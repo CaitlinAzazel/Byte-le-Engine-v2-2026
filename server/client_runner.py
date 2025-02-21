@@ -9,14 +9,18 @@ import sys
 import threading
 import time
 import schedule
+import traceback
+import time
+import random
 
 from datetime import datetime
 from queue import Queue
 from sqlalchemy.exc import IntegrityError
 
-from server.runner_utils import DB
+from server.runner_utils import DB, run_runner
 from server import runner_utils
-from server.crud import crud_tournament, crud_submission, crud_run, crud_submission_run_info, crud_turn, crud_university, crud_team_type
+from server.crud import crud_tournament, crud_submission, crud_run, crud_submission_run_info, crud_turn, \
+    crud_university, crud_team_type
 from server.models.submission import Submission
 from server.models.tournament import Tournament
 from server.schemas.run.run_base import RunBase
@@ -26,6 +30,7 @@ from server.schemas.tournament.tournament_base import TournamentBase
 from server.schemas.turn.turn_base import TurnBase
 from server.schemas.university.university_base import UniversityBase
 from server.server_config import Config
+from server.enums import RunnerOptions
 
 # Config for loggers
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -36,6 +41,7 @@ class ClientRunner:
     This class is responsible for running submitted client bots against each other and getting the results from the
     games.
     """
+
     def __init__(self):
         """
         Class variables
@@ -117,7 +123,8 @@ class ClientRunner:
         except KeyboardInterrupt:
             logging.warning("Ending runner due to Keyboard Interrupt")
         except Exception as e:
-            logging.warning("Ending runner due to {0}".format(e))
+            logging.warning("\nEnding runner due to {0}\n{1}\n".format(e, e.args))
+            traceback.print_exc()
         finally:
             self.close_server()
 
@@ -164,14 +171,10 @@ class ClientRunner:
         if not os.path.exists(self.seed_path):
             os.mkdir(self.seed_path)
 
+        random.seed(time.time())
         for index in range(self.config.NUMBER_OF_GAMES_AGAINST_SAME_TEAM):
             path: str = os.path.join(self.seed_path, str(index))
-            os.mkdir(path)
-            shutil.copy('launcher.pyz', path)
-            self.run_runner(path, os.path.join(os.getcwd(), 'server', 'runners', 'generator'))
-            with open(os.path.join(path, 'logs', 'game_map.json'), 'r') as fl:
-                gameboard: dict = json.load(fl)
-            self.index_to_seed_id[index] = gameboard['game_board']['seed']
+            self.index_to_seed_id[index] = random.randint(0, 1000000000)
 
         # then run them in parallel using their index as a unique identifier
         [self.jobqueues[i % 6].put((self.internal_runner, games[i], i)) for i in range(self.total_number_of_games)]
@@ -214,22 +217,20 @@ class ClientRunner:
 
         # Determine what seed this run needs based on it's serial index
         seed_index = index // self.number_of_unique_games
-        logging.info(f'running run {index} for game ({submission_tuple[0].submission_id}, '
-                        f'{submission_tuple[1].submission_id}) using seed index {seed_index}')
 
-        # Copy the seed into the run folder
-        if os.path.exists(os.path.join(self.seed_path, str(seed_index), 'logs', 'game_map.json')):
-            os.mkdir(os.path.join(end_path, 'logs'))
-            shutil.copyfile(os.path.join(self.seed_path, str(seed_index), 'logs', 'game_map.json'),
-                            os.path.join(end_path, 'logs', 'game_map.json'))
+        logging.info(f'generating game map for run {index} for game ({submission_tuple[0].submission_id}, '
+                     f'{submission_tuple[1].submission_id}) using seed index {seed_index}')
+        run_runner(end_path, RunnerOptions.GENERATE, seed=self.index_to_seed_id[seed_index])
+
+        logging.info(f'running run {index} for game ({submission_tuple[0].submission_id}, '
+                     f'{submission_tuple[1].submission_id}) using seed index {seed_index}')
 
         try:
-            res = self.run_runner(end_path, os.path.join(os.getcwd(), 'server', 'runners', 'runner'))
+            res = run_runner(end_path, RunnerOptions.RUN)
 
             if os.path.exists(os.path.join(end_path, 'logs', 'results.json')):
                 with open(os.path.join(end_path, 'logs', 'results.json'), 'r') as f:
                     results: dict = json.load(f)
-
         finally:
             player_sub_ids: list[int] = [int(x["file_name"].split("_")[-1]) for x in results['players']]
             run_id: int = self.insert_run(
@@ -238,8 +239,8 @@ class ClientRunner:
                 results)
             for i, result in enumerate(results["players"]):
                 self.insert_submission_run_info(player_sub_ids[i], run_id, result["error"], i,
-                                                result["avatar"]["score"])
-                score_for_each_submission[player_sub_ids[i]] = result["avatar"]["score"]
+                                                result["team_manager"]["score"])
+                score_for_each_submission[player_sub_ids[i]] = result["team_manager"]["score"]
 
             # don't store logs with non-eligible teams
             if any([not submission.team.team_type.eligible for submission in submission_tuple]):
@@ -252,30 +253,8 @@ class ClientRunner:
                     self.best_run_for_client[submission.submission_id] = {}
                     self.best_run_for_client[submission.submission_id]["log_path"] = os.path.join(end_path, 'logs')
                     self.best_run_for_client[submission.submission_id]["run_id"] = run_id
-                    self.best_run_for_client[submission.submission_id]["score"] = score_for_each_submission[submission.submission_id]
-
-    def run_runner(self, end_path, runner) -> bytes:
-        """
-        runs a script in the runner folder.
-        end path is where the runner is located
-        runner is the name of the script (no extension)
-        """
-        f = open(os.devnull, 'w')
-        if platform.system() == 'Linux':
-            shutil.copy(runner + '.sh', os.path.join(end_path, 'runner.sh'))
-            p = subprocess.Popen(f'bash {os.path.join(end_path, "runner.sh")}', stdout=f,
-                                 cwd=end_path, shell=True)
-            stdout, stderr = p.communicate()
-            p.wait()
-            return stdout
-        else:
-            # server/runner.bat
-            shutil.copy(runner + '.bat', os.path.join(end_path, 'runner.bat'))
-            p = subprocess.Popen(os.path.join(end_path, 'runner.bat'), stdout=f,
-                                 cwd=end_path, shell=True)
-            stdout, stderr = p.communicate()
-            p.wait()
-            return stdout
+                    self.best_run_for_client[submission.submission_id]["score"] = score_for_each_submission[
+                        submission.submission_id]
 
     def get_version_number(self) -> str:
         """
@@ -284,15 +263,7 @@ class ClientRunner:
         runner is the name of the script (no extension)
         """
 
-        stdout = ""
-        if platform.system() == 'Linux':
-            p = subprocess.Popen(os.path.join('server', 'runners', 'version.sh'),
-                                 stdout=subprocess.PIPE, shell=True)
-            stdout, stderr = p.communicate()
-        else:
-            p = subprocess.Popen(
-                os.path.join('server', 'runners', 'version.bat'), stdout=subprocess.PIPE, shell=True)
-            stdout, stderr = p.communicate()
+        stdout = run_runner(os.getcwd(), RunnerOptions.VERSION)
         return stdout.decode("utf-8").split('\n')[-1]
 
     def insert_new_tournament(self) -> Tournament:
@@ -430,7 +401,7 @@ class ClientRunner:
         # do not remove comment below:
         # noinspection PyTypeChecker
         fixtures: list[tuple[Submission, Submission]] = list(itertools.permutations(submissions, 2))
-        
+
         temp: list[tuple[Submission, ...]]
         self.number_of_unique_games = len(fixtures)
         repeated = fixtures * self.config.NUMBER_OF_GAMES_AGAINST_SAME_TEAM
@@ -492,6 +463,24 @@ class ClientRunner:
                 print('UND Added')
             except IntegrityError:
                 print('UND Already Exists')
+
+            try:
+                crud_university.create(db, UniversityBase(
+                    uni_id=4,
+                    uni_name='Concordia'
+                ))
+                print('Concordia Added')
+            except IntegrityError:
+                print('Concordia Already Exists')
+
+            try:
+                crud_university.create(db, UniversityBase(
+                    uni_id=5,
+                    uni_name='U of M'
+                ))
+                print('U of M Added')
+            except IntegrityError:
+                print('U of M Already Exists')
 
             try:
                 crud_team_type.create(db, TeamTypeBase(
