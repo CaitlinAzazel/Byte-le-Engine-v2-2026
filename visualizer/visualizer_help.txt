@@ -1,0 +1,20 @@
+For a good example of the new visualizer organization, highly recommend to look at the 2025 game:
+https://github.com/acm-ndsu/Byte-le-2025/tree/main/visualizer
+
+This folder is dedicated to visualizing the game created in the game folder through the use
+of the json log files created when running the game. Visualization happens after the game is
+completed.
+
+This folder structure is as follows:
+visualizer
+     \___ bytesprites: folder for python files for associating spritesheets to pygame objects to render. See its help file.
+     \___ fonts: folder for storing any fonts that need to be downloaded. See its help file.
+     \___ images: folder for storing png files to be visualized.
+             \___ spritesheets: folder for storing spritesheets, or png files used for dynamic textures (animations). See its help file.
+             \___ staticsprites: folder for storing staticsprites, or png files used for static textures. See its help file.
+     \___ sprites: folder for python files for associating a staticsprites to pygame objects to render. See its help file.
+     \___ templates: folder for putting sprites and bytesprites needed to render around the actual game. Used in adapter.py.
+     \___ utils: utility methods used throughout the above files. Does not need much adjustment.
+\___ adapter: file that brings all templates together.
+\___ config: visualizer config file, includes variables that can be used throughout the templates.
+\___ main: main runner for looping the visualizer. Should never be touched unless you understand what you are doing.

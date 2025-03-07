@@ -1,5 +1,0 @@
-The .png files found in this folder are used in the examples classes listed in the bytesprites folder. They represent
-the Avatar, Tile, and Wall classes respectively.
-
-For creating sprite, we recommend using paint.net. It's free to use and comes with a lot of handy tools. If there is
-different software you prefer using/already have, that is perfectly fine.

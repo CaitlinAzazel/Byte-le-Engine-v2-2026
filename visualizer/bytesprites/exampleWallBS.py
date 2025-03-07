@@ -37,5 +37,5 @@ class WallBytespriteFactoryExample(ByteSpriteFactory):
         :param screen:
         :return: a ByteSprite object
         """
-        return ByteSprite(screen, os.path.join(os.getcwd(), 'visualizer/spritesheets/ExampleWallSS.png'), 1,
+        return ByteSprite(screen, os.path.join(os.getcwd(), 'visualizer/images/spritesheets/ExampleWallSS.png'), 1,
                           8, WallBytespriteFactoryExample.update)

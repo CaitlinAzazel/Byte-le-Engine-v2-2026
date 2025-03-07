@@ -45,5 +45,5 @@ class AvatarBytespriteFactoryExample(ByteSpriteFactory):
         :param screen: ByteSprite
         :return:
         """
-        return ByteSprite(screen, os.path.join(os.getcwd(), 'visualizer/spritesheets/ExampleSpritesheet.png'), 4,
+        return ByteSprite(screen, os.path.join(os.getcwd(), 'visualizer/images/spritesheets/ExampleSpritesheet.png'), 4,
                           4, AvatarBytespriteFactoryExample.update, pyg.Color("#FBBBAD"))

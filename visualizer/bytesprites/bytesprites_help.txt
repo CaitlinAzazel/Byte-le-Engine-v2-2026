@@ -1,0 +1,12 @@
+Bytesprites are the logic that manipulates the spritesheets to make sprites dynamically
+responsive to events in the game. These files will consist of Python code that call up
+a row of animation as a result.
+
+Spritesheets are read into a bytesprite as a list[list[pyg.Surface]]
+when you return the row of animation you want to select, you can return spritesheets[# of row]
+ex: spritesheets[0] for first row
+
+bytesprites also extend BytespriteFactory, giving:
+- Update method: returns list[pyg.Surface], row of animation to use for this turn
+- Create method: returns a ByteSprite, which is the actual ByteSprite object displayed with
+an associated spritesheet and all

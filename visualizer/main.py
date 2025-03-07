@@ -530,6 +530,9 @@ class ByteVisualiser:
         # Run playback buttons method
         self.__playback_controls(button_pressed)
 
+        # This renders all static images and templates from the adapter file before the game, placing it behind the game
+        self.adapter.render()
+
         if self.tick % self.config.NUMBER_OF_FRAMES_PER_TURN == 0:
             # NEXT TURN
             turn: int = self.tick // self.config.NUMBER_OF_FRAMES_PER_TURN + 1
@@ -544,7 +547,6 @@ class ByteVisualiser:
             self.continue_animation()
             self.adapter.continue_animation()
 
-        self.adapter.render()
         pygame.display.flip()
 
         # If recording, save frames into video
@@ -639,6 +641,25 @@ class ByteVisualiser:
             [self.__create_bytesprite(x=vec['x'], y=vec['y'], z=z, temp_tile=obj) for z, obj in
              enumerate(objs, start=1)]
             self.__clean_up_layers(x=vec['x'], y=vec['y'], z=len(objs) + 1)
+            self.__clean_up_map(turn_data['game_board']['game_map'])
+
+    def __clean_up_map(self, vecs: list[str]) -> None:
+        def process_and_hash_vec_string(vec: str) -> int:
+            vec_dict: dict[str, int] = ast.literal_eval(vec)
+            return vec_dict['x'] * 17 + vec_dict['y'] * 19
+
+        # using hashing to search by O(1) instead of O(n)
+        hashed_vecs: set[int] = [process_and_hash_vec_string(vec) for vec in vecs]
+
+        def is_used(x: int, y: int) -> bool:
+            """
+            Nested method to help make the logic more readable later.
+            """
+            return (x * 17 + y * 19) in hashed_vecs
+
+        # clean up the layers on any coordinate as long as it was not used
+        [self.__clean_up_layers(x=x, y=y, z=1) for y, row in enumerate(self.bytesprite_map)
+         for x, _ in enumerate(row) if not is_used(x, y)]
 
     def __add_needed_layers(self, x: int, y: int, z: int) -> None:
         """

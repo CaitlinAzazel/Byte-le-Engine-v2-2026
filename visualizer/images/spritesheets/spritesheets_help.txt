@@ -1,0 +1,8 @@
+This file is for sprite sheet .png files, which are organized as:
+- columns: each frame in the animation
+- rows: each state for the bytesprite to have
+
+Images in this folder are used by the bytesprites in the bytesprites folder.
+
+NOTE: For any spritesheets that have some form of transparency, make sure to set the colorkey of the
+ByteSprite to the color chosen to be transparent. the default used in the past is pygame.Color(255, 0, 255).

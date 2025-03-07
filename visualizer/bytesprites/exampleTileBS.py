@@ -43,5 +43,5 @@ class TileBytespriteFactoryExample(ByteSpriteFactory):
         :param screen:
         :return:
         """
-        return ByteSprite(screen, os.path.join(os.getcwd(), 'visualizer/spritesheets/ExampleTileSS.png'), 2,
+        return ByteSprite(screen, os.path.join(os.getcwd(), 'visualizer/images/spritesheets/ExampleTileSS.png'), 2,
                           7, TileBytespriteFactoryExample.update)
