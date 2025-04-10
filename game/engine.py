@@ -219,6 +219,9 @@ class Engine:
 
         # Go through each thread and check if they are still alive
         for client, thr in zip(self.clients, threads):
+            # Load actions into player
+            client.actions = thr.result if thr.result is not None else []
+
             # If thread is no longer alive, mark it as non-functional, preventing it from receiving future turns
             if thr.is_alive():
                 client.functional = False

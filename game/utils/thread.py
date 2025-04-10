@@ -1,6 +1,8 @@
 import threading
 import traceback
 
+from game.common.enums import ActionType
+
 
 class Thread(threading.Thread):
     """
@@ -14,11 +16,12 @@ class Thread(threading.Thread):
         threading.Thread.__init__(self)
         self.args = args
         self.func = func
+        self.result: list[ActionType] = []
         self.error = None
 
     def run(self):
         try:
-            self.func(*self.args)
+            self.result = self.func(*self.args)
         except Exception:
             self.error = traceback.format_exc()
 
