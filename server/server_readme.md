@@ -105,6 +105,10 @@ To back up the database schema you've altered
 5. Click Go
 
 
+## Database UML
+![erd_diagram.png](server_doc_images/erd_diagram.png)
+
+
 ## CLIENT RUNNER
 
 The client runner fetches programs from the database, runs them, and stores their results in the database. 
@@ -227,4 +231,3 @@ Returns the asscosiated code file from a submission
 #### /api/get_seed_from_run
 #### body: vid string, runid int
 Returns the seed that a run was ran with
-
