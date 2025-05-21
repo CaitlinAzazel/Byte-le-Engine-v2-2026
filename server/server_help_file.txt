@@ -17,3 +17,64 @@ should be the only thing printed there.
 
 Typing in the other URLs listed in each method should return the data needed, assuming it's in the database. HTTP errors
 are raised if something goes wrong, and these are caught and handled in the client_utils.py file.
+
+------------------------------
+How to Work the Byte-le Server
+------------------------------
+
+If running the server on a Linux machine in the Linux lab, make sure to set up a virtual environment first before anything else. You cannot use `pip install` without a venv folder being setup
+
+POSTGRES PRE-STEPS:
+
+1. Ensure Postgres is installed
+2. Run command `psql -U <default user> -f <absolute path to postgres-setup.sql located in server folder>`
+3. Enter password for default user
+4. To wipe the database completely for new data, repeat steps 1-3
+
+PRE-STEP FAILSAFE:
+
+If steps 1-3 don't work, go to the project directory and delete the following files:
+- byte_server.db
+- byte_server.db-shm
+- byte_server.db-wal
+
+
+
+If working in terminal, run `pip install -r requirements.txt`
+
+
+
+1. Start the server with uvicorn server.main:app --reload (NOTE: --reload is helpful for live updating any file)
+a. If only doing local hosting, stop here
+b. http://127.0.0.1:8000/ is the default IP address and port for local deployment
+
+2. For production (tournament hosting)
+Use the IP address of the computer
+Port: 8000 (typically used, but does not need to be specifically, just a port with little/no traffic)
+
+a. uvicorn server.main:app --reload --host <ethernet IPv4 Address> --port
+i. If this doesn't work, try `python -m uvicorn.main:app --reload`
+b. IPv4 is found by typing the following:
+i. ipconfig on windows
+ii. ifconfig on linux
+
+3. After launching step 2, go to client_utils.py and update `self.IP` to include: 'http://<IP address>:<port number>/'
+
+4. Next thing to modify is the server.config
+a. end date time needs to be set
+b. sleep time seconds between runs
+c. sleep time seconds between vis
+
+5. Runner commands (both will need to be ran on their own terminal tabs)
+a. python -m server.client_runner
+b. python -m server.visualizer_runner
+
+NOTE: ONCE RUNNERS ARE RUNNING, LEAVE THEM ON UNTIL THE END OF THE TOURNAMENT. SHOULD BE SCHEDULED ANYWAY IN THE CONFIG.
+DON'T RESTART THE RUNNERS IN THE MIDDLE OF A JOB. WAIT UNTIL 'JOB COMPLETED' IS PRINTED
+
+6. After the server, client runner, and visualizer runner are all running, call `./build.bat` to build the launcher. This allows competitors
+to communicate with the server using the command line arguments seen in wrapper.__main__.py (e.g., python launcher.pyz c -register).
+
+7. After 2 clients have submitted bots, the visualizer runner will start to get everything set up and will start displaying games
+
+NOTE: When testing, make sure to delete any folders generated that have 'temp' in the name, and any VIDs made

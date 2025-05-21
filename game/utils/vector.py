@@ -1,6 +1,6 @@
 from game.common.game_object import GameObject
 from game.common.enums import ObjectType
-from typing import Self, Tuple
+from typing import Self, Tuple, Union
 
 
 class Vector(GameObject):
@@ -96,6 +96,12 @@ class Vector(GameObject):
     def from_yx_tuple(yx_tuple: Tuple[int, int]) -> 'Vector':
         return Vector(*yx_tuple[::-1])
 
+    @staticmethod
+    def add_vectors(vector_1: 'Vector', vector_2: 'Vector') -> 'Vector':
+        new_x: int = vector_1.x + vector_2.x
+        new_y: int = vector_1.y + vector_2.y
+        return Vector(new_x, new_y)
+
     def add_to_vector(self, other_vector: Self) -> 'Vector':
         return Vector(
             self.x + other_vector.x,
@@ -129,11 +135,50 @@ class Vector(GameObject):
 
         return self
 
+    # Overloaded Methods
     def __str__(self) -> str:
-        return f'({self.x}, {self.y})'
+        return f"Coordinates: ({self.x}, {self.y})"
 
-    def __hash__(self):
+    def __add__(self, other: 'Vector') -> 'Vector':
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other: 'Vector') -> 'Vector':
+        return Vector(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, other: 'Vector') -> 'Vector':
+        return Vector(self.x * other.x, self.y * other.y)
+
+    def __floordiv__(self, other: 'Vector') -> Union['Vector', None]:
+        if other.x == 0 or other.y == 0:
+            return None
+        return Vector(self.x // other.x, self.y // other.y)
+
+    def __ne__(self, other: 'Vector') -> bool:
+        return hash(str(self)) != hash(str(other))
+
+    def __eq__(self, other: 'Vector') -> bool:
+        return hash(str(self)) == hash(str(other))
+
+    def __lt__(self, other: 'Vector') -> bool:
+        return self.x < other.x and self.y < other.y
+
+    def __gt__(self, other: 'Vector') -> bool:
+        return self.x > other.x and self.y > other.y
+
+    def __le__(self, other: 'Vector') -> bool:
+        return self.x <= other.x and self.y <= other.y
+
+    def __ge__(self, other: 'Vector') -> bool:
+        return self.x >= other.x and self.y >= other.y
+
+    def __hash__(self) -> int:
         return hash(self.as_tuple())
 
-    def __eq__(self, other) -> bool:
-        return self.as_tuple() == other.as_tuple()
+    def length(self) -> int:
+        return abs(self.x) + abs(self.y)
+
+    def negative(self) -> Self:
+        return Vector(-self.x, -self.y)
+
+    def distance(self, other_vector: 'Vector') -> int:
+        return abs(self.x - other_vector.x) + abs(self.y - other_vector.y)

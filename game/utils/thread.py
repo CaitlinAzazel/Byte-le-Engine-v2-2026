@@ -61,4 +61,3 @@ class CommunicationThread(Thread):
 
     def retrieve_value(self):
         return self.safeObject.value
-
