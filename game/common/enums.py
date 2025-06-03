@@ -32,6 +32,7 @@ class ObjectType(Enum):
     STATION_RECEIVER_EXAMPLE = auto()
     OCCUPIABLE_STATION_EXAMPLE = auto()
     GAME_OBJECT_CONTAINER = auto()
+    VENT = auto()
 
 
 class ActionType(Enum):
