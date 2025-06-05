@@ -12,7 +12,7 @@ class BatteryOccupiableStation(OccupiableStation):
     """
     def __init__(self, position: Vector = Vector(0,0), cooldown: int = 10) -> None:
         super().__init__()
-        self.object_type = ObjectType.BATTERY
+        self.object_type = ObjectType.BATTERY_OCCUPIABLE_STATION
         self.position: Vector = position
         self.__battery_recharge_amount: int = 0
         # how many turns before another battery respawns after one is taken
