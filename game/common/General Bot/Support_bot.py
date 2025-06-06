@@ -6,8 +6,8 @@ class Support_Bot:
         super().__init__()
         self.turnedOn = False
         self.movement_controller: MovementController = MovementController()
+        self.stun = False
 
-    def gameActions(self):
+    def boosting(self):
         while self.turnedOn == True:
-            Dumb_bot.vision = 2
-
+            Dumb_bot.boosted = True
