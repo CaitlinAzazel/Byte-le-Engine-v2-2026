@@ -6,20 +6,22 @@ from game.common.map.game_board import GameBoard
 from game.utils.vector import Vector
 import Dumb_bot
 import Support_bot
+import Jumper_Bot
 
 player = Player()
+gameboard = GameBoard()
 
 def moveLeft(bot):
-    MovementController.handle_actions(bot, ActionType(4), player, GameBoard)
+    MovementController.handle_actions(bot, ActionType(4), player, gameboard)
 
 def moveUp(bot):
-    MovementController.handle_actions(bot, ActionType(2), player, GameBoard)
+    MovementController.handle_actions(bot, ActionType(2), player, gameboard)
 
 def moveRight(bot):
-    MovementController.handle_actions(bot, ActionType(5), player, GameBoard)
+    MovementController.handle_actions(bot, ActionType(5), player, gameboard)
 
 def moveDown(bot):
-    MovementController.handle_actions(bot, ActionType(3), player, GameBoard)
+    MovementController.handle_actions(bot, ActionType(3), player, gameboard)
 
 def playerScan(bot, radius):
     bot_pos: Vector = Vector(bot.avatar.position.x, bot.avatar.position.y)
@@ -50,3 +52,4 @@ def playerScan(bot, radius):
 def stun():
     Dumb_bot.stun = True
     Support_bot.stun = True
+    Jumper_Bot.stun = True

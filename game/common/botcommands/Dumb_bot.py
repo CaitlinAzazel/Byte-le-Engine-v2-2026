@@ -24,7 +24,7 @@ class DumbBot:
     def movement(self):
         while not self.master_controller.game_over and not self.player_seen:
             if self.stun:
-                self.stunned(self)
+                self.stunned()
             else:
                 movenum = random.randint(1,4)
                 match movenum:
@@ -40,9 +40,17 @@ class DumbBot:
     def player_seen_movement(self):
         while not self.master_controller.game_over and self.player_seen:
             if self.stun:
-                self.stunned(self)
+                self.stunned()
             else:
-                if self.playerX > 0 and self.playerY > 0:
+                if self.playerX > 0 and self.playerY == 0:
+                    moveRight(self)
+                elif self.playerX < 0 and self.playerY == 0:
+                    moveLeft(self)
+                elif self.playerX == 0 and self.playerY > 0:
+                    moveDown(self)
+                elif self.playerX == 0 and self.playerY < 0:
+                    moveUp(self)
+                elif self.playerX > 0 and self.playerY > 0:
                     if self.playerY > self.playerX:
                         moveDown(self)
                     else:
@@ -78,3 +86,8 @@ class DumbBot:
         if self.stun_counter == 5:
             self.stun = False
             self.stun_counter = 0
+
+    def action(self):
+        self.player_scan()
+        self.movement()
+        self.player_seen_movement()
