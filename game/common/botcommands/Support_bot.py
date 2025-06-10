@@ -1,6 +1,8 @@
 from General_Bot_Commands import *
 import Dumb_bot
 import Jumper_Bot
+import Crawler_Bot
+import IAN_Bot
 
 class Support_Bot:
     def __init__(self):
@@ -13,6 +15,8 @@ class Support_Bot:
         while self.turnedOn == True:
             Dumb_bot.boosted = True
             Jumper_Bot.boosted = True
+            Crawler_Bot.boosted = True
+            IAN_Bot.boosted = True
 
     def action(self):
         self.boosting()

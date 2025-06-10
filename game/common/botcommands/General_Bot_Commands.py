@@ -7,6 +7,8 @@ from game.utils.vector import Vector
 import Dumb_bot
 import Support_bot
 import Jumper_Bot
+import Crawler_Bot
+import IAN_Bot
 
 player = Player()
 gameboard = GameBoard()
@@ -53,3 +55,5 @@ def stun():
     Dumb_bot.stun = True
     Support_bot.stun = True
     Jumper_Bot.stun = True
+    Crawler_Bot.stun = True
+    IAN_Bot.stun = True
