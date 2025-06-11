@@ -8,11 +8,11 @@ class PowerController(Controller):
     """
     manages the passive drain of power from the player
     """
-    def __init__(self, decay_frequency: int = 5, decay_amount = 0):
+    def __init__(self, decay_frequency: int = 5, decay_amount: int = 0):
         super().__init__()
-        self.__decay_frequency = decay_frequency # in turns
-        self.__decay_amount = decay_amount
-        self.__decay_tick = 0
+        self.__decay_frequency: int = decay_frequency # in turns
+        self.__decay_amount: int = decay_amount
+        self.__decay_tick: int = 0
 
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard):
         del action # unused params
