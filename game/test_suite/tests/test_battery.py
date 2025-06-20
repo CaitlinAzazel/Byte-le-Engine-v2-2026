@@ -43,6 +43,7 @@ class TestBattery(unittest.TestCase):
         repetitions = 3
         total_turns = ((self.__battery_cooldown+1)*repetitions)+1
         for i in range(total_turns):
+            self.battery.tick()
             self.battery.handle_turn(self.avatar)
             total_power = self.__starting_power + (i // self.__battery_cooldown + 1) * self.__battery_recharge_amount
             self.assertEqual(self.avatar.power, total_power, f'failed on turn {i}')
