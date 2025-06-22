@@ -1,5 +1,4 @@
 import unittest
-import game.test_suite.utils
 
 from game.common.avatar import Avatar
 from game.fnaacm.stations.battery import Battery
@@ -47,3 +46,19 @@ class TestBattery(unittest.TestCase):
             self.battery.handle_turn(self.avatar)
             total_power = self.__starting_power + (i // self.__battery_cooldown + 1) * self.__battery_recharge_amount
             self.assertEqual(self.avatar.power, total_power, f'failed on turn {i}')
+
+    def test_battery_available(self):
+        self.assertTrue(self.battery.is_available)
+
+    def test_battery_unavailable(self):
+        self.battery.handle_turn(self.avatar)
+        self.assertFalse(self.battery.is_available)
+
+    def test_battery_availability_over_time(self):
+        self.assertTrue(self.battery.is_available)
+        self.battery.handle_turn(self.avatar)
+        for i in range(self.__battery_cooldown):
+            self.assertFalse(self.battery.is_available)
+            self.battery.tick()
+        self.assertTrue(self.battery.is_available)
+

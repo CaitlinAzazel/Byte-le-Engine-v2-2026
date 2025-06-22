@@ -1,10 +1,6 @@
-from typing_extensions import override
-
 from game.common.avatar import Avatar
 from game.common.enums import ObjectType
 from game.common.map.occupiable import Occupiable
-from game.common.items.item import Item
-from game.common.player import Player
 from game.utils.vector import Vector
 
 
@@ -20,6 +16,7 @@ class Battery(Occupiable):
         self.__cooldown_length: int = cooldown
         self.__cooldown_timer: int = 0
 
+    # should be called on every turn BEFORE any avatars interact with it
     def tick(self) -> None:
         # dont really gaf if it goes negative
         self.__cooldown_timer -= 1
@@ -27,7 +24,11 @@ class Battery(Occupiable):
     def handle_turn(self, avatar: Avatar) -> None:
         if self.position != avatar.position:
             return
-        if self.__cooldown_timer > 0:
+        if not self.is_available:
             return
         avatar.power += self.__recharge_amount
         self.__cooldown_timer = self.__cooldown_length
+
+    @property
+    def is_available(self) -> bool:
+        return self.__cooldown_timer <= 0
