@@ -23,6 +23,10 @@ class PowerController(Controller):
             return
         self.__decay_tick = 0
 
-        client.avatar.power -= self.__decay_amount
-        # access generators from world
-        # generators should drain additional power
+        # ensure power only drains to 0
+        if client.avatar.power <= 0:
+            return
+        client.avatar.power -= min(client.avatar.power, self.__decay_amount)
+
+        # TODO: access generators from world
+        # for each generator: drain additional power
