@@ -77,6 +77,13 @@ class TestVector(unittest.TestCase):
     def test_vector_mul(self) -> None:
         self.assertEqual(self.vector1 * self.vector2, Vector(40, 50))
 
+    def test_vector_scalar_mul(self) -> None:
+        self.assertEqual(self.vector2 * 10, Vector(self.vector2.x * 10, self.vector2.y * 10))
+
+    def test_vector_scalar_rmul(self) -> None:
+        scalar = 9
+        self.assertEqual(scalar * self.vector2, self.vector2 * scalar)
+
     def test_vector_floordiv(self) -> None:
         self.assertEqual(self.vector1 // Vector(0, 0), None)
         self.assertEqual(self.vector1 // self.vector2, Vector(1, 2))
