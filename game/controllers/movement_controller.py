@@ -1,4 +1,5 @@
 from game.common.avatar import Avatar
+from game.common.map.occupiable import Occupiable
 from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.common.enums import *
@@ -41,6 +42,10 @@ class MovementController(Controller):
 
         # if the top of the given coordinates are not occupiable or are invalid, return to do nothing
         if not world.is_occupiable(destination):
+            return
+
+        occupiable = world.get_top(destination)
+        if isinstance(occupiable, Occupiable) and not occupiable.can_occupy(avatar):
             return
 
         # remove the avatar from its previous location
