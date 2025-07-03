@@ -13,6 +13,8 @@ class PlayerCommands():
         self.movement_controller = MovementController()
         self.health = 3
         self.tempPower = 0
+        self.pointsTotal = 0
+        self.inSafeZone = False
 
     def moveLeft(self):
         MovementController.handle_actions(self.movement_controller, ActionType(4), self.player, self.gameboard)
@@ -35,3 +37,12 @@ class PlayerCommands():
         Avatar.power(self, self.tempPower)
         if self.health <= 0:
             MasterController.game_over = True
+
+    def addPoint(self):
+        if not self.inSafeZone:
+            self.pointsTotal += 1
+        else:
+            self.pointsTotal += 0
+
+    def action(self):
+        self.addPoint()
