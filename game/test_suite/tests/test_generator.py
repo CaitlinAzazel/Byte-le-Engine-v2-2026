@@ -35,12 +35,21 @@ class TestGenerator(unittest.TestCase):
         self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
         self.assertEqual(self.scrap.quantity, self.initial_scrap - self.cost)
 
-    # what if they don't have enough scrap?
+    # does the generator turn on when given scrap?
+    def test_activates_on_interact(self):
+        self.assertGreater(self.initial_scrap, self.cost)
+        self.assertFalse(self.generator.active)
+        self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
+        self.assertTrue(self.generator.active)
+
+    # does the generator stay off when a broke player tries to activate it?
     def test_not_enough_scrap(self):
         initial_scrap = self.cost - 1
         self.scrap.quantity = initial_scrap
+        self.assertFalse(self.generator.active)
         self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
         self.assertEqual(self.scrap.quantity, initial_scrap)
+        self.assertFalse(self.generator.active)
 
     def test_json(self):
         data: dict = self.generator.to_json()

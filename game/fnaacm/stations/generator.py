@@ -15,25 +15,27 @@ class Generator(Station):
     def __init__(self, held_item: Item | None = None, cost: int = 1, doors: list[GameObject] = []):
         super().__init__(held_item=held_item)
         self.object_type: ObjectType = ObjectType.GENERATOR
-        self.cost: int = cost
         self.connected_doors: list[GameObject] = doors # TODO: change to door class type
-        self.__activated: bool = False
+        self.__active: bool = False
+        self.__cost: int = cost
 
     @override
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
-        self.cost = data['cost']
+        self.__cost = data['cost']
+        self.__active = data['active']
         return self
 
     @override
     def to_json(self) -> dict:
         jason = super().to_json()
         jason['cost'] = self.cost
+        jason['active'] = self.active
         return jason
 
     @override
     def take_action(self, avatar: Avatar) -> Item | None:
-        if self.activated:
+        if self.active:
             return
         # total_scrap = sum(map(lambda item: item.quantity if isinstance(item, Scrap) else 0, avatar.inventory))
         total_scrap = 0
@@ -44,12 +46,16 @@ class Generator(Station):
         if total_scrap < self.cost:
             return
         avatar.take(Scrap(quantity=self.cost))
-        self.__activated = True
+        self.__active = True
         self.__toggle_doors(True)
 
     @property
-    def activated(self):
-        return self.__activated
+    def active(self) -> bool:
+        return self.__active
+
+    @property
+    def cost(self) -> int:
+        return self.__cost
 
     def __toggle_doors(self, open: bool):
         for door in self.connected_doors:
