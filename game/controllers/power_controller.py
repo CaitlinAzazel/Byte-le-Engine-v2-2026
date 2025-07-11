@@ -3,6 +3,8 @@ from game.common.map.game_board import GameBoard
 from game.common.player import Player
 from game.controllers.controller import Controller
 
+GENERATOR_PENALTY = 1
+GENERATOR_DRAIN_FREQUENCY = 5
 
 class PowerController(Controller):
     """
@@ -13,6 +15,7 @@ class PowerController(Controller):
         self.__decay_frequency: int = decay_frequency # in turns
         self.__decay_amount: int = decay_amount
         self.__decay_tick: int = 0
+        self.__generator_tick: int = 0
 
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard):
         del action # unused params
@@ -26,6 +29,13 @@ class PowerController(Controller):
         # ensure power only drains to 0
         if client.avatar.power <= 0:
             return
+
+        amount_to_take = self.__decay_amount
+        for position, generator in world.generators.items():
+            if not generator.active:
+                continue
+            amount_to_take += GENERATOR_PENALTY
+
         client.avatar.power -= min(client.avatar.power, self.__decay_amount)
 
         # TODO: access generators from world

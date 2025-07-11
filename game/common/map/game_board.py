@@ -11,6 +11,7 @@ from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
 from game.common.stations.occupiable_station import OccupiableStation
 from game.common.stations.station import Station
+from game.fnaacm.stations.generator import Generator
 from game.utils.vector import Vector
 
 
@@ -129,6 +130,7 @@ class GameBoard(GameObject):
         # when passing Vectors as a tuple, end the tuple of Vectors with a comma, so it is recognized as a tuple
         self.locations: dict | None = locations
         self.walled: bool = walled
+        self.generators: dict[Vector, Generator] = {}
 
     @property
     def seed(self) -> int:
@@ -229,6 +231,10 @@ class GameBoard(GameObject):
 
         # convert locations dict to go_container
         output.update({vec: GameObjectContainer(objs) for vec, objs in self.locations.items()})
+
+        # TODO: generate generators
+        # TODO  generate battery spawns
+
         return output
 
     def get(self, coords: Vector) -> GameObjectContainer | None:
