@@ -12,7 +12,7 @@ class Support_Bot:
         self.stun = False
 
     def boosting(self):
-        while self.turnedOn == True:
+        if self.turnedOn == True:
             Dumb_bot.boosted = True
             Jumper_Bot.boosted = True
             Crawler_Bot.boosted = True

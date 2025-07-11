@@ -22,7 +22,7 @@ class DumbBot:
         self.stun_counter = 0
 
     def movement(self):
-        while not self.master_controller.game_over and not self.player_seen:
+        if not self.master_controller.game_over and not self.player_seen:
             if self.stun:
                 self.stunned()
             else:
@@ -38,7 +38,7 @@ class DumbBot:
                         moveLeft(self)
 
     def player_seen_movement(self):
-        while not self.master_controller.game_over and self.player_seen:
+        if not self.master_controller.game_over and self.player_seen:
             if self.stun:
                 self.stunned()
             else:
@@ -74,7 +74,7 @@ class DumbBot:
                     self.movement()
 
     def player_scan(self):
-        while not self.master_controller.game_over and not self.stun:
+        if not self.master_controller.game_over and not self.stun:
             if not self.boosted:
                 self.player_seen, self.playerX, self.playerY = playerScan(self, 1)
             elif self.boosted:

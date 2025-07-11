@@ -20,11 +20,11 @@ class IANBot:
         self.stun_counter = 0
 
     def movement(self):
-        while not self.master_controller.game_over:
+        if not self.master_controller.game_over:
             """A* algorithm here mapping to the the coords of the player, MOVES EVERY TURN, IF BOOSTED MOVE 2 SPACES PER TURN"""
 
     def player_scan(self):
-        while not self.master_controller.game_over and not self.stun:
+        if not self.master_controller.game_over and not self.stun:
             self.player_seen, self.playerX, self.playerY = playerScan(self, 100)
 
     def stunned(self):
