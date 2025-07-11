@@ -5,6 +5,7 @@ from game.controllers.movement_controller import MovementController
 from game.common.botcommands.General_Bot_Commands import stun
 from game.controllers.master_controller import MasterController
 from game.common.avatar import Avatar
+from game.controllers.interact_controller import InteractController
 
 class PlayerCommands():
     def __init__(self):
