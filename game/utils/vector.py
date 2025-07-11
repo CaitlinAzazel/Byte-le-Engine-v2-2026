@@ -1,6 +1,6 @@
 from game.common.game_object import GameObject
 from game.common.enums import ObjectType
-from typing import Self, Tuple, Union
+from typing import Self, Tuple, Union, overload
 
 
 class Vector(GameObject):
@@ -145,8 +145,20 @@ class Vector(GameObject):
     def __sub__(self, other: 'Vector') -> 'Vector':
         return Vector(self.x - other.x, self.y - other.y)
 
+    @overload
+    def __mul__(self, other: int) -> 'Vector':
+        ...
+    @overload
     def __mul__(self, other: 'Vector') -> 'Vector':
-        return Vector(self.x * other.x, self.y * other.y)
+        ...
+    def __mul__(self, other) -> 'Vector':
+        if isinstance(other, Vector):
+            return Vector(self.x * other.x, self.y * other.y)
+        else:
+            return Vector(self.x * other, self.y * other)
+
+    def __rmul__(self, scalar: int) -> 'Vector':
+        return self * scalar
 
     def __floordiv__(self, other: 'Vector') -> Union['Vector', None]:
         if other.x == 0 or other.y == 0:
