@@ -12,6 +12,7 @@ from game.common.map.occupiable import Occupiable
 from game.common.stations.occupiable_station import OccupiableStation
 from game.common.stations.station import Station
 from game.fnaacm.stations.generator import Generator
+from game.fnaacm.map.battery_list import BatteryList
 from game.utils.vector import Vector
 
 
@@ -131,6 +132,7 @@ class GameBoard(GameObject):
         self.locations: dict | None = locations
         self.walled: bool = walled
         self.generators: dict[Vector, Generator] = {}
+        self.batteries: BatteryList = BatteryList()
 
     @property
     def seed(self) -> int:

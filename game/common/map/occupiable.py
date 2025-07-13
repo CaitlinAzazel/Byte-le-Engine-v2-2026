@@ -3,6 +3,7 @@ from game.common.game_object import GameObject
 from game.common.items.item import Item
 from typing import Self, Type
 from game.common.avatar import Avatar
+from game.utils.vector import Vector
 
 
 class Occupiable(GameObject):
@@ -28,3 +29,6 @@ class Occupiable(GameObject):
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
         return self
+
+    def can_occupy(self, game_object: GameObject) -> bool:
+        return True
