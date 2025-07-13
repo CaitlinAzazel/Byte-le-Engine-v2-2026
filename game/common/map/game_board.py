@@ -235,6 +235,11 @@ class GameBoard(GameObject):
         output.update({vec: GameObjectContainer(objs) for vec, objs in self.locations.items()})
 
         # TODO: generate generators
+        for pos, go_list in self.locations.items():
+            for game_object in go_list:
+                if not isinstance(game_object, Generator):
+                    continue
+                self.generators[pos] = game_object
         # TODO  generate battery spawns
 
         return output
