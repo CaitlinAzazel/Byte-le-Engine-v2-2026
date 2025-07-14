@@ -1,9 +1,6 @@
 from typing import Self, override
 from game.common.game_object import GameObject
 
-DURATION_JSON_KEY = 'duration'
-COUNTER_JSON_KEY = 'counter'
-
 # TODO: testing 8^)
 
 class Cooldown(GameObject):
@@ -15,18 +12,23 @@ class Cooldown(GameObject):
         self.__duration = duration
         self.__counter = 0
 
+    def __eq__(self, value: object, /) -> bool:
+        if isinstance(value, self.__class__):
+            return self.__dict__ == value.__dict__
+        return False
+
     @override
     def to_json(self) -> dict:
         data = super().to_json()
-        data[DURATION_JSON_KEY] = self.__duration
-        data[COUNTER_JSON_KEY] = self.__counter
+        data['duration'] = self.__duration
+        data['counter'] = self.__counter
         return data
 
     @override
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
-        self.__duration = data[DURATION_JSON_KEY]
-        self.__counter = data[COUNTER_JSON_KEY]
+        self.__duration = data['duration']
+        self.__counter = data['counter']
         return self
 
     def tick(self):
