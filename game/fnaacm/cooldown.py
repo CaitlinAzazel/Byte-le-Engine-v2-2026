@@ -1,8 +1,6 @@
 from typing import Self, override
 from game.common.game_object import GameObject
 
-# TODO: testing 8^)
-
 class Cooldown(GameObject):
     def __init__(self, duration: int = 0):
         """
