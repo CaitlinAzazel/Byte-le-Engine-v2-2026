@@ -36,7 +36,7 @@ class ObjectType(Enum):
     SCRAP = auto()
     VENT = auto()
     BATTERY = auto()
-
+    DOOR = auto()
 
 class ActionType(Enum):
     NONE = auto()
