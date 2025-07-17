@@ -6,16 +6,17 @@ from game.common.game_object import GameObject
 from game.common.items.item import Item
 from game.common.stations.station import Station
 from game.fnaacm.items.scrap import Scrap
+from game.fnaacm.map.door import Door
 
 
 class Generator(Station):
     """
     opens doors once fed scrap via interaction
     """
-    def __init__(self, held_item: Item | None = None, cost: int = 1, doors: list[GameObject] = []):
+    def __init__(self, held_item: Item | None = None, cost: int = 1, doors: list[Door] = []):
         super().__init__(held_item=held_item)
         self.object_type: ObjectType = ObjectType.GENERATOR
-        self.connected_doors: list[GameObject] = doors # TODO: change to door class type
+        self.connected_doors: list[Door] = doors
         self.__active: bool = False
         self.__cost: int = cost
 
@@ -59,6 +60,5 @@ class Generator(Station):
 
     def __toggle_doors(self, open: bool):
         for door in self.connected_doors:
-            # TODO: open the door
-            ...
+            door.open = open
 
