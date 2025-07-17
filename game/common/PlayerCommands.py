@@ -1,6 +1,8 @@
 from game.common.enums import ActionType
 from game.common.map.game_board import GameBoard
 from game.common.player import Player
+from game.common.stations import refuge
+from game.common.stations.refuge import Refuge
 from game.controllers.movement_controller import MovementController
 from game.common.botcommands.General_Bot_Commands import stun
 from game.controllers.master_controller import MasterController
@@ -40,6 +42,7 @@ class PlayerCommands():
             MasterController.game_over = True
 
     def addPoint(self):
+        self.inSafeZone = Refuge.occupied
         if not self.inSafeZone:
             self.pointsTotal += 1
         else:
