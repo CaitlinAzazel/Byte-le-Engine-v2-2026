@@ -34,6 +34,7 @@ class ObjectType(Enum):
     GAME_OBJECT_CONTAINER = auto()
     VENT = auto()
     BATTERY = auto()
+    REFUGE = auto()
 
 
 class ActionType(Enum):
