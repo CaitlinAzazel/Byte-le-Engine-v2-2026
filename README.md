@@ -190,12 +190,28 @@ Changes made in 2023.
 
 ## How to run
 
+### Windows
 ```bash
-.\build.bat - will build your code (compile, pretty much)
+.\build.bat # will compile your code
 
-python .\launcher.pyz g - will generate a map 
+python .\launcher.pyz g # will generate a map 
 
-python .\launcher.pyz r - will run the game
+python .\launcher.pyz r # will run the game
+```
+
+### Linux
+```bash
+./build.sh # will compile your code
+
+python launcher.pyz g # will generate a map 
+
+python launcher.pyz r # will run the game
+```
+
+Note: if running the launcher throws a ModuleNotFoundError, make sure your Python virtual environment is activated via:
+```bash
+# in the root directory
+source .venv/bin/activate
 ```
 
 ## Required Python Version
