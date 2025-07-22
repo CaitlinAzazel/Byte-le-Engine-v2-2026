@@ -90,8 +90,12 @@ class CrawlBot:
     def action(self, game_board, player_avatar):
         self.turn_counter += 1
 
-        if self.turn_counter % 4 != 0:
-            return  # Only act every 4 turns
+        if self.boosted:
+            if self.turn_counter % 2 != 0:
+                return  # Only act every other turn
+        else:
+            if self.turn_counter % 4 != 0:
+                return  # Only act every 4 turns
 
         if not self.position or not player_avatar.position:
             return

@@ -17,6 +17,11 @@ class Support_Bot:
             Jumper_Bot.boosted = True
             Crawler_Bot.boosted = True
             IAN_Bot.boosted = True
+        else:
+            Dumb_bot.boosted = False
+            Jumper_Bot.boosted = False
+            Crawler_Bot.boosted = False
+            IAN_Bot.boosted = False
 
     def action(self):
         self.boosting()

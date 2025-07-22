@@ -20,6 +20,7 @@ class DumbBot:
         self.playerY: 0
         self.stun = False
         self.stun_counter = 0
+        self.turn_counter = 0
 
     def movement(self):
         if not self.master_controller.game_over and not self.player_seen:
@@ -86,8 +87,14 @@ class DumbBot:
         if self.stun_counter == 5:
             self.stun = False
             self.stun_counter = 0
+        return
 
     def action(self):
+        self.turn_counter += 1
+
+        if self.turn_counter % 2 != 0:
+            return  # Only act every other turn
+
         self.player_scan()
         self.movement()
         self.player_seen_movement()
