@@ -2,7 +2,7 @@ from game.common.enums import ActionType
 from game.common.map.game_board import GameBoard
 from game.common.player import Player
 from game.controllers.movement_controller import MovementController
-from game.common.botcommands.General_Bot_Commands import stun
+from game.common.botcommands.General_Bot_Commands import stun, player
 from game.controllers.master_controller import MasterController
 from game.common.avatar import Avatar
 from game.controllers.interact_controller import InteractController
@@ -32,10 +32,10 @@ class PlayerCommands():
     def __whenHit(self):
         stun()
         self.health -= 1
-        self.tempPower = Avatar.power(self) - 50
+        self.tempPower = player.power(self) - 50
         if self.tempPower < 0:
             self.tempPower = 0
-        Avatar.power(self, self.tempPower)
+        player.power(self, self.tempPower)
         if self.health <= 0:
             MasterController.game_over = True
 
