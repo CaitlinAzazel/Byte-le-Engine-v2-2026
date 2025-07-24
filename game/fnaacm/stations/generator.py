@@ -58,6 +58,12 @@ class Generator(Station):
     def cost(self) -> int:
         return self.__cost
 
+    @cost.setter
+    def cost(self, value: object):
+        if not isinstance(value, int):
+            raise TypeError(f'{self.__class__}.cost must be an int; {value} is a(n) {value.__class__}')
+        self.__cost = value
+
     def __toggle_doors(self, open: bool):
         for door in self.connected_doors:
             door.open = open

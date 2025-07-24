@@ -49,6 +49,11 @@ GAME_MAP_FILE_NAME = "game_map.json"                                # Name and e
 GAME_MAP_DIR = os.path.join(os.getcwd(), "logs")                    # Location of game map file
 GAME_MAP_FILE = os.path.join(GAME_MAP_DIR, GAME_MAP_FILE_NAME)      # Filepath for game map file
 
+LDTK_MAP_FILE_PATH = os.path.join(os.getcwd(), 'map.ldtk')
+# should mirror values in LDtk editor
+class LDtkCollisionType:
+    WALL = 1
+    VENT = 2
 
 class Debug:                    # Keeps track of the current debug level of the game
     level = DebugLevel.NONE
