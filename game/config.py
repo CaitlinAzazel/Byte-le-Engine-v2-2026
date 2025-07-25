@@ -51,9 +51,16 @@ GAME_MAP_FILE = os.path.join(GAME_MAP_DIR, GAME_MAP_FILE_NAME)      # Filepath f
 
 LDTK_MAP_FILE_PATH = os.path.join(os.getcwd(), 'map.ldtk')
 # should mirror values in LDtk editor
-class LDtkCollisionType:
-    WALL = 1
-    VENT = 2
+class LDtkConfig:
+    class CollisionType:
+        WALL = 1
+        VENT = 2
+    class EntityIdentifier:
+        DOOR = 'Door'
+        GENERATOR = 'Generator'
+    class LayerIdentifier:
+        ENTITY = 'Entities'
+        COLLISION = 'Collisions'
 
 class Debug:                    # Keeps track of the current debug level of the game
     level = DebugLevel.NONE

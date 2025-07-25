@@ -12,56 +12,70 @@ from game.config import *
 from game.utils.helpers import read_json_file, write_json_file
 from game.common.map.game_board import GameBoard
 
+ENTITY_LOAD_PRIORITY: dict[str, int] = {
+    LDtkConfig.EntityIdentifier.DOOR: -9999,
+    LDtkConfig.EntityIdentifier.GENERATOR: 0,
+}
+
 def load_entities(game_board: GameBoard, entity_layer: LayerInstance):
     doors: dict[str, Door] = {}
-    for entity in entity_layer.entity_instances:
+    sorted_entities = sorted(entity_layer.entity_instances, key=lambda ent: ENTITY_LOAD_PRIORITY[ent.identifier])
+    for entity in sorted_entities:
         game_object: GameObject | None = None
         match entity.identifier:
-            case 'Door':
+            case LDtkConfig.EntityIdentifier.DOOR:
                 game_object = Door()
                 doors[entity.iid] = game_object
-            case 'Generator':
-                # FIXME: assumes all doors are loaded before generators
+            case LDtkConfig.EntityIdentifier.GENERATOR:
                 game_object = Generator.from_ldtk_entity(entity, doors)
-        if game_object is None:
-            raise ValueError(f'unknown entity identifier: {entity.identifier}')
+            case _:
+                raise ValueError(f'unknown entity identifier: {entity.identifier}')
 
         position = Vector(entity.grid[0], entity.grid[1])
         placed = game_board.place(position, game_object)
-        assert placed, f'failed to place game_object ({entity.identifier}) @ <{position.x},{position.y}>'
+        if not placed:
+            raise RuntimeError(f'failed to place game_object ({entity.identifier}) @ <{position.x},{position.y}>')
 
 def load_collisions(game_board: GameBoard, collision_layer: LayerInstance):
     for i in range(len(collision_layer.int_grid_csv)):
-        x = i // game_board.map_size.x
-        y = i - x * game_board.map_size.x
+        y = i // game_board.map_size.x
+        x = i - y * game_board.map_size.x
         position = Vector(x, y)
-        match collision_layer.int_grid_csv[i]:
-            case LDtkCollisionType.WALL:
+        collision_type = collision_layer.int_grid_csv[i]
+        match collision_type:
+            case LDtkConfig.CollisionType.WALL:
                 game_board.place(position, Wall())
-            case LDtkCollisionType.VENT:
+            case LDtkConfig.CollisionType.VENT:
                 game_board.place(position, Vent())
+            case _:
+                raise ValueError(f'unknown collision type: {collision_type}')
 
 def game_board_from_ldtk(path_to_ldtk_file: str) -> GameBoard:
     json_data = read_json_file(path_to_ldtk_file)
     ldtk_json = ldtk_json_from_dict(json_data)
-    assert len(ldtk_json.levels) == 1, f'this is a dumb hack for the current project; fix if needed'
-
-    level = ldtk_json.levels[0]
+    if len(ldtk_json.levels) < 1:
+        raise RuntimeError(f'LDtk file "{path_to_ldtk_file}" has no levels')
+    level = ldtk_json.levels[0] # hack for current game; we only have one level
     layers = level.layer_instances
-    assert layers is not None
-    # all layers should (?) have the same grid size 
-    assert len(layers) > 0, f'this is another dumb hack for the current project; fix if needed'
+    if layers is None:
+        raise RuntimeError(f'layers of level "{level.identifier}" could not be found; check if LDtk project setting "Save levels separately" is enabled')
+    if len(layers) < 1:
+        raise RuntimeError(f'level "{level.identifier}" has no layers')
 
     game_board = GameBoard()
+    # this is why the function doesn't return a locations dict
+    # also `load_collisions` currently relies on `GameBoard.map_size`
     game_board.map_size.x = layers[0].c_wid
     game_board.map_size.y = layers[0].c_hei
     game_board.generate_map()
     for layer in layers:
         match layer.identifier:
-            case 'Entities':
+            case LDtkConfig.LayerIdentifier.ENTITY:
                 load_entities(game_board, layer)
-            case 'Collision':
+            case LDtkConfig.LayerIdentifier.COLLISION:
                 load_collisions(game_board, layer)
+            case _:
+                raise ValueError(f'unknown layer: {layer.identifier}')
 
     return game_board
 

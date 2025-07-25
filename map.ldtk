@@ -201,7 +201,7 @@
             "tilesetUid": null
           },
           {
-            "identifier": "activates",
+            "identifier": "connected_doors",
             "doc": null,
             "__type": "Array<EntityRef>",
             "uid": 8,
@@ -412,7 +412,7 @@
                   ]
                 },
                 {
-                  "__identifier": "activates",
+                  "__identifier": "connected_doors",
                   "__type": "Array<EntityRef>",
                   "__value": [
                     {

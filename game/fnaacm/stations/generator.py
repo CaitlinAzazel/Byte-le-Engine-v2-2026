@@ -28,7 +28,7 @@ class Generator(Station):
             match field.identifier:
                 case 'cost':
                     cost = field.value
-                case 'activates':
+                case 'connected_doors':
                     for ent in field.value:
                         door = all_doors[ent['entityIid']]
                         assert door is not None, f'oops!'
