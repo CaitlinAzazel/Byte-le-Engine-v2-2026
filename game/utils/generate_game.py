@@ -36,11 +36,12 @@ def load_entities(game_board: GameBoard, entity_layer: LayerInstance):
         if not placed:
             raise RuntimeError(f'failed to place game_object ({entity.identifier}) @ <{position.x},{position.y}>')
 
+def vector_from_index(i: int, map_width: int) -> Vector:
+    return Vector(i % map_width, i // map_width)
+
 def load_collisions(game_board: GameBoard, collision_layer: LayerInstance):
     for i in range(len(collision_layer.int_grid_csv)):
-        y = i // game_board.map_size.x
-        x = i - y * game_board.map_size.x
-        position = Vector(x, y)
+        position = vector_from_index(i, game_board.map_size.x)
         collision_type = collision_layer.int_grid_csv[i]
         match collision_type:
             case LDtkConfig.CollisionType.WALL:
