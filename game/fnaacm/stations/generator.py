@@ -2,11 +2,11 @@
 from typing import Self, override
 from game.common.avatar import Avatar
 from game.common.enums import ObjectType
-from game.common.game_object import GameObject
 from game.common.items.item import Item
 from game.common.stations.station import Station
 from game.fnaacm.items.scrap import Scrap
 from game.fnaacm.map.door import Door
+from game.utils.ldtk_json import EntityInstance
 
 
 class Generator(Station):
@@ -19,6 +19,21 @@ class Generator(Station):
         self.connected_doors: list[Door] = doors
         self.__active: bool = False
         self.__cost: int = cost
+
+    @classmethod
+    def from_ldtk_entity(cls, entity: EntityInstance, all_doors: dict[str, Door]) -> Self:
+        cost: int = -1
+        connected_doors: list[Door] = []
+        for field in entity.field_instances:
+            match field.identifier:
+                case 'cost':
+                    cost = field.value
+                case 'activates':
+                    for ent in field.value:
+                        door = all_doors[ent['entityIid']]
+                        assert door is not None, f'oops!'
+                        connected_doors.append(door)
+        return cls(cost=cost, doors=connected_doors)
 
     @override
     def from_json(self, data: dict) -> Self:
