@@ -3,6 +3,7 @@ from game.common.avatar import Avatar
 from game.common.enums import ObjectType
 from game.common.map.occupiable import Occupiable
 from game.fnaacm.cooldown import Cooldown
+from game.utils.ldtk_json import EntityInstance
 from game.utils.vector import Vector
 
 class Battery(Occupiable):
@@ -15,6 +16,19 @@ class Battery(Occupiable):
         self.position: Vector = position
         self.__recharge_amount: int = recharge_amount
         self.__cooldown = Cooldown(duration=cooldown_duration)
+
+    @classmethod
+    def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
+        position: Vector = Vector(entity.grid[0], entity.grid[1])
+        cooldown_duration: int = -1
+        recharge_amount: int = -1
+        for field in entity.field_instances:
+            match field.identifier:
+                case 'cooldown_duration':
+                    cooldown_duration = field.value
+                case 'recharge_amount':
+                    recharge_amount = field.value
+        return cls(position, cooldown_duration, recharge_amount)
 
     def __eq__(self, value: object, /) -> bool:
         if isinstance(value, self.__class__):

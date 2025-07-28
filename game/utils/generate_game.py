@@ -5,21 +5,24 @@ from game.common.game_object import GameObject
 from game.common.map.wall import Wall
 from game.fnaacm.map.door import Door
 from game.fnaacm.map.vent import Vent
+from game.fnaacm.stations.battery import Battery
 from game.fnaacm.stations.generator import Generator
-from game.utils.ldtk_json import LayerInstance, ldtk_json_from_dict
+from game.utils.ldtk_json import EntityInstance, LayerInstance, ldtk_json_from_dict
 from game.utils.vector import Vector
 from game.config import *
 from game.utils.helpers import read_json_file, write_json_file
 from game.common.map.game_board import GameBoard
 
 ENTITY_LOAD_PRIORITY: dict[str, int] = {
-    LDtkConfig.EntityIdentifier.DOOR: -9999,
-    LDtkConfig.EntityIdentifier.GENERATOR: 0,
+    LDtkConfig.EntityIdentifier.DOOR: -9999, # load doors at least before generators
 }
+
+def get_entity_load_priority(entity: EntityInstance) -> int:
+    return ENTITY_LOAD_PRIORITY.get(entity.identifier, 0)
 
 def load_entities(game_board: GameBoard, entity_layer: LayerInstance):
     doors: dict[str, Door] = {}
-    sorted_entities = sorted(entity_layer.entity_instances, key=lambda ent: ENTITY_LOAD_PRIORITY[ent.identifier])
+    sorted_entities = sorted(entity_layer.entity_instances, key=get_entity_load_priority)
     for entity in sorted_entities:
         game_object: GameObject | None = None
         match entity.identifier:
@@ -28,8 +31,10 @@ def load_entities(game_board: GameBoard, entity_layer: LayerInstance):
                 doors[entity.iid] = game_object
             case LDtkConfig.EntityIdentifier.GENERATOR:
                 game_object = Generator.from_ldtk_entity(entity, doors)
+            case LDtkConfig.EntityIdentifier.BATTERY:
+                game_object = Battery.from_ldtk_entity(entity)
             case _:
-                raise ValueError(f'unknown entity identifier: {entity.identifier}')
+                raise ValueError(f'unhandled entity identifier: "{entity.identifier}"')
 
         position = Vector(entity.grid[0], entity.grid[1])
         placed = game_board.place(position, game_object)
@@ -44,12 +49,14 @@ def load_collisions(game_board: GameBoard, collision_layer: LayerInstance):
         position = vector_from_index(i, game_board.map_size.x)
         collision_type = collision_layer.int_grid_csv[i]
         match collision_type:
+            case LDtkConfig.CollisionType.NONE:
+                pass
             case LDtkConfig.CollisionType.WALL:
                 game_board.place(position, Wall())
             case LDtkConfig.CollisionType.VENT:
                 game_board.place(position, Vent())
             case _:
-                raise ValueError(f'unknown collision type: {collision_type}')
+                raise ValueError(f'unhandled collision type: {collision_type}')
 
 def game_board_from_ldtk(path_to_ldtk_file: str) -> GameBoard:
     json_data = read_json_file(path_to_ldtk_file)
@@ -71,12 +78,12 @@ def game_board_from_ldtk(path_to_ldtk_file: str) -> GameBoard:
     game_board.generate_map()
     for layer in layers:
         match layer.identifier:
-            case LDtkConfig.LayerIdentifier.ENTITY:
+            case LDtkConfig.LayerIdentifier.ENTITIES:
                 load_entities(game_board, layer)
-            case LDtkConfig.LayerIdentifier.COLLISION:
+            case LDtkConfig.LayerIdentifier.COLLISIONS:
                 load_collisions(game_board, layer)
             case _:
-                raise ValueError(f'unknown layer: {layer.identifier}')
+                raise ValueError(f'unhandled layer: {layer.identifier}')
 
     return game_board
 
