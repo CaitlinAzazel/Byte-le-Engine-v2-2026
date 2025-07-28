@@ -56,10 +56,13 @@ class LDtkConfig:
         NONE = 0
         WALL = 1
         VENT = 2
+        SAFE_POINT = 3
     class EntityIdentifier:
         DOOR = 'Door'
         GENERATOR = 'Generator'
         BATTERY = 'Battery'
+        SPAWN = 'Spawn'
+        SCRAP = 'Scrap'
     class LayerIdentifier:
         ENTITIES = 'Entities'
         COLLISIONS = 'Collisions'
