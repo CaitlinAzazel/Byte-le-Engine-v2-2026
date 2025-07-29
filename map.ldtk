@@ -734,6 +734,170 @@
               ],
               "__worldX": 160,
               "__worldY": 32
+            },
+            {
+              "__identifier": "Spawn",
+              "__grid": [
+                4,
+                1
+              ],
+              "__pivot": [
+                0,
+                0
+              ],
+              "__tags": [],
+              "__tile": null,
+              "__smartColor": "#2CE8F5",
+              "iid": "eb678990-5e50-11f0-80ea-83ca87932236",
+              "width": 16,
+              "height": 16,
+              "defUid": 13,
+              "px": [
+                64,
+                16
+              ],
+              "fieldInstances": [
+                {
+                  "__identifier": "SpawnedEntity",
+                  "__type": "LocalEnum.SpawnedEntity",
+                  "__value": "Crawler",
+                  "__tile": null,
+                  "defUid": 15,
+                  "realEditorValues": [
+                    {
+                      "id": "V_String",
+                      "params": [
+                        "Crawler"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "__worldX": 64,
+              "__worldY": 16
+            },
+            {
+              "__identifier": "Spawn",
+              "__grid": [
+                11,
+                5
+              ],
+              "__pivot": [
+                0,
+                0
+              ],
+              "__tags": [],
+              "__tile": null,
+              "__smartColor": "#2CE8F5",
+              "iid": "f42256f0-5e50-11f0-80ea-d5d0a27d4b45",
+              "width": 16,
+              "height": 16,
+              "defUid": 13,
+              "px": [
+                176,
+                80
+              ],
+              "fieldInstances": [
+                {
+                  "__identifier": "SpawnedEntity",
+                  "__type": "LocalEnum.SpawnedEntity",
+                  "__value": "Jumper",
+                  "__tile": null,
+                  "defUid": 15,
+                  "realEditorValues": [
+                    {
+                      "id": "V_String",
+                      "params": [
+                        "Jumper"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "__worldX": 176,
+              "__worldY": 80
+            },
+            {
+              "__identifier": "Spawn",
+              "__grid": [
+                3,
+                12
+              ],
+              "__pivot": [
+                0,
+                0
+              ],
+              "__tags": [],
+              "__tile": null,
+              "__smartColor": "#2CE8F5",
+              "iid": "f7220260-5e50-11f0-80ea-07c87c6f264b",
+              "width": 16,
+              "height": 16,
+              "defUid": 13,
+              "px": [
+                48,
+                192
+              ],
+              "fieldInstances": [
+                {
+                  "__identifier": "SpawnedEntity",
+                  "__type": "LocalEnum.SpawnedEntity",
+                  "__value": "Support",
+                  "__tile": null,
+                  "defUid": 15,
+                  "realEditorValues": [
+                    {
+                      "id": "V_String",
+                      "params": [
+                        "Support"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "__worldX": 48,
+              "__worldY": 192
+            },
+            {
+              "__identifier": "Spawn",
+              "__grid": [
+                14,
+                15
+              ],
+              "__pivot": [
+                0,
+                0
+              ],
+              "__tags": [],
+              "__tile": null,
+              "__smartColor": "#2CE8F5",
+              "iid": "fc3301a0-5e50-11f0-80ea-b7e26719ebb4",
+              "width": 16,
+              "height": 16,
+              "defUid": 13,
+              "px": [
+                224,
+                240
+              ],
+              "fieldInstances": [
+                {
+                  "__identifier": "SpawnedEntity",
+                  "__type": "LocalEnum.SpawnedEntity",
+                  "__value": "Dummy",
+                  "__tile": null,
+                  "defUid": 15,
+                  "realEditorValues": [
+                    {
+                      "id": "V_String",
+                      "params": [
+                        "Dummy"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "__worldX": 224,
+              "__worldY": 240
             }
           ]
         },

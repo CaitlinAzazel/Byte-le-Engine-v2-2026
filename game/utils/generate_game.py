@@ -15,7 +15,7 @@ from game.utils.helpers import read_json_file, write_json_file
 from game.common.map.game_board import GameBoard
 
 ENTITY_LOAD_PRIORITY: dict[str, int] = {
-    LDtkConfig.EntityIdentifier.DOOR: -9999, # load doors at least before generators
+    LDtk.EntityIdentifier.DOOR: -9999, # load doors at least before generators
 }
 
 # TODO: shove this in `GameBoard` or something
@@ -34,14 +34,30 @@ def get_spawned_entity_from_spawner(spawner: EntityInstance) -> GameObject:
     spawned_entity: GameObject | None = None
     parsed_value: str = ''
     for field in spawner.field_instances:
-        match field.identifier:
-            case 'SpawnedEntity':
-                parsed_value = field.value
-                match field.value:
-                    case 'Player':
-                        spawned_entity = Avatar()
-                    case _:
-                        raise ValueError(f'unhandled spawner entity type: "{field.value}"')
+        if field.identifier != 'SpawnedEntity':
+            continue
+
+        parsed_value = field.value
+        match field.value:
+            case LDtk.SpawnedEntityType.PLAYER:
+                spawned_entity = Avatar()
+            case LDtk.SpawnedEntityType.IAN:
+                # TODO:
+                spawned_entity = Avatar()
+            case LDtk.SpawnedEntityType.CRAWLER:
+                # TODO:
+                spawned_entity = Avatar()
+            case LDtk.SpawnedEntityType.JUMPER:
+                # TODO:
+                spawned_entity = Avatar()
+            case LDtk.SpawnedEntityType.SUPPORT:
+                # TODO:
+                spawned_entity = Avatar()
+            case LDtk.SpawnedEntityType.DUMMY:
+                # TODO:
+                spawned_entity = Avatar()
+            case _:
+                raise ValueError(f'unhandled spawner entity type: "{field.value}"')
     if spawned_entity is None:
         raise RuntimeError(f'could not determine spawner\'s entity type; best guess is "{parsed_value}"')
     return spawned_entity
@@ -53,22 +69,23 @@ def load_entities(locations: Locations, entity_layer: LayerInstance):
     for entity in sorted_entities:
         game_object: GameObject | None = None
         match entity.identifier:
-            case LDtkConfig.EntityIdentifier.DOOR:
+            case LDtk.EntityIdentifier.DOOR:
                 game_object = Door()
                 doors[entity.iid] = game_object
-            case LDtkConfig.EntityIdentifier.GENERATOR:
+            case LDtk.EntityIdentifier.GENERATOR:
                 game_object = Generator.from_ldtk_entity(entity, doors)
-            case LDtkConfig.EntityIdentifier.BATTERY:
+            case LDtk.EntityIdentifier.BATTERY:
                 game_object = Battery.from_ldtk_entity(entity)
-            case LDtkConfig.EntityIdentifier.SPAWN:
+            case LDtk.EntityIdentifier.SPAWN:
                 game_object = get_spawned_entity_from_spawner(entity)
-            case LDtkConfig.EntityIdentifier.SCRAP:
+            case LDtk.EntityIdentifier.SCRAP:
                 # TODO: write a luh scrap spawner and use it here
                 ...
             case _:
                 raise ValueError(f'unhandled entity identifier: "{entity.identifier}"')
         if game_object is None:
             continue
+
         position = Vector(entity.grid[0], entity.grid[1])
         update_locations(locations, position, game_object)
 
@@ -80,13 +97,13 @@ def load_collisions(locations: Locations,  collision_layer: LayerInstance, map_w
         game_object: GameObject | None = None 
         collision_type = collision_layer.int_grid_csv[i]
         match collision_type:
-            case LDtkConfig.CollisionType.NONE:
+            case LDtk.CollisionType.NONE:
                 pass
-            case LDtkConfig.CollisionType.WALL:
+            case LDtk.CollisionType.WALL:
                 game_object = Wall()
-            case LDtkConfig.CollisionType.VENT:
+            case LDtk.CollisionType.VENT:
                 game_object = Vent()
-            case LDtkConfig.CollisionType.SAFE_POINT:
+            case LDtk.CollisionType.SAFE_POINT:
                 # TODO: replace with hidey hole/refuge/safe point instance
                 game_object = Occupiable()
             case _:
@@ -112,9 +129,9 @@ def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[Locations, Vector]:
     locations: Locations = {}
     for layer in layers:
         match layer.identifier:
-            case LDtkConfig.LayerIdentifier.ENTITIES:
+            case LDtk.LayerIdentifier.ENTITIES:
                 load_entities(locations, layer)
-            case LDtkConfig.LayerIdentifier.COLLISIONS:
+            case LDtk.LayerIdentifier.COLLISIONS:
                 load_collisions(locations, layer, map_size.x)
             case _:
                 raise ValueError(f'unhandled layer: {layer.identifier}')
