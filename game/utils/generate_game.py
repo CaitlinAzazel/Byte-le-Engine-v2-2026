@@ -18,15 +18,6 @@ ENTITY_LOAD_PRIORITY: dict[str, int] = {
     LDtk.EntityIdentifier.DOOR: -9999, # load doors at least before generators
 }
 
-# TODO: shove this in `GameBoard` or something
-Locations = dict[Vector, list[GameObject]]
-def update_locations(locations: Locations, position: Vector, game_object: GameObject) -> Locations:
-    if position in locations:
-        locations[position].append(game_object)
-    else:
-        locations[position] = [game_object]
-    return locations
-
 def get_entity_load_priority(entity: EntityInstance) -> int:
     return ENTITY_LOAD_PRIORITY.get(entity.identifier, 0)
 
@@ -63,7 +54,7 @@ def get_spawned_entity_from_spawner(spawner: EntityInstance) -> GameObject:
     return spawned_entity
 
 
-def load_entities(locations: Locations, entity_layer: LayerInstance):
+def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: LayerInstance):
     doors: dict[str, Door] = {}
     sorted_entities = sorted(entity_layer.entity_instances, key=get_entity_load_priority)
     for entity in sorted_entities:
@@ -87,12 +78,12 @@ def load_entities(locations: Locations, entity_layer: LayerInstance):
             continue
 
         position = Vector(entity.grid[0], entity.grid[1])
-        update_locations(locations, position, game_object)
+        GameBoard.insert_location(locations, position, game_object)
 
 def vector_from_index(i: int, map_width: int) -> Vector:
     return Vector(i % map_width, i // map_width)
 
-def load_collisions(locations: Locations,  collision_layer: LayerInstance, map_width: int):
+def load_collisions(locations: dict[Vector, list[GameObject]],  collision_layer: LayerInstance, map_width: int):
     for i in range(len(collision_layer.int_grid_csv)):
         game_object: GameObject | None = None 
         collision_type = collision_layer.int_grid_csv[i]
@@ -111,9 +102,12 @@ def load_collisions(locations: Locations,  collision_layer: LayerInstance, map_w
         if game_object is None:
             continue
         position = vector_from_index(i, map_width)
-        update_locations(locations, position, game_object)
+        GameBoard.insert_location(locations, position, game_object)
 
-def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[Locations, Vector]:
+def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[dict[Vector, list[GameObject]], Vector]:
+    """
+    returned vector is the size of the map
+    """
     json_data = read_json_file(path_to_ldtk_file)
     ldtk_json = ldtk_json_from_dict(json_data)
     if len(ldtk_json.levels) < 1:
@@ -126,7 +120,7 @@ def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[Locations, Vector]:
         raise RuntimeError(f'level "{level.identifier}" has no layers')
 
     map_size = Vector(layers[0].c_wid, layers[0].c_hei)
-    locations: Locations = {}
+    locations: dict[Vector, list[GameObject]] = {}
     for layer in layers:
         match layer.identifier:
             case LDtk.LayerIdentifier.ENTITIES:

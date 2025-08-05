@@ -118,6 +118,17 @@ class GameBoard(GameObject):
             x x x x x   y = 6
     """
 
+    @staticmethod
+    def insert_location(locations: dict[Vector, list[GameObject]], position: Vector, game_object: GameObject):
+        """
+        dynamically creates a new `list[GameObject]` or appends to an existing one at `position`
+        """
+        if position in locations:
+            locations[position].append(game_object)
+        else:
+            locations[position] = [game_object]
+
+
     def __init__(self, seed: int | None = None, map_size: Vector = Vector(),
                  locations: dict[Vector, list[GameObject]] = {}, walled: bool = False):
 
