@@ -168,6 +168,114 @@ Changes made in 2023.
   * The most notable change in this file is MAX_NUMBER_OF_ACTIONS_PER_TURN. It is used for 
   allowing multiple actions to be taken in one turn. Adjust as necessary.
 
+## [LDtk](https://ldtk.io/) Integration
+
+`game/utils/generate_game` now contains functions for parsing .ldtk project files.
+To use them, your LDtk project ***must***:
+
+* contain two layers:
+  * an integer grid named **"Collisions"**
+  * an entities layer named **"Entities"**
+* disable the "Save levels to separate files" option (as of writing it is disabled by default)
+
+Integer grid values, enums, or any other important identifiers defined in the LDtk project
+should be defined as constants in the `LDtk` class in `game/config` for maintainability.
+
+For example, the following integer grid values (in this case they map to different types of "collidable" tiles)
+
+![Example integer grid values in LDtk](ldtk_examples/int_grid.png)
+
+should have config values set to:
+
+```py
+# game/config.py
+class LDtk:
+  ...
+  class CollisionType:
+    NONE = 0
+    WALL = 1
+    VENT = 2
+    SAFE_POINT = 3
+  ...
+```
+
+These constants can then be used in your implementation to safely refer to editor-defined values
+like so
+
+```py
+match collision_type:
+  case LDtk.CollisionType.NONE:
+    pass
+  case LDtk.CollisionType.WALL:
+    # place wall
+  case LDtk.CollisionType.VENT:
+    # place vent
+  case LDtk.CollisionType.SAFE_POINT:
+    # place safe point
+  case _:
+    raise ValueError(f'unknown collision type: {collision_type}')
+```
+
+### Using `LDtkJson`
+
+Most of the heavy lifting is currently done by an
+[importer provided by LDtk](https://ldtk.io/files/quicktype/LdtkJson.py),
+so all we have to do is find what we need in the `LDtkJson` object returned by `ldtk_json_from_dict`. To do so, we first need to know a little bit about the structure of our .ldtk file. To keep things simple, just look at this diagram from [here](https://ldtk.io/docs/game-dev/json-overview/):
+
+![LDtk json layout](https://ldtk.io/wp-content/uploads/2022/02/JSON-chart-pre-multiworlds.png)
+
+For more details about the .ldtk format, see [their docs](https://ldtk.io/docs/game-dev/json-overview/).
+
+For instance, if we want to access all the entities we placed in LDtk, we choose a level, find an entity layer, and then iterate over that layer's entities.
+Using the `LDtkJson`, that might look something like:
+
+```py
+ldtk_json = ldtk_json_from_dict(json_data)
+first_level = ldtk_json.levels[0]
+
+# note the addition of "_instances" instead of an "s"
+for layer in first_level.layer_instances 
+
+  # valid values of LayerInstance.type are documented in LDtkJson
+  if layer.type != 'Entities': 
+    continue
+
+  for entity in layer.entity_instances:
+    # do entity stuff
+```
+
+Or, if we have some `EntityInstance` and we want to instantiate a Python object with values defined in LDtk, we must iterate over `EntityInstance.field_instances`
+
+```py
+class CustomEntity:
+    @classmethod
+    def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
+      foo = -1
+      bar = []
+      for field in entity.field_instances:
+        match field.identifier:
+            case 'foo_name_in_ldtk':
+              foo = field.value
+            case 'bar_name_in_ldtk':
+              for element in field.value:
+                bar.append(element)
+      return cls(foo=foo, bar=bar)
+```
+
+### Prioritized entity loading
+
+If you need to load certain types of entities before or after others, you can add an entry to `ENTITY_LOAD_PRIORITY` in `game/utils/generate_game`:
+
+```py
+"""
+unspecified entities have a default priority of 0
+highest = first; lowest = last
+"""
+ENTITY_LOAD_PRIORITY: dict[str, int] = {
+  LDtk.EntityIdentifier.A: 0, # optional; unspecified entities have priority of 0
+  LDtk.EntityIdentifier.B: -9999, # load before A
+}
+```
 
 ## Development Notes
 

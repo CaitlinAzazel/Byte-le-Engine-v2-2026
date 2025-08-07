@@ -14,6 +14,10 @@ from game.config import *
 from game.utils.helpers import read_json_file, write_json_file
 from game.common.map.game_board import GameBoard
 
+"""
+unspecified entities have a default priority of 0
+highest = first; lowest = last
+"""
 ENTITY_LOAD_PRIORITY: dict[str, int] = {
     LDtk.EntityIdentifier.DOOR: -9999, # load doors at least before generators
 }
@@ -80,10 +84,7 @@ def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: Layer
         position = Vector(entity.grid[0], entity.grid[1])
         GameBoard.insert_location(locations, position, game_object)
 
-def vector_from_index(i: int, map_width: int) -> Vector:
-    return Vector(i % map_width, i // map_width)
-
-def load_collisions(locations: dict[Vector, list[GameObject]],  collision_layer: LayerInstance, map_width: int):
+def load_collisions(locations: dict[Vector, list[GameObject]], collision_layer: LayerInstance, map_width: int):
     for i in range(len(collision_layer.int_grid_csv)):
         game_object: GameObject | None = None 
         collision_type = collision_layer.int_grid_csv[i]
@@ -101,7 +102,7 @@ def load_collisions(locations: dict[Vector, list[GameObject]],  collision_layer:
                 raise ValueError(f'unhandled collision type: {collision_type}')
         if game_object is None:
             continue
-        position = vector_from_index(i, map_width)
+        position = Vector(i % map_width, i // map_width)
         GameBoard.insert_location(locations, position, game_object)
 
 def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[dict[Vector, list[GameObject]], Vector]:
