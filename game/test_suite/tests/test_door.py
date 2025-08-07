@@ -40,3 +40,12 @@ class TestDoor(unittest.TestCase):
         self.starting_position = self.avatar.position
         self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
         self.assertEqual(self.starting_position, self.avatar.position)
+
+    # Can a player walk through a door that is open? (Generator Presumed Active)
+    def test_open_status(self):
+        self.door.open = True
+        self.assertTrue(self.door.open)
+        self.starting_position = self.avatar.position
+        self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        self.assertNotEqual(self.starting_position, self.avatar.position)
+        print(f" X Vector of Avatar: {self.avatar.position.x} ")
