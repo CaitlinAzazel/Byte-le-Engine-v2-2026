@@ -184,8 +184,8 @@ class Avatar(GameObject):
     @power.setter
     def power(self, value: int) -> None:
         if value is None or not isinstance(value, int):
-            raise ValueError(
-                f'{self.__class__.__name__}.score must be an int. ',
+            raise TypeError(
+                f'{self.__class__.__name__}.score must be an int '
                 f'It is a(n) {value.__class__.__name__} and has the value of {value}')
         if value < 0:
             raise ValueError(f'{self.__class__.__name__}.power must be nonnegative; attempted to set it to {value}')
