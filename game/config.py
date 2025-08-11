@@ -55,7 +55,7 @@ class Debug:                    # Keeps track of the current debug level of the 
 # Other Settings Here --------------------------------------------------------------------------------------------------
 
 LDTK_MAP_FILE_PATH = os.path.join(os.getcwd(), 'map.ldtk')
-# should mirror values in LDtk editor
+# should mirror values in LDtk editor, but lowercase
 class LDtk:
     class CollisionType:
         NONE = 0

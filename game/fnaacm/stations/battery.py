@@ -10,6 +10,11 @@ class Battery(Occupiable):
     """
     A tile that occasionally holds batteries which increase the player avatar's power.
     """
+
+    class LDtkFieldIdentifers:
+        COOLDOWN_DURATION = 'cooldown_duration'
+        RECHARGE_AMOUNT = 'recharge_amount'
+
     def __init__(self, position: Vector = Vector(0,0), cooldown_duration: int = 10, recharge_amount: int = 10) -> None:
         super().__init__()
         self.object_type: ObjectType = ObjectType.BATTERY
@@ -24,9 +29,9 @@ class Battery(Occupiable):
         recharge_amount: int = -1
         for field in entity.field_instances:
             match field.identifier:
-                case 'cooldown_duration':
+                case Battery.LDtkFieldIdentifers.COOLDOWN_DURATION:
                     cooldown_duration = field.value
-                case 'recharge_amount':
+                case Battery.LDtkFieldIdentifers.RECHARGE_AMOUNT:
                     recharge_amount = field.value
         return cls(position, cooldown_duration, recharge_amount)
 

@@ -11,8 +11,13 @@ from game.utils.ldtk_json import EntityInstance
 
 class Generator(Station):
     """
-    opens doors once fed scrap via interaction
+    Opens connected doors once fed scrap via interaction
     """
+
+    class LDtkFieldIdentifiers:
+        COST = 'cost'
+        CONNECTED_DOORS = 'connected_doors'
+
     def __init__(self, held_item: Item | None = None, cost: int = 1, doors: list[Door] = []):
         super().__init__(held_item=held_item)
         self.object_type: ObjectType = ObjectType.GENERATOR
@@ -26,12 +31,16 @@ class Generator(Station):
         connected_doors: list[Door] = []
         for field in entity.field_instances:
             match field.identifier:
-                case 'cost':
+                case Generator.LDtkFieldIdentifiers.COST:
                     cost = field.value
-                case 'connected_doors':
+                case Generator.LDtkFieldIdentifiers.CONNECTED_DOORS:
                     for ent in field.value:
-                        door = all_doors[ent['entityIid']]
-                        assert door is not None, f'oops!'
+                        iid = ent['entityIid'] 
+                        if iid is None:
+                            raise RuntimeError(f'could not find iid in {ent}')
+                        door = all_doors[iid]
+                        if door is None:
+                            raise RuntimeError(f'could not find door (iid={iid})')
                         connected_doors.append(door)
         return cls(cost=cost, doors=connected_doors)
 
