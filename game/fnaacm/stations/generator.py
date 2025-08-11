@@ -49,6 +49,7 @@ class Generator(Station):
         super().from_json(data)
         self.__cost = data['cost']
         self.__active = data['active']
+        self.connected_doors = [Door().from_json(d) for d in data['connected_doors']]
         return self
 
     @override
@@ -56,6 +57,7 @@ class Generator(Station):
         jason = super().to_json()
         jason['cost'] = self.cost
         jason['active'] = self.active
+        jason['connected_doors'] = [door.to_json() for door in self.connected_doors]
         return jason
 
     @override
