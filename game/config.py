@@ -63,18 +63,18 @@ class LDtk:
         VENT = 2
         SAFE_POINT = 3
     class EntityIdentifier:
-        DOOR = 'Door'
-        GENERATOR = 'Generator'
-        BATTERY = 'Battery'
-        SPAWN = 'Spawn'
-        SCRAP = 'Scrap'
+        DOOR = 'door'
+        GENERATOR = 'generator'
+        BATTERY = 'battery'
+        SPAWN = 'spawn'
+        SCRAP = 'scrap'
     class LayerIdentifier:
-        ENTITIES = 'Entities'
-        COLLISIONS = 'Collisions'
+        ENTITIES = 'entities'
+        COLLISIONS = 'collisions'
     class SpawnedEntityType:
-        PLAYER = 'Player'
-        IAN = 'IAN'
-        CRAWLER = 'Crawler'
-        JUMPER = 'Jumper'
-        SUPPORT = 'Support'
-        DUMMY = 'Dummy'
+        PLAYER = 'player'
+        IAN = 'ian'
+        CRAWLER = 'crawler'
+        JUMPER = 'jumper'
+        SUPPORT = 'support'
+        DUMMY = 'dummy'

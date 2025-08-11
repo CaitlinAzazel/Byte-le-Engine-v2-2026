@@ -29,11 +29,11 @@ def get_spawned_entity_from_spawner(spawner: EntityInstance) -> GameObject:
     spawned_entity: GameObject | None = None
     parsed_value: str = ''
     for field in spawner.field_instances:
-        if field.identifier != 'SpawnedEntity':
+        if field.identifier.lower() != 'spawned_entity':
             continue
 
         parsed_value = field.value
-        match field.value:
+        match field.value.lower():
             case LDtk.SpawnedEntityType.PLAYER:
                 spawned_entity = Avatar()
             case LDtk.SpawnedEntityType.IAN:
@@ -63,7 +63,7 @@ def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: Layer
     sorted_entities = sorted(entity_layer.entity_instances, key=get_entity_load_priority)
     for entity in sorted_entities:
         game_object: GameObject | None = None
-        match entity.identifier:
+        match entity.identifier.lower():
             case LDtk.EntityIdentifier.DOOR:
                 game_object = Door()
                 doors[entity.iid] = game_object
@@ -123,11 +123,13 @@ def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[dict[Vector, list[GameObj
     map_size = Vector(layers[0].c_wid, layers[0].c_hei)
     locations: dict[Vector, list[GameObject]] = {}
     for layer in layers:
-        match layer.identifier:
+        match layer.identifier.lower():
             case LDtk.LayerIdentifier.ENTITIES:
                 load_entities(locations, layer)
             case LDtk.LayerIdentifier.COLLISIONS:
                 load_collisions(locations, layer, map_size.x)
+            case 'AutoLayer':
+                pass
             case _:
                 raise ValueError(f'unhandled layer: {layer.identifier}')
 
