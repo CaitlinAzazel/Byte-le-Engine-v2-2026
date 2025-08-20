@@ -62,6 +62,9 @@ class TestGenerator(unittest.TestCase):
         generator: Generator = Generator().from_json(data)
         self.assertEqual(self.generator.object_type, generator.object_type)
         self.assertEqual(self.generator.cost, generator.cost)
+        self.assertEqual(self.generator.active, generator.active)
+        # NOTE: testing if each door is equal is not necessary since we already test Door's to/from json
+        self.assertEqual(len(self.generator.connected_doors), len(generator.connected_doors))
 
     def test_doors_open_on_activated(self):
         self.test_activates_on_interact()
