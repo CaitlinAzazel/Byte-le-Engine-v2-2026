@@ -2,12 +2,12 @@ from game.common.enums import ActionType
 from game.common.map.game_board import GameBoard
 from game.common.player import Player
 from game.controllers.movement_controller import MovementController
-from game.common.botcommands.General_Bot_Commands import stun, player
+from game.common.bots.General_Bot_Commands import stun, player
 from game.controllers.master_controller import MasterController
 from game.common.avatar import Avatar
 from game.controllers.interact_controller import InteractController
 
-class PlayerCommands():
+class FNAACMPlayer(Player):
     def __init__(self):
         self.player = Player()
         self.gameboard = GameBoard()
@@ -29,7 +29,7 @@ class PlayerCommands():
     def moveDown(self):
         MovementController.handle_actions(self.movement_controller, ActionType(3), self.player, self.gameboard)
 
-    def __whenHit(self):
+    def hit(self):
         stun()
         self.health -= 1
         self.tempPower = player.power(self) - 50
