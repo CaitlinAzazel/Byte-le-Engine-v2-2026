@@ -11,8 +11,8 @@ class BatteryList(GameObject):
         super().__init__()
         self.__list: list[Battery] = []
 
-    def append(self, dynamite: Battery):
-        self.__list.append(dynamite)
+    def append(self, battery: Battery):
+        self.__list.append(battery)
 
     def size(self) -> int:
         return len(self.__list)

@@ -11,6 +11,8 @@ from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
 from game.common.stations.occupiable_station import OccupiableStation
 from game.common.stations.station import Station
+from game.fnaacm.stations.generator import Generator
+from game.fnaacm.stations.battery import Battery
 from game.fnaacm.map.battery_list import BatteryList
 from game.utils.vector import Vector
 
@@ -116,8 +118,16 @@ class GameBoard(GameObject):
             x x x x x   y = 6
     """
 
+    @staticmethod
+    def insert_location(locations: dict[Vector, list[GameObject]], position: Vector, game_object: GameObject):
+        if position in locations:
+            locations[position].append(game_object)
+        else:
+            locations[position] = [game_object]
+
+
     def __init__(self, seed: int | None = None, map_size: Vector = Vector(),
-                 locations: dict[Vector, list[GameObject]] | None = None, walled: bool = False):
+                 locations: dict[Vector, list[GameObject]] = {}, walled: bool = False):
 
         super().__init__()
         # game_map is initially going to be None. Since generation is slow, call generate_map() as needed
@@ -128,8 +138,9 @@ class GameBoard(GameObject):
         self.event_active: int | None = None
         self.map_size: Vector = map_size
         # when passing Vectors as a tuple, end the tuple of Vectors with a comma, so it is recognized as a tuple
-        self.locations: dict | None = locations
+        self.locations: dict = locations
         self.walled: bool = walled
+        self.generators: dict[Vector, Generator] = {}
         self.batteries: BatteryList = BatteryList()
 
     @property
@@ -181,7 +192,7 @@ class GameBoard(GameObject):
         return self.__locations
 
     @locations.setter
-    def locations(self, locations: dict[Vector, list[GameObject]] | None) -> None:
+    def locations(self, locations: dict[Vector, list[GameObject]]) -> None:
         if self.game_map is not None:
             raise RuntimeError(f'{self.__class__.__name__} variables cannot be changed once generate_map is run.')
         if locations is not None and not isinstance(locations, dict):
@@ -219,6 +230,11 @@ class GameBoard(GameObject):
             for obj in objs:
                 if isinstance(obj, Avatar):
                     obj.position = vec
+                # assume that no generator/battery spawns will be added after this
+                elif isinstance(obj, Generator):
+                    self.generators[vec] = obj
+                elif isinstance(obj, Battery):
+                    self.batteries.append(obj)
 
         if self.walled:
             # Generate the walls
@@ -231,6 +247,7 @@ class GameBoard(GameObject):
 
         # convert locations dict to go_container
         output.update({vec: GameObjectContainer(objs) for vec, objs in self.locations.items()})
+
         return output
 
     def get(self, coords: Vector) -> GameObjectContainer | None:

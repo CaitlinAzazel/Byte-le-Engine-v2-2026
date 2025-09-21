@@ -49,8 +49,32 @@ GAME_MAP_FILE_NAME = "game_map.json"                                # Name and e
 GAME_MAP_DIR = os.path.join(os.getcwd(), "logs")                    # Location of game map file
 GAME_MAP_FILE = os.path.join(GAME_MAP_DIR, GAME_MAP_FILE_NAME)      # Filepath for game map file
 
-
 class Debug:                    # Keeps track of the current debug level of the game
     level = DebugLevel.NONE
 
 # Other Settings Here --------------------------------------------------------------------------------------------------
+
+LDTK_MAP_FILE_PATH = os.path.join(os.getcwd(), 'map.ldtk')
+# should mirror values in LDtk editor, but lowercase
+class LDtk:
+    class CollisionType:
+        NONE = 0
+        WALL = 1
+        VENT = 2
+        SAFE_POINT = 3
+    class EntityIdentifier:
+        DOOR = 'door'
+        GENERATOR = 'generator'
+        BATTERY = 'battery'
+        SPAWN = 'spawn'
+        SCRAP = 'scrap'
+    class LayerIdentifier:
+        ENTITIES = 'entities'
+        COLLISIONS = 'collisions'
+    class SpawnedEntityType:
+        PLAYER = 'player'
+        IAN = 'ian'
+        CRAWLER = 'crawler'
+        JUMPER = 'jumper'
+        SUPPORT = 'support'
+        DUMMY = 'dummy'
