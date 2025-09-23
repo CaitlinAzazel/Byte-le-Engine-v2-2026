@@ -4,11 +4,6 @@ from game.common.player import Player
 from game.controllers.movement_controller import MovementController
 from game.common.map.game_board import GameBoard
 from game.utils.vector import Vector
-import Dumb_bot
-import Support_bot
-import Jumper_Bot
-import Crawler_Bot
-import IAN_Bot
 
 player = Player()
 gameboard = GameBoard()
@@ -51,9 +46,9 @@ def playerScan(bot, radius):
         i += 1
     return False, 0, 0
 
-def stun():
-    Dumb_bot.stun = True
-    Support_bot.stun = True
-    Jumper_Bot.stun = True
-    Crawler_Bot.stun = True
-    IAN_Bot.stun = True
+# def stun():
+#     DumbBot.stun = True
+#     SupportBot.stun = True
+#     JumpBot.stun = True
+#     Crawler_Bot.stun = True
+#     IAN_Bot.stun = True
