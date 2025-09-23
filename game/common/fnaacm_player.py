@@ -1,4 +1,4 @@
-from game.common.enums import ActionType
+from game.common.enums import ActionType, ObjectType
 from game.common.map.game_board import GameBoard
 from game.common.player import Player
 from game.controllers.movement_controller import MovementController
@@ -9,13 +9,10 @@ from game.controllers.interact_controller import InteractController
 
 class FNAACMPlayer(Player):
     def __init__(self):
-        self.player = Player()
-        self.gameboard = GameBoard()
-        self.movement_controller = MovementController()
+        super().__init__()
         self.health = 3
         self.tempPower = 0
         self.pointsTotal = 0
-        self.inSafeZone = False
 
     def moveLeft(self):
         MovementController.handle_actions(self.movement_controller, ActionType(4), self.player, self.gameboard)
@@ -40,10 +37,23 @@ class FNAACMPlayer(Player):
             MasterController.game_over = True
 
     def addPoint(self):
-        if not self.inSafeZone:
+        if not self.in_refuge:
             self.pointsTotal += 1
         else:
             self.pointsTotal += 0
 
     def action(self):
         self.addPoint()
+
+    @property
+    def in_refuge(self) -> bool:
+        # FIXME: replace with real check
+        return False
+
+    @property
+    def in_vent(self, gameboard: GameBoard) -> bool:
+        return gameboard.object_is_found_at(self.avatar.position, ObjectType.VENT)
+
+        # get the tile the player is standing on
+        # look for a vent
+        # return whether or not vent is found
