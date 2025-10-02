@@ -31,7 +31,7 @@ class Bot(GameObject):
         is_behind_wall: bool = False
         distance_to_player: int = self.position.distance(player.avatar.position)
         in_vision: bool = distance_to_player <= self.vision_radius
-        return not is_behind_wall and in_vision and not player.in_refuge
+        return not is_behind_wall and in_vision and not player.in_refuge()
 
     def calc_next_move(self, gameboard : GameBoard, player : FNAACMPlayer ) -> list[ActionType]:
         """
@@ -52,6 +52,6 @@ class Bot(GameObject):
         -> is_in_vent, is_in_refuge, otherwise hit
         """
         # should there be max attack radius?
-        return self.can_see_player(game_board, player) and not (player.in_refuge or player.in_vent)
+        return self.can_see_player(game_board, player) and not (player.in_refuge() or player.in_vent(game_board))
 
 
