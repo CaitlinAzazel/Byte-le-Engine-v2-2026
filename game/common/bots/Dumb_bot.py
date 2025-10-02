@@ -1,10 +1,11 @@
 import random
 
-from General_Bot_Commands import *
 from game.common.avatar import Avatar
+from game.common.bots.General_Bot_Commands import *
 from game.common.game_object import GameObject
 from game.controllers.master_controller import MasterController
 from game.common.map.game_board import GameBoard
+from game.controllers.movement_controller import MovementController
 
 
 class DumbBot(GameObject):
