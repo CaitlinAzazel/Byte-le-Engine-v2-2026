@@ -9,14 +9,15 @@ from game.utils.vector import Vector
 
 
 DEFAULT_STUN_DURATION = 5
+DEFAULT_VISION_RADIUS = 1
 
 class Bot(GameObject):
-    def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector() ):
+    def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
         super().__init__()
         self.boosted : bool = False
         self.stunned : Cooldown = Cooldown(stun_duration)
         self.position : Vector = start_position
-        self.vision_radius: int = 0
+        self.vision_radius: int = vision_radius
 
     @abstractmethod
     def __calc_next_move_hunt(self, gameboard : GameBoard, player: FNAACMPlayer) -> list[ActionType]:
