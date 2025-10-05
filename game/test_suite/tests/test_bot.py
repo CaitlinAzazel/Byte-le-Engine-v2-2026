@@ -1,6 +1,6 @@
 import unittest
 from game.common.avatar import Avatar
-from game.common.bots.bot import Bot
+from game.fnaacm.bots.bot import Bot
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
 from game.fnaacm.map.vent import Vent

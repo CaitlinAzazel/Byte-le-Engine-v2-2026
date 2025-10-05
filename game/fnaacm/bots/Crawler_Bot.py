@@ -1,3 +1,5 @@
+from typing_extensions import override
+
 from game.common.avatar import Avatar
 from game.common.game_object import GameObject
 from game.controllers.master_controller import MasterController
@@ -5,9 +7,11 @@ from game.common.map.game_board import GameBoard
 import heapq
 from game.common.enums import ObjectType
 from game.controllers.movement_controller import MovementController
+from game.fnaacm.bots.bot import Bot
+from game.fnaacm.fnaacm_player import FNAACMPlayer
 from game.utils.vector import Vector
 
-class CrawlBot(GameObject):
+class CrawlBot(Bot):
     def __init__(self):
         super().__init__()
         self.vision = 1
@@ -24,6 +28,7 @@ class CrawlBot(GameObject):
         self.object_type = ObjectType.AVATAR
         self.turn_counter = 0
         self.position = Avatar.position
+        self.can_see_into_vent = True
 
     def a_star(self, board, start: Vector, goal: Vector) -> list[Vector]:
         open_set = []

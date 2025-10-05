@@ -18,6 +18,7 @@ class Bot(GameObject):
         self.stunned : Cooldown = Cooldown(stun_duration)
         self.position : Vector = start_position
         self.vision_radius: int = vision_radius
+        self.can_see_into_vent: bool = False
 
     @abstractmethod
     def __calc_next_move_hunt(self, gameboard : GameBoard, player: FNAACMPlayer) -> list[ActionType]:
@@ -27,12 +28,24 @@ class Bot(GameObject):
     def __calc_next_move_patrol(self, gameboard : GameBoard, player: FNAACMPlayer) -> list[ActionType]:
         pass
 
+    def __is_tile_open(self, tile: GameObject) -> bool:
+
+        return False
+
     def can_see_player(self, game_board: GameBoard, player: FNAACMPlayer) -> bool:
         # TODO: actually check if player is behind wall
         is_behind_wall: bool = False
         distance_to_player: int = self.position.distance(player.avatar.position)
         in_vision: bool = distance_to_player <= self.vision_radius
-        return not is_behind_wall and in_vision and not player.in_refuge()
+        if not in_vision:
+            return False
+        # open tiles: non-walls and vents if we can see into them
+        # closed tiles: walls, closed doors, vents if we cannot see into them, refuge
+
+        # need all the tiles between the bot and the player
+        positions_between = GameBoard.get_positions_overlapped_by_line(self.position, player.avatar.position)
+
+        return not is_behind_wall and not player.in_refuge()
 
     def calc_next_move(self, gameboard : GameBoard, player : FNAACMPlayer ) -> list[ActionType]:
         """

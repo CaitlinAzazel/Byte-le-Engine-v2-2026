@@ -234,6 +234,27 @@ class TestGameBoard(unittest.TestCase):
         pos: Vector = self.avatar.position
         self.assertEqual(pos, Vector(0, 1))
 
+    def test_overlapped_pos_calculator(self):
+        actual_positions = GameBoard.get_positions_overlapped_by_line(Vector(0, 0), Vector(1, 2))
+        expected_positions = [
+            Vector(0, 0),
+            Vector(0, 1),
+            Vector(1, 1),
+            Vector(1, 2)
+        ]
+        for position in actual_positions:
+            self.assertIn(position, expected_positions, f'did not find {position} in expected')
+            print(f'{position.x} {position.y}')
+        for position in expected_positions:
+            self.assertIn(position, actual_positions, f'did not find {position} in actual')
+
+    # TODO: test edge cases like
+    # WP
+    # BW
+    # W = wall
+    # P = player
+    # B = bot
+
     # test json method
     def test_game_board_json(self):
         data: dict = self.game_board.to_json()

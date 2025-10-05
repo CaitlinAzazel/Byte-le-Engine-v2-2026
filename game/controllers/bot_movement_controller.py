@@ -1,6 +1,5 @@
-from game.common.bots.bot import Bot
+from game.fnaacm.bots.bot import Bot
 from game.common.enums import ActionType, ObjectType
-from game.common.game_object import GameObject
 from game.common.map.occupiable import Occupiable
 from game.controllers.controller import Controller
 from game.common.map.game_board import GameBoard

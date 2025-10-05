@@ -1,5 +1,6 @@
 import ast
 import random
+from math import floor
 from typing import Self
 
 from game.common.avatar import Avatar
@@ -124,7 +125,6 @@ class GameBoard(GameObject):
             locations[position].append(game_object)
         else:
             locations[position] = [game_object]
-
 
     def __init__(self, seed: int | None = None, map_size: Vector = Vector(),
                  locations: dict[Vector, list[GameObject]] = {}, walled: bool = False):
@@ -362,6 +362,106 @@ class GameBoard(GameObject):
                 results.append((vec, found))  # Add tuple pairings and objects found
 
         return results
+
+    @staticmethod
+    def get_progress(a: float, b: float, value: float) -> float:
+        """
+        returns percentage "progress" of value from a to b
+        if value is "past" b then progress is 100%
+        """
+        # you cannot move "between" a and b if a == b
+        if a == b:
+            return 1
+        if value > b :
+            return 1
+        return (value - a) / (b - a)
+
+    # https://forum.gamemaker.io/index.php?threads/how-to-find-every-square-a-line-passes-through.101130/
+    @staticmethod
+    def get_positions_overlapped_by_line(line_start: Vector, line_end: Vector) -> list[Vector]:
+
+        # // get grid-relative coordinates
+        # var cx1 = x1 / cell_size;
+        # var cy1 = y1 / cell_size;
+        # var cx2 = x2 / cell_size;
+        # var cy2 = y2 / cell_size;
+        cx1 = line_start.x + 0.5
+        cy1 = line_start.y + 0.5
+        cx2 = line_end.x + 0.5
+        cy2 = line_end.y + 0.5
+
+        # // setup the initial parameters
+        # var xdir = x2 > x1 ? 1 : -1;
+        xdir: int = 1 if cx2 > cx1 else -1
+        # var xcurrent = floor(cx1);
+        xcurrent: int = floor(cx1)
+        # var xnext = x2 > x1 ? xcurrent + 1 : xcurrent;
+        xnext: float = (xcurrent + 1) if cx2 > cx1 else (xcurrent)
+        # var xprogress = get_progress(cx1, cx2, xnext);
+        xprogress = GameBoard.get_progress(cx1, cx2, xnext)
+
+        # var ydir = y2 > y1 ? 1 : -1;
+        ydir = 1 if cy2 > cy1 else -1
+        # var ycurrent = floor(cy1);
+        ycurrent = floor(cy1)
+        # var ynext = y2 > y1 ? ycurrent + 1 : ycurrent;
+        ynext = (ycurrent + 1) if cy2 > cy1 else (ycurrent)
+        # var yprogress = get_progress(cy1, cy2, ynext);
+        yprogress = GameBoard.get_progress(cy1, cy2, ynext)
+        #
+        # // if at this point x progress or y progress is 0
+        # // then the starting point is somewhere at a grid boundary
+        # // and the first cell to draw will be determined by the crawl
+        #
+        # // if neither progress is 0, the starting point is in the middle of a cell
+        # // and thus a cell containing the point should be drawn before the crawl
+        # if (xprogress != 0 && yprogress != 0)
+        #     draw_cell(xcurrent, ycurrent);
+        if (xprogress != 0 and yprogress != 0):
+            overlapped_positions = [Vector(xcurrent, ycurrent)]
+        #
+        # // the line-crawl loop
+        #
+        # // if the upcoming x progress is lower than the y progress
+        # // then it means the upcoming horizontal intersection between lines is closer
+        # // and thus the line should crawl horizontally in the next step
+        #
+        # // conversely, if the y progress is larger than the x progress
+        # // the line should crawl vertically in the next step
+        #
+        # // if x progress and y progress are the same
+        # // the line crawls diagonally, skipping both nearby cells
+        # while (xprogress < 1 || yprogress < 1) {
+        while (xprogress < 1 or yprogress < 1):
+            # var should_move_x = xprogress <= yprogress;
+            # var should_move_y = yprogress <= xprogress;
+            should_move_x = xprogress <= yprogress
+            should_move_y = yprogress <= xprogress
+
+            # if (should_move_x) {
+            # xcurrent += xdir;
+            # xnext += xdir;
+            # xprogress = get_progress(cx1, cx2, xnext);
+            # }
+            if should_move_x:
+                xcurrent += xdir
+                xnext += xdir
+                xprogress = GameBoard.get_progress(cx1, cx2, xnext)
+
+            # if (should_move_y) {
+            # ycurrent += ydir;
+            # ynext += ydir;
+            # yprogress = get_progress(cy1, cy2, ynext);
+            # }
+            if should_move_y:
+                ycurrent += ydir
+                ynext += ydir
+                yprogress = GameBoard.get_progress(cy1, cy2, ynext)
+
+            overlapped_positions.append(Vector(xcurrent, ycurrent))
+        # }
+
+        return overlapped_positions
 
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
