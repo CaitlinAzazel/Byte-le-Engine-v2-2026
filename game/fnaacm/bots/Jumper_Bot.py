@@ -5,7 +5,7 @@ from game.common.avatar import Avatar
 from game.controllers.master_controller import MasterController
 from game.common.map.game_board import GameBoard
 
-class JumpBot:
+class JumpBot(Bot):
     def __init__(self):
         super().__init__()
         self.vision = 2

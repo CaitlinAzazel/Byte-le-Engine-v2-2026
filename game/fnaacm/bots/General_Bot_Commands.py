@@ -4,6 +4,7 @@ from game.common.player import Player
 from game.controllers.movement_controller import MovementController
 from game.common.map.game_board import GameBoard
 from game.utils.vector import Vector
+from game.fnaacm.bots.bot import Bot
 
 player = Player()
 gameboard = GameBoard()

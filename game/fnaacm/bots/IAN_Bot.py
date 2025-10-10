@@ -6,8 +6,9 @@ from game.common.map.game_board import GameBoard
 import heapq
 from game.common.enums import ObjectType
 from game.utils.vector import Vector
+from game.fnaacm.bots.bot import Bot
 
-class IANBot(GameObject):
+class IANBot(Bot):
     def __init__(self):
         super().__init__()
         self.vision = 1

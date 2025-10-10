@@ -29,7 +29,7 @@ class Bot(GameObject):
         pass
 
     def __is_tile_open(self, tile: GameObject) -> bool:
-
+        # Overridable boolean dependent upon specific bot abilities/functionality
         return False
 
     def can_see_player(self, game_board: GameBoard, player: FNAACMPlayer) -> bool:

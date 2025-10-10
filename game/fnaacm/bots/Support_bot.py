@@ -3,8 +3,9 @@ import Dumb_bot
 import Jumper_Bot
 import Crawler_Bot
 import IAN_Bot
+from game.fnaacm.bots.bot import Bot
 
-class Support_Bot:
+class Support_Bot(Bot):
     def __init__(self):
         super().__init__()
         self.turnedOn = False
