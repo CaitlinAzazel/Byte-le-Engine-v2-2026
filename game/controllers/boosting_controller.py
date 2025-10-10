@@ -7,13 +7,13 @@ from game.controllers.controller import Controller
 
 class BoostingController(Controller):
 
-    def __init__(self):
+    def __init__(self, supportBot, jumpBot, dumbBot, crawlerBot, ianBot):
         super().__init__()
-        self.jumpBot = JumpBot()
-        self.supportBot = SupportBot()
-        self.ianBot = IANBot()
-        self.crawlerBot = CrawlBot()
-        self.dumbBot = DumbBot()
+        self.jumpBot = jumpBot
+        self.supportBot = supportBot
+        self.ianBot = ianBot
+        self.crawlerBot = crawlerBot
+        self.dumbBot = dumbBot
 
     def boosting(self):
         if SupportBot.turned_on(self.supportBot):

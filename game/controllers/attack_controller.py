@@ -6,7 +6,7 @@ from game.common.map.game_board import GameBoard
 from game.utils.vector import Vector
 
 class Attack_Controller(Controller):
-"""
+    """
     `Attack Controller Notes:`
 
         The Attack Controller manages the actions the bots try to execute. As the game is played, a bot can

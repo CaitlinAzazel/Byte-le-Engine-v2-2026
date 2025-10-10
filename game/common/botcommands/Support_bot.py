@@ -9,3 +9,6 @@ class SupportBot:
 
     def turned_on(self):
         return self.turnedOn
+
+    def flip_state(self):
+        self.turnedOn = not self.turnedOn
