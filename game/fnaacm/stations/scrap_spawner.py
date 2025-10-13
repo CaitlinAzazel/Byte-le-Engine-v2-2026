@@ -3,6 +3,7 @@ from game.common.avatar import Avatar
 from game.common.enums import ObjectType
 from game.common.map.occupiable import Occupiable
 from game.fnaacm.cooldown import Cooldown
+from game.fnaacm.items.scrap import Scrap
 from game.utils.ldtk_json import EntityInstance
 from game.utils.vector import Vector
 
@@ -15,7 +16,7 @@ class ScrapSpawner(Occupiable):
 
     def __init__(self, position: Vector = Vector(0,0)) -> None:
         super().__init__()
-        self.object_type: ObjectType = ObjectType.BATTERY
+        self.object_type: ObjectType = ObjectType.SCRAP_SPAWNER
         self.position: Vector = position
         self.__cooldown: Cooldown = Cooldown(ScrapSpawner.TURNS_TO_RESPAWN)
 
@@ -33,7 +34,6 @@ class ScrapSpawner(Occupiable):
     @override
     def to_json(self) -> dict:
         data = super().to_json()
-        data['recharge_amount'] = self.__recharge_amount
         data['cooldown'] = self.__cooldown.to_json()
         data['position'] = self.position.to_json()
         return data
@@ -41,9 +41,8 @@ class ScrapSpawner(Occupiable):
     @override
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
-        self.__recharge_amount = data['recharge_amount']
-        self.__cooldown = Cooldown().from_json(data['cooldown'])
         self.position = Vector().from_json(data['position'])
+        self.__cooldown = Cooldown().from_json(data['cooldown'])
         return self
 
     def is_available(self) -> bool:
@@ -55,4 +54,4 @@ class ScrapSpawner(Occupiable):
             return
         if not self.__cooldown.activate():
             return
-        # TODO: give them scrap
+        avatar.pick_up(Scrap(quantity=1))

@@ -8,6 +8,7 @@ from game.fnaacm.map.door import Door
 from game.fnaacm.map.vent import Vent
 from game.fnaacm.stations.battery import Battery
 from game.fnaacm.stations.generator import Generator
+from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.utils.helpers import read_json_file
 from game.utils.ldtk_json import EntityInstance, LayerInstance, ldtk_json_to_dict
 from game.utils.vector import Vector
@@ -73,8 +74,7 @@ def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: Layer
             case LDtk.EntityIdentifier.SPAWN:
                 game_object = get_spawned_entity_from_spawner(entity)
             case LDtk.EntityIdentifier.SCRAP:
-                # TODO: write a luh scrap spawner and use it here
-                ...
+                game_object = ScrapSpawner.from_ldtk_entity(entity)
             case _:
                 raise ValueError(f'unhandled entity identifier: "{entity.identifier}"')
         if game_object is None:

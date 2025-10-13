@@ -39,12 +39,12 @@ class Cooldown(GameObject):
 
     @property
     def can_activate(self) -> bool:
-        """
-        returns True if cooldown was successfully activated
-        """
         return self.__counter == 0
 
     def activate(self) -> bool:
+        """
+        returns True if cooldown was successfully activated
+        """
         if not self.can_activate:
             return False
         self.__counter = self.__duration
