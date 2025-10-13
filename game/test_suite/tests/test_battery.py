@@ -48,7 +48,7 @@ class TestBattery(unittest.TestCase):
 
     def test_battery_cooldown_activates(self):
         self.battery.handle_turn(self.avatar)
-        self.assertFalse(self.battery.is_available)
+        self.assertFalse(self.battery.is_available())
 
     def test_battery_json(self):
         json = self.battery.to_json()

@@ -6,6 +6,7 @@ from game.fnaacm.cooldown import Cooldown
 from game.utils.ldtk_json import EntityInstance
 from game.utils.vector import Vector
 
+# TODO: rename to BatterySpawn
 class Battery(Occupiable):
     """
     A tile that occasionally holds batteries which increase the player avatar's power.
@@ -59,7 +60,6 @@ class Battery(Occupiable):
         self.position = Vector().from_json(data['position'])
         return self
 
-    @property
     def is_available(self) -> bool:
         return self.__cooldown.can_activate
 
