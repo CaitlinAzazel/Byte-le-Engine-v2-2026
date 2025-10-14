@@ -11,9 +11,9 @@ from game.utils.vector import Vector
 from typing_extensions import override
 
 class Refuge(Occupiable):
-    __global_occupied = False
-    __global_countdown_timer = 10
-    __global_ejection_reset = 5
+    global_occupied = False
+    global_countdown_timer = 10
+    global_ejection_reset = 5
 
     """
         'Refuge Class Notes'
@@ -41,40 +41,40 @@ class Refuge(Occupiable):
     def to_json(self) -> dict:
         json = super().to_json()
         json['vector'] = self.vector
-        json['occupied'] = self.__global_occupied
-        json['countdown_timer'] = self.__global_countdown_timer
+        json['occupied'] = self.global_occupied
+        json['countdown_timer'] = self.global_countdown_timer
         return json
 
     @override
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
-        self.__global_occupied = data['occupied']
-        self.__global_countdown_timer = data['countdown_timer']
+        self.global_occupied = data['occupied']
+        self.global_countdown_timer = data['countdown_timer']
         return self
 
     @property
     def occupied(self) -> bool:
-        return self.__global_occupied
+        return self.global_occupied
 
     @occupied.setter
     def occupied(self, occupied: bool) -> None:
-        self.__global_occupied = occupied
+        self.global_occupied = occupied
 
     @property
     def ejection_reset(self) -> int:
-        return self.__global_ejection_reset
+        return self.global_ejection_reset
 
     @ejection_reset.setter
     def ejection_reset(self, value: int) -> None:
-        self.__global_ejection_reset = value
+        self.global_ejection_reset = value
 
     @property
     def countdown_timer(self) -> int:
-        return self.__global_countdown_timer
+        return self.global_countdown_timer
 
     @countdown_timer.setter
     def countdown_timer(self, value: int) -> None:
-        self.__global_countdown_timer = value
+        self.global_countdown_timer = value
 
     @override
     def can_occupy(self, avatar: Avatar) -> bool:
@@ -89,17 +89,17 @@ class Refuge(Occupiable):
 
     def refuge_countdown(self, avatar: Avatar) -> None:
         if self.occupied:
-            self.countdown_timer -= 1
-            self.ejection_reset = 0
+            Refuge.countdown_timer -= 1
+            Refuge.ejection_reset = 0
             if self.countdown_timer <= 0:
                 self.ejection(avatar)
-                self.ejection_reset = 0
+                Refuge.ejection_reset = 0
 
     def refuge_tick(self, avatar: Avatar) -> None:
         if self.can_occupy(avatar) and avatar.position == self.vector:
             self.refuge_countdown(avatar)
         elif self.ejection_reset < 5:
-            self.ejection_reset += 1
+            Refuge.ejection_reset += 1
 
         """
                    # TO SET OCCUPIED:
