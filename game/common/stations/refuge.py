@@ -89,24 +89,17 @@ class Refuge(Occupiable):
 
     def refuge_countdown(self, avatar: Avatar) -> None:
         if self.occupied:
-
-            turns_remaining = self.countdown_timer
-            self.countdown_timer = turns_remaining - 1
+            self.countdown_timer -= 1
             self.ejection_reset = 0
-
             if self.countdown_timer <= 0:
                 self.ejection(avatar)
                 self.ejection_reset = 0
-        else:
-            self.ejection_reset += 1
 
     def refuge_tick(self, avatar: Avatar) -> None:
         if self.can_occupy(avatar) and avatar.position == self.vector:
-            self.countdown_timer -= 1
+            self.refuge_countdown(avatar)
         elif self.ejection_reset < 5:
             self.ejection_reset += 1
-
-        self.refuge_countdown(avatar)
 
         """
                    # TO SET OCCUPIED:

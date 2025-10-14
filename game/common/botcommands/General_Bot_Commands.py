@@ -1,16 +1,9 @@
 from game.common.avatar import Avatar
 from game.common.enums import ActionType
 from game.common.player import Player
-from game.common.stations import refuge
-from game.common.stations.refuge import Refuge
 from game.controllers.movement_controller import MovementController
 from game.common.map.game_board import GameBoard
 from game.utils.vector import Vector
-import Dumb_bot
-import Support_bot
-import Jumper_Bot
-import Crawler_Bot
-import IAN_Bot
 
 player = Player()
 gameboard = GameBoard()
@@ -28,7 +21,6 @@ def moveDown(bot):
     MovementController.handle_actions(bot, ActionType(3), player, gameboard)
 
 def playerScan(bot, radius):
-    while not Refuge.occupied:
         bot_pos: Vector = Vector(bot.avatar.position.x, bot.avatar.position.y)
         i = 1
         while(i <= radius):
