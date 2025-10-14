@@ -6,11 +6,11 @@ from game.common.map.wall import Wall
 from game.config import LDtk
 from game.fnaacm.map.door import Door
 from game.fnaacm.map.vent import Vent
-from game.fnaacm.stations.battery import Battery
+from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
 from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.utils.helpers import read_json_file
-from game.utils.ldtk_json import EntityInstance, LayerInstance, ldtk_json_to_dict
+from game.utils.ldtk_json import EntityInstance, LayerInstance, ldtk_json_from_dict 
 from game.utils.vector import Vector
 
 
@@ -70,7 +70,7 @@ def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: Layer
             case LDtk.EntityIdentifier.GENERATOR:
                 game_object = Generator.from_ldtk_entity(entity, doors)
             case LDtk.EntityIdentifier.BATTERY:
-                game_object = Battery.from_ldtk_entity(entity)
+                game_object = BatterySpawner.from_ldtk_entity(entity)
             case LDtk.EntityIdentifier.SPAWN:
                 game_object = get_spawned_entity_from_spawner(entity)
             case LDtk.EntityIdentifier.SCRAP:
@@ -109,7 +109,7 @@ def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[dict[Vector, list[GameObj
     returned vector is the size of the map
     """
     json_data = read_json_file(path_to_ldtk_file)
-    ldtk_json = ldtk_json_to_dict(json_data)
+    ldtk_json = ldtk_json_from_dict(json_data)
     if len(ldtk_json.levels) < 1:
         raise RuntimeError(f'LDtk file "{path_to_ldtk_file}" has no levels')
     level = ldtk_json.levels[0] # hack for current game; we only have one level

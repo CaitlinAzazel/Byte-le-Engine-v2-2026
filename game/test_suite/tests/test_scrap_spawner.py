@@ -40,6 +40,7 @@ class TestScrapSpawner(unittest.TestCase):
         repetitions = 3
         total_turns = ((ScrapSpawner.TURNS_TO_RESPAWN + 1) * repetitions) + 1
         for i in range(total_turns):
+            self.scrap_spawner.tick()
             self.scrap_spawner.handle_turn(self.avatar)
             expected = (i // ScrapSpawner.TURNS_TO_RESPAWN) + 1
             self.assertEqual(self.avatar.get_quantity_of_item_type(ObjectType.SCRAP), expected, f'failed on turn {i}')

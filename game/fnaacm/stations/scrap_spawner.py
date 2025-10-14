@@ -48,8 +48,10 @@ class ScrapSpawner(Occupiable):
     def is_available(self) -> bool:
         return self.__cooldown.can_activate
 
-    def handle_turn(self, avatar: Avatar) -> None:
+    def tick(self) -> None:
         self.__cooldown.tick()
+
+    def handle_turn(self, avatar: Avatar) -> None:
         if self.position != avatar.position:
             return
         if not self.__cooldown.activate():
