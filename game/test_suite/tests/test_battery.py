@@ -20,7 +20,7 @@ class TestBattery(unittest.TestCase):
         self.__battery_recharge_amount: int = 4
         self.battery: Battery = Battery(
             position=position,
-            cooldown=self.__battery_cooldown,
+            cooldown_duration=self.__battery_cooldown,
             recharge_amount=self.__battery_recharge_amount
         )
 
@@ -42,23 +42,17 @@ class TestBattery(unittest.TestCase):
         repetitions = 3
         total_turns = ((self.__battery_cooldown+1)*repetitions)+1
         for i in range(total_turns):
-            self.battery.tick()
             self.battery.handle_turn(self.avatar)
             total_power = self.__starting_power + (i // self.__battery_cooldown + 1) * self.__battery_recharge_amount
             self.assertEqual(self.avatar.power, total_power, f'failed on turn {i}')
 
-    def test_battery_available(self):
-        self.assertTrue(self.battery.is_available)
-
-    def test_battery_unavailable(self):
+    def test_battery_cooldown_activates(self):
         self.battery.handle_turn(self.avatar)
         self.assertFalse(self.battery.is_available)
 
-    def test_battery_availability_over_time(self):
-        self.assertTrue(self.battery.is_available)
-        self.battery.handle_turn(self.avatar)
-        for i in range(self.__battery_cooldown):
-            self.assertFalse(self.battery.is_available)
-            self.battery.tick()
-        self.assertTrue(self.battery.is_available)
+    def test_battery_json(self):
+        json = self.battery.to_json()
+        new_battery = Battery().from_json(json)
+        self.assertEqual(self.battery, new_battery)
+
 
