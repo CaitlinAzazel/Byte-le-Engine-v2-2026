@@ -28,3 +28,15 @@ class TestRefuge(unittest.TestCase):
         self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
         self.assertTrue(self.player.avatar.position == Vector(1,1) )
         self.refuge.refuge_tick(self.avatar)
+
+    def test_refuge_nonoccupiable(self):
+        self.refuge.ejection_reset = 0
+        self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        self.assertTrue(self.player.avatar.position == Vector(0,1) )
+
+    def test_refuge_ejection(self):
+        self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        for i in range (11):
+            self.refuge.refuge_tick(self.avatar)
+            print(self.player.avatar.position)
+        self.assertTrue(self.player.avatar.position == Vector(1, 2) )
