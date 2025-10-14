@@ -63,3 +63,9 @@ class InteractController(Controller):
 
         if stat is not None and isinstance(stat, Station):
             stat.take_action(client.avatar)
+
+        # "proximity-based" tile interactions
+        for battery_spawner in world.battery_spawners:
+            battery_spawner.handle_turn(client.avatar)
+        for scrap_spawner in world.scrap_spawners:
+            scrap_spawner.handle_turn(client.avatar)

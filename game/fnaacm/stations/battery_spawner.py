@@ -6,8 +6,7 @@ from game.fnaacm.cooldown import Cooldown
 from game.utils.ldtk_json import EntityInstance
 from game.utils.vector import Vector
 
-# TODO: rename to BatterySpawn
-class Battery(Occupiable):
+class BatterySpawner(Occupiable):
     """
     A tile that occasionally holds batteries which increase the player avatar's power.
     """
@@ -30,9 +29,9 @@ class Battery(Occupiable):
         recharge_amount: int = -1
         for field in entity.field_instances:
             match field.identifier:
-                case Battery.LDtkFieldIdentifers.COOLDOWN_DURATION:
+                case BatterySpawner.LDtkFieldIdentifers.COOLDOWN_DURATION:
                     cooldown_duration = field.value
-                case Battery.LDtkFieldIdentifers.RECHARGE_AMOUNT:
+                case BatterySpawner.LDtkFieldIdentifers.RECHARGE_AMOUNT:
                     recharge_amount = field.value
         return cls(position, cooldown_duration, recharge_amount)
 
@@ -60,11 +59,14 @@ class Battery(Occupiable):
         self.position = Vector().from_json(data['position'])
         return self
 
+    @property
     def is_available(self) -> bool:
         return self.__cooldown.can_activate
 
-    def handle_turn(self, avatar: Avatar) -> None:
+    def tick(self) -> None:
         self.__cooldown.tick()
+
+    def handle_turn(self, avatar: Avatar) -> None:
         if self.position != avatar.position:
             return
         if not self.__cooldown.activate():

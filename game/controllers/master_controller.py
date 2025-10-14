@@ -105,8 +105,10 @@ class MasterController(Controller):
     def turn_logic(self, clients: list[Player], turn):
         game_board: GameBoard = self.current_world_data["game_board"]
 
-        for i in range(game_board.batteries.size()):
-            game_board.batteries.get(i).tick()
+        for battery in game_board.battery_spawners:
+            battery.tick()
+        for scrap_spawner in game_board.scrap_spawners:
+            scrap_spawner.tick()
 
         for client in clients:
 
@@ -116,11 +118,6 @@ class MasterController(Controller):
                     self.interact_controller.handle_actions(client.actions[i], client, game_board)
                 except IndexError:
                     pass
-
-            # could have a system for proximity-based tile interaction but this works for now
-            for i in range(game_board.batteries.size()):
-                if client.avatar is not None:
-                    game_board.batteries.get(i).handle_turn(client.avatar)
 
         # checks event logic at the end of round
         # self.handle_events(clients)
