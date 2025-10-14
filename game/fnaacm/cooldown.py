@@ -5,6 +5,9 @@ class Cooldown(GameObject):
     def __init__(self, duration: int = 0):
         """
         encapsulates simple turn-based cooldown logic; proper use requires that `tick` is called before checking `can_activate`
+
+        if a cooldown is activated on turn n,
+        the next turn it may be activated is turn n + duration + 1
         """
         super().__init__()
         self.__duration = duration
