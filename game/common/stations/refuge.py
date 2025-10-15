@@ -1,19 +1,17 @@
-from operator import truediv
 
-from game.common.botcommands.General_Bot_Commands import player
 from game.common.enums import ObjectType
-from game.common.game_object import GameObject
-from game.common.items.item import Item
 from typing import Self, Type
 from game.common.avatar import Avatar
+from game.common.map.game_board import GameBoard
 from game.common.map.occupiable import Occupiable
+from game.controllers.movement_controller import MovementController
 from game.utils.vector import Vector
 from typing_extensions import override
 
 class Refuge(Occupiable):
     global_occupied = False
-    global_countdown_timer = 10
-    global_ejection_reset = 5
+    global_turns_inside = 0
+    global_turns_outside = 5
 
     """
         'Refuge Class Notes'
@@ -27,7 +25,7 @@ class Refuge(Occupiable):
 
         The Refuge is intended to add a layer of strategy to the game, providing safety at the cost of valuable points
 
-        The occupied/countdown_timer variables are meant to be global because their status can
+        The occupied/turns_inside variables are meant to be global because their status can
                                         drastically change the state and operations of the entire game
     """
 
@@ -42,64 +40,63 @@ class Refuge(Occupiable):
         json = super().to_json()
         json['vector'] = self.vector
         json['occupied'] = self.global_occupied
-        json['countdown_timer'] = self.global_countdown_timer
+        json['turns_inside'] = self.global_turns_inside
         return json
 
     @override
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
         self.global_occupied = data['occupied']
-        self.global_countdown_timer = data['countdown_timer']
+        self.global_turns_inside = data['turns_inside']
         return self
-
-    @property
-    def occupied(self) -> bool:
-        return self.global_occupied
-
-    @occupied.setter
-    def occupied(self, occupied: bool) -> None:
-        self.global_occupied = occupied
-
-    @property
-    def ejection_reset(self) -> int:
-        return self.global_ejection_reset
-
-    @ejection_reset.setter
-    def ejection_reset(self, value: int) -> None:
-        self.global_ejection_reset = value
-
-    @property
-    def countdown_timer(self) -> int:
-        return self.global_countdown_timer
-
-    @countdown_timer.setter
-    def countdown_timer(self, value: int) -> None:
-        self.global_countdown_timer = value
 
     @override
     def can_occupy(self, avatar: Avatar) -> bool:
-        if self.ejection_reset >= 5:
-            self.countdown_timer = 10
-            return True
+        return Refuge.global_turns_outside >= 5
+
+    @staticmethod
+    def ejection(avatar: Avatar, refuge_position: Vector, game_board: GameBoard) -> None:
+        directions = [Vector(0,1), Vector(1, 0), Vector(0, -1), Vector(-1, 0)]
+
+        # check if N, E, S, W tiles are occupiable, no bot
+        for direction in directions:
+            eject_to = refuge_position + direction
+            if not game_board.is_occupiable(eject_to):
+                continue
+
+            objects = game_board.get_objects_from(eject_to)
+            bot_found = False
+            for object in objects:
+                # FIXME: import Bot once merged
+                if (isinstance(object, Bot)):
+                    bot_found = True
+                    break
+            if bot_found:
+                continue
+
+            tile = game_board.get_top( eject_to )
+            if isinstance(tile, Occupiable) and not tile.can_occupy(avatar):
+                continue
+
+            MovementController.update_avatar_position(eject_to, avatar, game_board)
+        
+        # pray it doesnt get here
+
+    @staticmethod
+    def refuge_countdown(avatar: Avatar) -> None:
+        Refuge.global_turns_inside += 1
+        if Refuge.global_turns_inside >= 10:
+            Refuge.ejection(avatar)
+            Refuge.global_turns_outside = 0
+
+    @staticmethod
+    def refuge_tick(avatar: Avatar) -> None:
+        if Refuge.global_occupied:
+            Refuge.refuge_countdown(avatar)
         else:
-            return False
+            Refuge.global_turns_outside += 1
 
-    def ejection(self, avatar: Avatar) -> None:
-        avatar.position = avatar.position.add_y(1)
 
-    def refuge_countdown(self, avatar: Avatar) -> None:
-        if self.occupied:
-            Refuge.countdown_timer -= 1
-            Refuge.ejection_reset = 0
-            if self.countdown_timer <= 0:
-                self.ejection(avatar)
-                Refuge.ejection_reset = 0
-
-    def refuge_tick(self, avatar: Avatar) -> None:
-        if self.can_occupy(avatar) and avatar.position == self.vector:
-            self.refuge_countdown(avatar)
-        elif self.ejection_reset < 5:
-            Refuge.ejection_reset += 1
 
         """
                    # TO SET OCCUPIED:

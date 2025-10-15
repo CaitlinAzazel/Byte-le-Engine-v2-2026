@@ -6,6 +6,7 @@ from game.common.avatar import Avatar
 from game.common.enums import *
 from game.common.player import Player
 import game.config as config   # this is for turns
+from game.common.stations.refuge import Refuge
 from game.utils.thread import CommunicationThread
 from game.controllers.movement_controller import MovementController
 from game.controllers.controller import Controller
@@ -107,6 +108,10 @@ class MasterController(Controller):
 
         for i in range(game_board.batteries.size()):
             game_board.batteries.get(i).tick()
+
+        # pve game so only one client
+        avatar = clients[0].avatar
+        Refuge.refuge_tick(avatar)
 
         for client in clients:
 

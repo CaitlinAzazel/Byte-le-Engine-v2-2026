@@ -27,19 +27,25 @@ class TestRefuge(unittest.TestCase):
     def test_refuge_occupiable(self):
         self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
         self.assertTrue(self.player.avatar.position == Vector(1,1) )
-        self.refuge.refuge_tick(self.avatar)
+        Refuge.refuge_tick(self.avatar)
+        self.assertTrue(Refuge.global_occupied)
 
     def test_refuge_nonoccupiable(self):
-        self.refuge.ejection_reset = 0
+        Refuge.global_turns_outside = 0
         self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        Refuge.refuge_tick(self.avatar)
         self.assertTrue(self.player.avatar.position == Vector(0,1) )
+        self.assertFalse(Refuge.global_occupied)
 
     def test_refuge_ejection(self):
         self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
-        for i in range (11):
-            self.refuge.refuge_countdown(self.avatar)
+        for i in range (10):
+            print(Refuge.global_turns_inside)
+            Refuge.refuge_tick(self.avatar)
             print(self.player.avatar.position)
-            print(self.refuge.countdown_timer)
+            print(Refuge.global_turns_inside)
         self.assertTrue(self.player.avatar.position == Vector(1, 2) )
 
-   # def test_refuge_point_blockade(self):
+    # TODO: waiting on point system
+    def test_refuge_point_blockade(self):
+        ...
