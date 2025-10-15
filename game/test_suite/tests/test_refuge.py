@@ -41,10 +41,14 @@ class TestRefuge(unittest.TestCase):
         self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
         for i in range (10):
             print(Refuge.global_turns_inside)
-            Refuge.refuge_tick(self.avatar)
+            Refuge.refuge_tick(self.avatar, self.game_board)
             print(self.player.avatar.position)
             print(Refuge.global_turns_inside)
         self.assertTrue(self.player.avatar.position == Vector(1, 2) )
+
+    # TODO: test cases for ejecting to E, S, W,
+
+    # TODO: check if ejection avoids bots
 
     # TODO: waiting on point system
     def test_refuge_point_blockade(self):

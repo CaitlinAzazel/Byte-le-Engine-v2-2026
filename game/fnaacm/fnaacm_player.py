@@ -1,10 +1,7 @@
 from game.common.enums import ActionType, ObjectType
 from game.common.map.game_board import GameBoard
 from game.common.player import Player
-from game.controllers.movement_controller import MovementController
-from game.controllers.master_controller import MasterController
 from game.common.avatar import Avatar
-from game.controllers.interact_controller import InteractController
 
 class FNAACMPlayer(Player):
     def __init__(self, code: object | None = None, team_name: str | None = None, actions: list[ActionType] = [],

@@ -1,10 +1,8 @@
 from game.common.avatar import Avatar
-from game.common.game_object import GameObject
 from game.common.map.occupiable import Occupiable
 from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.common.enums import *
-from game.common.stations.refuge import Refuge
 from game.utils.vector import Vector
 from game.controllers.controller import Controller
 
@@ -26,13 +24,6 @@ class MovementController(Controller):
 
     @staticmethod
     def update_avatar_position(position: Vector, avatar: Avatar, world: GameBoard):
-        tile = world.get_top(position)
-        if isinstance(tile, Refuge):
-            Refuge.global_turns_inside = 0
-            Refuge.global_occupied = True
-        else:
-            Refuge.global_occupied = False
-
         # remove the avatar from its previous location
         world.remove(avatar.position, ObjectType.AVATAR)
 

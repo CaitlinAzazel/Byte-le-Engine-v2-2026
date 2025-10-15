@@ -109,10 +109,6 @@ class MasterController(Controller):
         for i in range(game_board.batteries.size()):
             game_board.batteries.get(i).tick()
 
-        # pve game so only one client
-        avatar = clients[0].avatar
-        Refuge.refuge_tick(avatar)
-
         for client in clients:
 
             for i in range(MAX_NUMBER_OF_ACTIONS_PER_TURN):
@@ -126,6 +122,11 @@ class MasterController(Controller):
             for i in range(game_board.batteries.size()):
                 if client.avatar is not None:
                     game_board.batteries.get(i).handle_turn(client.avatar)
+
+
+        # pve game so only one client
+        avatar = clients[0].avatar
+        Refuge.refuge_tick(avatar, game_board)
 
         # checks event logic at the end of round
         # self.handle_events(clients)

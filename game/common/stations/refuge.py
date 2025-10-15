@@ -5,6 +5,7 @@ from game.common.avatar import Avatar
 from game.common.map.game_board import GameBoard
 from game.common.map.occupiable import Occupiable
 from game.controllers.movement_controller import MovementController
+from game.fnaacm.bots.bot import Bot
 from game.utils.vector import Vector
 from typing_extensions import override
 
@@ -12,6 +13,8 @@ class Refuge(Occupiable):
     global_occupied = False
     global_turns_inside = 0
     global_turns_outside = 5
+
+    all_positions: set[Vector] = set()
 
     """
         'Refuge Class Notes'
@@ -33,6 +36,7 @@ class Refuge(Occupiable):
         super().__init__()
         self.vector = Vector(x, y)
         self.object_type: ObjectType = ObjectType.REFUGE
+        Refuge.all_positions.add(self.vector)
 
 
     @override
@@ -68,7 +72,7 @@ class Refuge(Occupiable):
             bot_found = False
             for object in objects:
                 # FIXME: import Bot once merged
-                if (isinstance(object, Bot)):
+                if isinstance(object, Bot):
                     bot_found = True
                     break
             if bot_found:
@@ -79,23 +83,29 @@ class Refuge(Occupiable):
                 continue
 
             MovementController.update_avatar_position(eject_to, avatar, game_board)
-        
+
         # pray it doesnt get here
 
     @staticmethod
-    def refuge_countdown(avatar: Avatar) -> None:
+    def refuge_countdown(avatar: Avatar, game_board: GameBoard) -> None:
         Refuge.global_turns_inside += 1
         if Refuge.global_turns_inside >= 10:
-            Refuge.ejection(avatar)
+            Refuge.ejection(avatar, avatar.position, game_board)
             Refuge.global_turns_outside = 0
 
     @staticmethod
-    def refuge_tick(avatar: Avatar) -> None:
+    def refuge_tick(avatar: Avatar, game_board: GameBoard) -> None:
+        Refuge.global_occupied = False
+        for pos in Refuge.all_positions:
+            if pos == avatar.position:
+                Refuge.global_occupied = True
+                break
+
         if Refuge.global_occupied:
-            Refuge.refuge_countdown(avatar)
+            Refuge.refuge_countdown(avatar, game_board)
         else:
             Refuge.global_turns_outside += 1
-
+            Refuge.global_turns_inside = 0
 
 
         """
