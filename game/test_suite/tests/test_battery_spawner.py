@@ -1,11 +1,11 @@
 import unittest
 
 from game.common.avatar import Avatar
-from game.fnaacm.stations.battery import Battery
+from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.utils.vector import Vector
 
 
-class TestBattery(unittest.TestCase):
+class TestBatterySpawner(unittest.TestCase):
     def setUp(self) -> None:
         position = Vector()
 
@@ -18,7 +18,7 @@ class TestBattery(unittest.TestCase):
 
         self.__battery_cooldown: int = 11
         self.__battery_recharge_amount: int = 4
-        self.battery: Battery = Battery(
+        self.battery: BatterySpawner = BatterySpawner(
             position=position,
             cooldown_duration=self.__battery_cooldown,
             recharge_amount=self.__battery_recharge_amount
@@ -42,6 +42,7 @@ class TestBattery(unittest.TestCase):
         repetitions = 3
         total_turns = ((self.__battery_cooldown+1)*repetitions)+1
         for i in range(total_turns):
+            self.battery.tick()
             self.battery.handle_turn(self.avatar)
             total_power = self.__starting_power + (i // self.__battery_cooldown + 1) * self.__battery_recharge_amount
             self.assertEqual(self.avatar.power, total_power, f'failed on turn {i}')
@@ -52,7 +53,7 @@ class TestBattery(unittest.TestCase):
 
     def test_battery_json(self):
         json = self.battery.to_json()
-        new_battery = Battery().from_json(json)
+        new_battery = BatterySpawner().from_json(json)
         self.assertEqual(self.battery, new_battery)
 
 

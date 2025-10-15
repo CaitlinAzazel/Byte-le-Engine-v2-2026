@@ -326,6 +326,9 @@ class Avatar(GameObject):
         # If the item can't be in the inventory, return it
         return item
 
+    def get_quantity_of_item_type(self, item_type: ObjectType) -> int:
+        return sum(map(lambda x: x.quantity if x is not None and x.object_type == item_type else 0, self.inventory))
+
     def to_json(self) -> dict:
         data: dict = super().to_json()
         data['held_index'] = self.__held_index

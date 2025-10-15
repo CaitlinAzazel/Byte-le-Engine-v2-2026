@@ -34,6 +34,7 @@ class ObjectType(Enum):
     GAME_OBJECT_CONTAINER = auto()
     GENERATOR = auto()
     SCRAP = auto()
+    SCRAP_SPAWNER = auto()
     VENT = auto()
     BATTERY = auto()
     DOOR = auto()

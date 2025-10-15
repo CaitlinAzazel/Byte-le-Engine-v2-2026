@@ -11,9 +11,10 @@ from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
 from game.common.stations.occupiable_station import OccupiableStation
 from game.common.stations.station import Station
+from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
+from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
-from game.fnaacm.stations.battery import Battery
-from game.fnaacm.map.battery_list import BatteryList
+from game.fnaacm.map.battery_spawner_list import BatterySpawnerList
 from game.utils.vector import Vector
 
 
@@ -141,7 +142,8 @@ class GameBoard(GameObject):
         self.locations: dict = locations
         self.walled: bool = walled
         self.generators: dict[Vector, Generator] = {}
-        self.batteries: BatteryList = BatteryList()
+        self.battery_spawners: BatterySpawnerList = BatterySpawnerList()
+        self.scrap_spawners: ScrapSpawnerList = ScrapSpawnerList()
 
     @property
     def seed(self) -> int:
@@ -233,8 +235,8 @@ class GameBoard(GameObject):
                 # assume that no generator/battery spawns will be added after this
                 elif isinstance(obj, Generator):
                     self.generators[vec] = obj
-                elif isinstance(obj, Battery):
-                    self.batteries.append(obj)
+                elif isinstance(obj, BatterySpawner):
+                    self.battery_spawners.append(obj)
 
         if self.walled:
             # Generate the walls
