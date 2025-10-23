@@ -34,6 +34,7 @@ class ObjectType(Enum):
     GAME_OBJECT_CONTAINER = auto()
     GENERATOR = auto()
     SCRAP = auto()
+    SCRAP_SPAWNER = auto()
     VENT = auto()
     BATTERY = auto()
     REFUGE = auto()
@@ -65,6 +66,14 @@ class ActionType(Enum):
     PLACE_ITEM_DOWN = auto()
     PLACE_ITEM_LEFT = auto()
     PLACE_ITEM_RIGHT = auto()
+    ATTACK_UP = auto()
+    ATTACK_DOWN = auto()
+    ATTACK_LEFT = auto()
+    ATTACK_RIGHT = auto()
+    ATTACK_TOP_RIGHT = auto()
+    ATTACK_BOTTOM_RIGHT = auto()
+    ATTACK_BOTTOM_LEFT = auto()
+    ATTACK_TOP_LEFT = auto()
     """
     These last 10 enums are for selecting a slot from the Avatar class' inventory.
     You can add/remove these as needed for the purposes of your game. 

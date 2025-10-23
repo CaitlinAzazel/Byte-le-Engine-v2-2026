@@ -1,28 +1,15 @@
-from General_Bot_Commands import *
-import Dumb_bot
-import Jumper_Bot
-import Crawler_Bot
-import IAN_Bot
 from game.fnaacm.bots.bot import Bot
+from game.fnaacm.bots.General_Bot_Commands import *
 
-class Support_Bot(Bot):
+class SupportBot(Bot):
     def __init__(self):
         super().__init__()
         self.turnedOn = False
         self.movement_controller: MovementController = MovementController()
         self.stun = False
 
-    def boosting(self):
-        if self.turnedOn == True:
-            Dumb_bot.boosted = True
-            Jumper_Bot.boosted = True
-            Crawler_Bot.boosted = True
-            IAN_Bot.boosted = True
-        else:
-            Dumb_bot.boosted = False
-            Jumper_Bot.boosted = False
-            Crawler_Bot.boosted = False
-            IAN_Bot.boosted = False
+    def turned_on(self):
+        return self.turnedOn
 
-    def action(self):
-        self.boosting()
+    def flip_state(self):
+        self.turnedOn = not self.turnedOn

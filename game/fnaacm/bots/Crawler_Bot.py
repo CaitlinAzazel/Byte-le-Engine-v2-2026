@@ -1,5 +1,4 @@
-from typing_extensions import override
-
+from game.common.botcommands.General_Bot_Commands import *
 from game.common.avatar import Avatar
 from game.common.game_object import GameObject
 from game.controllers.master_controller import MasterController
@@ -91,6 +90,9 @@ class CrawlBot(Bot):
             self.stun = False
             self.stun_counter = 0
         return
+
+    def boosting(self, boost):
+        self.boosted = boost
 
     def action(self, game_board, player_avatar):
         self.turn_counter += 1

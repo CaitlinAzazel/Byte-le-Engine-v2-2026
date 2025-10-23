@@ -1,6 +1,6 @@
 import random
 
-from General_Bot_Commands import *
+from game.common.botcommands.General_Bot_Commands import *
 from game.common.avatar import Avatar
 from game.controllers.master_controller import MasterController
 from game.common.map.game_board import GameBoard
@@ -200,6 +200,9 @@ class JumpBot(Bot):
             self.stun = False
             self.stun_counter = 0
         return
+
+    def boosting(self, boost):
+        self.boosted = boost
 
     def action(self):
         self.turn_counter += 1
