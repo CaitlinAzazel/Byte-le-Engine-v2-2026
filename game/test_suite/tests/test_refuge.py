@@ -27,13 +27,13 @@ class TestRefuge(unittest.TestCase):
     def test_refuge_occupiable(self):
         self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
         self.assertTrue(self.player.avatar.position == Vector(1,1) )
-        Refuge.refuge_tick(self.avatar)
+        Refuge.refuge_tick(self.avatar, self.game_board)
         self.assertTrue(Refuge.global_occupied)
 
     def test_refuge_nonoccupiable(self):
         Refuge.global_turns_outside = 0
         self.controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
-        Refuge.refuge_tick(self.avatar)
+        Refuge.refuge_tick(self.avatar, self.game_board)
         self.assertTrue(self.player.avatar.position == Vector(0,1) )
         self.assertFalse(Refuge.global_occupied)
 

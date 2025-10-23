@@ -71,7 +71,6 @@ class Refuge(Occupiable):
             objects = game_board.get_objects_from(eject_to)
             bot_found = False
             for object in objects:
-                # FIXME: import Bot once merged
                 if isinstance(object, Bot):
                     bot_found = True
                     break

@@ -44,13 +44,9 @@ class BotMovementController(Controller):
         if isinstance(occupiable, Occupiable) and not occupiable.can_occupy(bot):
             return
 
-        # remove the avatar from its previous location
-        world.remove(bot.position, ObjectType.BOT)
-
-        # add the avatar to the top of the list of the coordinate
+        # each bot has its own ObjectType
+        world.remove(bot.position, bot.object_type)
         world.place(destination, bot)
-
-        # reassign the avatar's position
         bot.position = destination
 
 

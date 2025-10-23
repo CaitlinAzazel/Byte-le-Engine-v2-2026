@@ -1,5 +1,5 @@
 from game.common.game_object import GameObject
-from game.common.enums import ObjectType
+from game.common.enums import ActionType, ObjectType
 from typing import Self, Tuple, Union, overload
 
 
