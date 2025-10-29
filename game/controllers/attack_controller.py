@@ -42,25 +42,34 @@ def handle_actions(self, action: ActionType, client: Player, world: GameBoard, b
         :param bot:
         :return: None
         """
+    stunned = False
     # match interaction type with x and y
     vector: Vector
     match action:
         case ActionType.ATTACK_UP:
             vector = Vector(x=0, y=-1)
+            stunned = True
         case ActionType.ATTACK_DOWN:
             vector = Vector(x=0, y=1)
+            stunned = True
         case ActionType.ATTACK_LEFT:
             vector = Vector(x=-1, y=0)
+            stunned = True
         case ActionType.ATTACK_RIGHT:
             vector = Vector(x=1, y=0)
+            stunned = True
         case ActionType.ATTACK_TOP_LEFT:
             vector = Vector(x=-1, y=-1)
+            stunned = True
         case ActionType.ATTACK_BOTTOM_LEFT:
             vector = Vector(x=-1, y=1)
+            stunned = True
         case ActionType.ATTACK_TOP_RIGHT:
             vector = Vector(x=1, y=-1)
+            stunned = True
         case ActionType.ATTACK_BOTTOM_RIGHT:
             vector = Vector(x=1, y=1)
+            stunned = True
             return
     # find result in interaction
     vector.x += client.avatar.position.x

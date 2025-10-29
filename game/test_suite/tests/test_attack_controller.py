@@ -19,7 +19,7 @@ from game.common.enums import ObjectType
 
 class TestInteractController(unittest.TestCase):
     """
-    `Test Avatar Notes:`
+    `Test Attack Controller Notes:`
 
         This class tests the different methods in the InteractController class.
     """
@@ -49,4 +49,6 @@ class TestInteractController(unittest.TestCase):
         self.interact_controller.handle_actions(ActionType.ATTACK_LEFT, self.player, self.game_board)
         self.assertEqual(self.bot.attack, self.player)
 
-
+    def test_stunned_bot(self):
+        self.interact_controller.handle_actions(ActionType.ATTACK_LEFT, self.player, self.game_board)
+        self.assertEqual(self.bot.stunned, True)
