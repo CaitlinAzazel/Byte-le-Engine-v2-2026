@@ -1,6 +1,6 @@
 import random
 
-from game.common.botcommands.General_Bot_Commands import *
+from game.fnaacm.bots.General_Bot_Commands import *
 from game.common.avatar import Avatar
 from game.common.game_object import GameObject
 from game.controllers.master_controller import MasterController

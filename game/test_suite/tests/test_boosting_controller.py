@@ -1,9 +1,9 @@
 import unittest
-from game.common.botcommands.Jumper_Bot import JumpBot
-from game.common.botcommands.IAN_Bot import IANBot
-from game.common.botcommands.Support_bot import SupportBot
-from game.common.botcommands.Dumb_bot import DumbBot
-from game.common.botcommands.Crawler_Bot import CrawlBot
+from game.fnaacm.bots.Jumper_Bot import JumpBot
+from game.fnaacm.bots.IAN_Bot import IANBot
+from game.fnaacm.bots.Support_bot import SupportBot
+from game.fnaacm.bots.Dumb_bot import DumbBot
+from game.fnaacm.bots.Crawler_Bot import CrawlBot
 from game.controllers.boosting_controller import BoostingController
 
 
