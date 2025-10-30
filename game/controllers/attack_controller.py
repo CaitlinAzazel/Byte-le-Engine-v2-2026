@@ -3,6 +3,7 @@ from game.controllers.controller import Controller
 from game.common.player import Player
 from game.common.stations.station import Station
 from game.common.map.game_board import GameBoard
+from game.fnaacm.bots.bot import Bot
 from game.utils.vector import Vector
 
 class Attack_Controller(Controller):

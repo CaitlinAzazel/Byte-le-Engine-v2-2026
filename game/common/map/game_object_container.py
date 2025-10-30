@@ -20,6 +20,9 @@ class GameObjectContainer(GameObject):
         self.__sublist: list[GameObject] = []
         self.place_all(objects)
 
+    def __iter__(self):
+        return iter(self.__sublist)
+
     def place_all(self, game_objs: list[GameObject] | None) -> bool:
         if game_objs is None:
             return False

@@ -1,7 +1,7 @@
 import unittest
 from game.common.avatar import Avatar
+from game.common.map.wall import Wall
 from game.common.stations.refuge import Refuge
-from game.fnaacm.bots import bot
 from game.fnaacm.bots.bot import DEFAULT_VISION_RADIUS, Bot
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
@@ -41,7 +41,7 @@ class TestBot(unittest.TestCase):
         player_pos: Vector = self.player.avatar.position
         bot_pos: Vector = player_pos + Vector(0, 1)
         locations: dict[Vector, list[GameObject]] = {
-            player_pos: [Vent(), self.player.avatar],
+            player_pos: [Vent(), self.avatar],
             bot_pos: [self.bot],
         }
         game_board = GameBoard(0, Vector(1, 2), locations)
@@ -50,10 +50,10 @@ class TestBot(unittest.TestCase):
 
     def test_cannot_attack_into_refuge(self):
         player_pos: Vector = self.player.avatar.position
-        bot_pos: Vector = player_pos + Vector(0, 1)
+        self.bot.position = player_pos + Vector(0, 1)
         locations: dict[Vector, list[GameObject]] = {
-            player_pos: [Refuge(player_pos.x, player_pos.y), self.player.avatar],
-            bot_pos: [self.bot],
+            player_pos: [Refuge(player_pos.x, player_pos.y), self.avatar],
+            self.bot.position: [self.bot],
         }
         game_board = GameBoard(0, Vector(1, 2), locations)
         game_board.generate_map()
@@ -63,25 +63,24 @@ class TestBot(unittest.TestCase):
 
     # can the bot SEE in "optimal" conditions?
     def test_can_see(self):
-        player_pos: Vector = self.player.avatar.position
-        bot_pos: Vector = player_pos + Vector(0, 1)
+        self.bot.position = self.avatar.position + Vector(0, 1)
         # no special conditions
         locations: dict[Vector, list[GameObject]] = {
-            player_pos: [self.player],
-            bot_pos: [self.bot],
+            self.avatar.position: [self.avatar],
+            self.bot.position: [self.bot],
         }
         game_board = GameBoard(0, Vector(1, 2), locations)
         game_board.generate_map()
         self.assertTrue(self.bot.can_see_player(game_board, self.player))
 
     def test_cannot_see_past_vision_radius(self):
-        player_pos: Vector = self.player.avatar.position
-        bot_pos: Vector = player_pos + Vector(DEFAULT_VISION_RADIUS+1)
+        self.avatar.position = Vector(0, 0)
+        self.bot.position = Vector(DEFAULT_VISION_RADIUS+1)
         locations: dict[Vector, list[GameObject]] = {
-            player_pos: [self.player],
-            bot_pos: [self.bot],
+            self.avatar.position: [self.avatar],
+            self.bot.position: [self.bot],
         }
-        game_board = GameBoard(0, Vector(DEFAULT_VISION_RADIUS+1, 1))
+        game_board = GameBoard(0, Vector(DEFAULT_VISION_RADIUS+1, 1), locations)
         game_board.generate_map()
         self.assertFalse(self.bot.can_see_player(game_board, self.player))
 
@@ -97,8 +96,15 @@ class TestBot(unittest.TestCase):
         self.assertFalse(self.bot.can_see_player(game_board, self.player))
 
     def test_cannot_see_player_behind_wall(self):
-        game_board = GameBoard()
-        # TODO: set up map where wall is between player and bot
+        self.avatar.position = Vector(0, 0)
+        self.bot.position = Vector(DEFAULT_VISION_RADIUS+1)
+        locations: dict[Vector, list[GameObject]] = {
+            self.avatar.position: [self.avatar],
+            Vector(1,0): [Wall()],
+            self.bot.position: [self.bot],
+        }
+        game_board = GameBoard(0, Vector(3, 1), locations)
+        game_board.generate_map()
         self.assertFalse(self.bot.can_see_player(game_board, self.player))
 
 
