@@ -86,8 +86,14 @@ class TestBot(unittest.TestCase):
         self.assertFalse(self.bot.can_see_player(game_board, self.player))
 
     def test_cannot_see_player_in_vent(self):
-        game_board = GameBoard()
-        # TODO: set up map where player is in vent, bot is outside
+        locations: dict[Vector, list[GameObject]] = \
+            {
+                Vector(1,1): [self.bot],
+                Vector(2,2): [self.vent, self.player.avatar]
+            }
+
+        game_board = GameBoard(0, Vector(3,3), locations, True)
+        game_board.generate_map()
         self.assertFalse(self.bot.can_see_player(game_board, self.player))
 
     def test_cannot_see_player_behind_wall(self):

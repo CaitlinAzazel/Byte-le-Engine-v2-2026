@@ -67,4 +67,6 @@ def handle_actions(self, action: ActionType, client: Player, world: GameBoard, b
     vector.y += client.avatar.position.y
     play: Player = world.get_top(vector)
     if play is not None and isinstance(play, Station):
+        #consider running player.hit instead
+        #using an attack method from bot doesn't make sense
         bot.attack(client.avatar)
