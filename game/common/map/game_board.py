@@ -381,7 +381,7 @@ class GameBoard(GameObject):
     # https://forum.gamemaker.io/index.php?threads/how-to-find-every-square-a-line-passes-through.101130/
     @staticmethod
     def get_positions_overlapped_by_line(line_start: Vector, line_end: Vector) -> list[Vector]:
-
+        overlapped_positions = []
         # // get grid-relative coordinates
         # var cx1 = x1 / cell_size;
         # var cy1 = y1 / cell_size;
@@ -420,7 +420,7 @@ class GameBoard(GameObject):
         # if (xprogress != 0 && yprogress != 0)
         #     draw_cell(xcurrent, ycurrent);
         if (xprogress != 0 and yprogress != 0):
-            overlapped_positions = [Vector(xcurrent, ycurrent)]
+            overlapped_positions.append(Vector(xcurrent, ycurrent))
         #
         # // the line-crawl loop
         #
@@ -464,6 +464,12 @@ class GameBoard(GameObject):
         # }
 
         return overlapped_positions
+
+    @staticmethod
+    def get_positions_overlapped_by_line_sorted_by_distance(line_start: Vector, line_end: Vector) -> list[Vector]:
+        # lowkey made this for no reason
+        return sorted(GameBoard.get_positions_overlapped_by_line(line_start, line_end),
+                      key=lambda pos: (pos - line_start).magnitude_squared)
 
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()

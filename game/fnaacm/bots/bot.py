@@ -3,6 +3,7 @@ from game.common.avatar import Avatar
 from game.common.enums import ActionType
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
+from game.common.map.occupiable import Occupiable
 from game.fnaacm.cooldown import Cooldown
 from game.fnaacm.fnaacm_player import FNAACMPlayer
 from game.utils.vector import Vector
@@ -29,8 +30,12 @@ class Bot(GameObject):
         pass
 
     def __is_tile_open(self, tile: GameObject) -> bool:
-        # Overridable boolean dependent upon specific bot abilities/functionality
-        return False
+        """
+        determines if a tile "blocks" this bot's line of sight or not
+
+        override in Bot subclasses if more complex behavior is needed
+        """
+        return isinstance(tile, Occupiable) and tile.can_be_occupied_by(self)
 
     def can_see_player(self, game_board: GameBoard, player: FNAACMPlayer) -> bool:
         # TODO: actually check if player is behind wall

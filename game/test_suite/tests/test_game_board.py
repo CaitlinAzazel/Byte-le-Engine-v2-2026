@@ -234,7 +234,7 @@ class TestGameBoard(unittest.TestCase):
         pos: Vector = self.avatar.position
         self.assertEqual(pos, Vector(0, 1))
 
-    def test_overlapped_pos_calculator(self):
+    def test_overlapped_pos_correct_tiles(self):
         actual_positions = GameBoard.get_positions_overlapped_by_line(Vector(0, 0), Vector(1, 2))
         expected_positions = [
             Vector(0, 0),
@@ -247,6 +247,14 @@ class TestGameBoard(unittest.TestCase):
             print(f'{position.x} {position.y}')
         for position in expected_positions:
             self.assertIn(position, actual_positions, f'did not find {position} in actual')
+
+    def test_overlapped_pos_returned_in_order(self):
+        line_start = Vector(0, 0)
+        positions = GameBoard.get_positions_overlapped_by_line_sorted_by_distance(line_start, Vector(6, 7))
+        previous_position = positions[0]
+        for position in positions[1:]:
+            self.assertTrue(position.is_farther_from(line_start, previous_position), f'{position} is closer to {line_start} than {previous_position}')
+            previous_position = position
 
     # TODO: test edge cases like
     # WP
