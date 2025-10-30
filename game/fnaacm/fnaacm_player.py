@@ -2,6 +2,7 @@ from game.common.enums import ActionType, ObjectType
 from game.common.map.game_board import GameBoard
 from game.common.player import Player
 from game.common.avatar import Avatar
+from game.common.stations.refuge import Refuge
 
 class FNAACMPlayer(Player):
     def __init__(self, code: object | None = None, team_name: str | None = None, actions: list[ActionType] = [],
@@ -43,8 +44,7 @@ class FNAACMPlayer(Player):
         self.addPoint()
 
     def in_refuge(self) -> bool:
-        # FIXME: replace with real check
-        return False
+        return Refuge.global_occupied
 
     def in_vent(self, gameboard: GameBoard) -> bool:
         return gameboard.object_is_found_at(self.avatar.position, ObjectType.VENT)

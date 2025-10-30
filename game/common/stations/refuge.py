@@ -5,9 +5,13 @@ from game.common.avatar import Avatar
 from game.common.map.game_board import GameBoard
 from game.common.map.occupiable import Occupiable
 from game.controllers.movement_controller import MovementController
-from game.fnaacm.bots.bot import Bot
 from game.utils.vector import Vector
 from typing_extensions import override
+
+# FIXME: update this with bot subclasses
+BOT_OBJECT_TYPES = [
+    ObjectType.BOT,
+]
 
 class Refuge(Occupiable):
     global_occupied = False
@@ -70,8 +74,9 @@ class Refuge(Occupiable):
 
             objects = game_board.get_objects_from(eject_to)
             bot_found = False
-            for object in objects:
-                if isinstance(object, Bot):
+            for obj in objects:
+                # hack to avoid importing Bot
+                if obj.object_type in BOT_OBJECT_TYPES:
                     bot_found = True
                     break
             if bot_found:

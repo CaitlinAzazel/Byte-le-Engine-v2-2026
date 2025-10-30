@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from game.common.avatar import Avatar
 from game.common.enums import ActionType
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
