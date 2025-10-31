@@ -1,13 +1,13 @@
-from game.fnaacm.bots.Jumper_Bot import JumpBot
-from game.fnaacm.bots.IAN_Bot import IANBot
-from game.fnaacm.bots.Support_bot import SupportBot
-from game.fnaacm.bots.Dumb_bot import DumbBot
-from game.fnaacm.bots.Crawler_Bot import CrawlBot
+from game.fnaacm.bots.jumper_bot import JumpBot
+from game.fnaacm.bots.ian_bot import IANBot
+from game.fnaacm.bots.support_bot import SupportBot
+from game.fnaacm.bots.dumb_bot import DumbBot
+from game.fnaacm.bots.crawler_bot import CrawlBot
 from game.controllers.controller import Controller
 
 class BoostingController(Controller):
 
-    def __init__(self, supportBot, jumpBot, dumbBot, crawlerBot, ianBot):
+    def __init__(self, supportBot: SupportBot, jumpBot: JumpBot, dumbBot: DumbBot, crawlerBot: CrawlBot, ianBot: IANBot):
         super().__init__()
         self.jumpBot = jumpBot
         self.supportBot = supportBot
@@ -16,7 +16,7 @@ class BoostingController(Controller):
         self.dumbBot = dumbBot
 
     def boosting(self):
-        if SupportBot.turned_on(self.supportBot):
+        if self.supportBot.turned_on():
             self.jumpBot.boosting(True)
             self.dumbBot.boosting(True)
             self.crawlerBot.boosting(True)

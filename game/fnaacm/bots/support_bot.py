@@ -1,5 +1,5 @@
 from game.fnaacm.bots.bot import Bot
-from game.fnaacm.bots.General_Bot_Commands import *
+from game.fnaacm.bots.general_bot_commands import *
 
 class SupportBot(Bot):
     def __init__(self):

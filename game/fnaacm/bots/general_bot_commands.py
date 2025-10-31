@@ -27,7 +27,10 @@ def playerScan(bot, radius):
     while(i <= radius):
         j = 0
         while(j <= radius):
-            if (not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, i)),Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, -i)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, -j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, -j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-j, i)), Avatar)):
+            if (not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, i)),Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, -i)), Avatar)
+                    and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, j)), Avatar)
+                    and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, -j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, -j)), Avatar)
+                    and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-j, i)), Avatar)):
                 j += 1
             else:
                 if bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, i)),Avatar):

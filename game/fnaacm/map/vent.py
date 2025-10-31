@@ -1,6 +1,6 @@
 from typing_extensions import override
 
-from game.fnaacm.bots.Crawler_Bot import CrawlBot
+from game.fnaacm.bots.crawler_bot import CrawlBot
 from game.common.game_object import GameObject
 from game.common.map.occupiable import Occupiable
 from game.common.enums import ObjectType

@@ -6,8 +6,7 @@ from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
 from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.occupiable import Occupiable
-from game.fnaacm.cooldown import Cooldown
-from game.fnaacm.fnaacm_player import FNAACMPlayer
+from game.common.player import Player
 from game.utils.vector import Vector
 
 
@@ -18,17 +17,20 @@ class Bot(GameObject):
     def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
         super().__init__()
         self.boosted : bool = False
-        self.stunned : Cooldown = Cooldown(stun_duration)
+        self.is_stunned : bool = False
         self.position : Vector = start_position
         self.vision_radius: int = vision_radius
+        self.boosted_vision_radius: int = vision_radius * 2
         self.can_see_into_vent: bool = False
+        self.stun_counter: int = 0
+
 
     @abstractmethod
-    def __calc_next_move_hunt(self, gameboard : GameBoard, player: FNAACMPlayer) -> list[ActionType]:
+    def __calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         pass
 
     @abstractmethod
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: FNAACMPlayer) -> list[ActionType]:
+    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         pass
 
     def __is_tile_open(self, tile_data: GameObjectContainer) -> bool:
@@ -51,9 +53,10 @@ class Bot(GameObject):
 
         return True
 
-    def can_see_player(self, game_board: GameBoard, player: FNAACMPlayer) -> bool:
+    def can_see_player(self, game_board: GameBoard, player: Player) -> bool:
         distance_to_player: int = self.position.distance(player.avatar.position)
-        in_vision: bool = distance_to_player <= self.vision_radius
+        vision_radius = self.boosted_vision_radius if self.boosted else self.vision_radius
+        in_vision: bool = distance_to_player <= vision_radius
         if not in_vision:
             return False
 
@@ -63,9 +66,9 @@ class Bot(GameObject):
             if not self.__is_tile_open(tile_objects):
                 return False
 
-        return not player.in_refuge()
+        return not player.avatar.in_refuge()
 
-    def calc_next_move(self, gameboard : GameBoard, player : FNAACMPlayer ) -> list[ActionType]:
+    def calc_next_move(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         """
         returns actions that the bot should take to get to wherever it wants to go (typically player vector)
         """
@@ -73,8 +76,20 @@ class Bot(GameObject):
             return self.__calc_next_move_hunt(gameboard, player)
         return self.__calc_next_move_patrol(gameboard, player)
 
-    def can_attack(self, game_board: GameBoard, player: FNAACMPlayer) -> bool:
+    def can_attack(self, game_board: GameBoard, player: Player) -> bool:
         # distance check is just a shortcut for checking up/down/left/right
         return self.can_see_player(game_board, player) and self.position.distance(player.avatar.position) <= 1
 
+    def boosting(self, boost):
+        self.boosted = boost
 
+    def stunned(self):
+        """do nothing"""
+        self.stun_counter += 1
+        if self.stun_counter == 5:
+            self.is_stunned = False
+            self.stun_counter = 0
+        return
+
+    def can_act(self, turn: int) -> bool:
+        return turn % 2 == 0

@@ -24,15 +24,15 @@ class FNAACMPlayer(Player):
     # def moveDown(self):
     #     MovementController.handle_actions(self.movement_controller, ActionType(3), self.player, self.gameboard)
     #
-    # def hit(self):
-    #     stun()
-    #     self.health -= 1
-    #     self.tempPower = player.power(self) - 50
-    #     if self.tempPower < 0:
-    #         self.tempPower = 0
-    #     player.power(self, self.tempPower)
-    #     if self.health <= 0:
-    #         MasterController.game_over = True
+    def hit(self):
+        stun()
+        self.health -= 1
+        self.tempPower = player.power(self) - 50
+        if self.tempPower < 0:
+            self.tempPower = 0
+        player.power(self, self.tempPower)
+        if self.health <= 0:
+            MasterController.game_over = True
 
     def addPoint(self):
         if not self.in_refuge:

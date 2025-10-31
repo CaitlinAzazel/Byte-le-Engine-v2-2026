@@ -1,4 +1,4 @@
-from game.fnaacm.bots.General_Bot_Commands import *
+from game.fnaacm.bots.general_bot_commands import *
 from game.common.avatar import Avatar
 from game.common.game_object import GameObject
 from game.controllers.master_controller import MasterController
@@ -12,16 +12,8 @@ class IANBot(Bot):
     def __init__(self):
         super().__init__()
         self.vision = 1
-        self.movement_controller: MovementController = MovementController()
-        self.master_controller: MasterController = MasterController()
-        self.game_board: GameBoard = GameBoard()
-        self.player_seen : bool = False
         self.boosted : bool = False
-        self.avatar: Avatar = Avatar()
-        self.playerX: 0
-        self.playerY: 0
         self.stun = False
-        self.stun_counter = 0
         self.object_type = ObjectType.AVATAR
         self.position = Avatar.position
 
@@ -78,17 +70,6 @@ class IANBot(Bot):
             current = came_from[current]
             path.insert(0, current)
         return path
-
-    def stunned(self):
-        """do nothing"""
-        self.stun_counter += 1
-        if self.stun_counter == 10:
-            self.stun = False
-            self.stun_counter = 0
-        return
-
-    def boosting(self, boost):
-        self.boosted = boost
 
     def action(self, game_board, player_avatar):
         if not self.position or not player_avatar.position:

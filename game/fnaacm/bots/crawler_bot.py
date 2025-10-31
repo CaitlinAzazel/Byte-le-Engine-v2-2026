@@ -1,32 +1,34 @@
-from game.common.avatar import Avatar
-from game.common.game_object import GameObject
-from game.controllers.master_controller import MasterController
-from game.common.map.game_board import GameBoard
+from game.common import avatar
+from game.common.stations.refuge import Refuge
 import heapq
 from game.common.enums import ObjectType
-from game.controllers.movement_controller import MovementController
-from game.fnaacm.bots.bot import Bot
-from game.fnaacm.fnaacm_player import FNAACMPlayer
-from game.utils.vector import Vector
+import random
+from game.fnaacm.bots.general_bot_commands import *
 
 class CrawlBot(Bot):
     def __init__(self):
         super().__init__()
         self.vision = 1
-        self.movement_controller: MovementController = MovementController()
-        self.master_controller: MasterController = MasterController()
-        self.game_board: GameBoard = GameBoard()
-        self.player_seen : bool = False
         self.boosted : bool = False
-        self.avatar: Avatar = Avatar()
-        self.playerX: 0
-        self.playerY: 0
         self.stun = False
-        self.stun_counter = 0
         self.object_type = ObjectType.AVATAR
-        self.turn_counter = 0
         self.position = Avatar.position
         self.can_see_into_vent = True
+
+    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+        return self.blind_movement()
+
+
+    def blind_movement(self) -> list[ActionType]:
+        if self.stun:
+            self.stunned()
+            return []
+        return [random.choice([ActionType.MOVE_UP, ActionType.MOVE_RIGHT, ActionType.MOVE_DOWN, ActionType.MOVE_LEFT])]
+
+    def can_act(self, turn: int) -> bool:
+        if self.boosted:
+            return turn % 2 ==0
+        return turn % 4 == 0
 
     def a_star(self, board, start: Vector, goal: Vector) -> list[Vector]:
         open_set = []
@@ -58,6 +60,14 @@ class CrawlBot(Bot):
                     f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
                     heapq.heappush(open_set, (f_score[neighbor], neighbor))
 
+        actions = []
+        # for each position in the calculated path,
+        #   look at where the next position is and convert that to a direction
+        #   convert above direction into an ActionType
+        #   store that ActionType in actions
+
+        # return actions
+
         return [start]  # No path found
 
     def get_neighbors(self, pos: Vector, board) -> list[Vector]:
@@ -82,35 +92,16 @@ class CrawlBot(Bot):
             path.insert(0, current)
         return path
 
-    def stunned(self):
-        """do nothing"""
-        self.stun_counter += 1
-        if self.stun_counter == 5:
-            self.stun = False
-            self.stun_counter = 0
-        return
-
-    def boosting(self, boost):
-        self.boosted = boost
-
     def action(self, game_board, player_avatar):
-        self.turn_counter += 1
-
-        if self.boosted:
-            if self.turn_counter % 2 != 0:
-                return  # Only act every other turn
+        #if not self.position or not player_avatar.position:
+          #  return
+        if Refuge.global_occupied:
+            self.__calc_next_move_patrol(game_board, player_avatar)
         else:
-            if self.turn_counter % 4 != 0:
-                return  # Only act every 4 turns
-
-        if not self.position or not player_avatar.position:
-            return
-
-        path = self.a_star(game_board, self.position, player_avatar.position)
-
-        if len(path) > 1:
-            next_step = path[1]
-            if game_board.is_occupiable(next_step):
-                game_board.remove(self.position, self.object_type)
-                game_board.place(next_step, self)
-                self.position = next_step
+            path = self.a_star(gameboard,self.position, player.avatar.position)
+            if len(path) > 1:
+                next_step = path[1]
+                if game_board.is_occupiable(next_step):
+                    game_board.remove(self.position, self.object_type)
+                    game_board.place(next_step, self)
+                    self.position = next_step

@@ -1,19 +1,19 @@
 import unittest
 from game.common.avatar import Avatar
 from game.common.map.wall import Wall
+from game.common.player import Player
 from game.common.stations.refuge import Refuge
 from game.fnaacm.bots.bot import DEFAULT_VISION_RADIUS, Bot
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
 from game.fnaacm.map.vent import Vent
-from game.fnaacm.fnaacm_player import FNAACMPlayer
 from game.utils.vector import Vector
 
 
 class TestBot(unittest.TestCase):
     def setUp(self) -> None:
         self.avatar = Avatar(position=Vector())
-        self.player = FNAACMPlayer(avatar=self.avatar)
+        self.player = Player(avatar=self.avatar)
         self.bot = Bot()
 
         self.vent = Vent()
