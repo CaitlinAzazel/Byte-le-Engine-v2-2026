@@ -1,19 +1,31 @@
 import ast
 import random
 from math import floor
-from typing import Self
+from typing import Self, Type
 
+from game.common.avatar import Avatar
 from game.common.enums import *
 from game.common.game_object import GameObject
 from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
+from game.common.stations.occupiable_station import OccupiableStation
+from game.common.stations.station import Station
 from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
 from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
 from game.fnaacm.map.battery_spawner_list import BatterySpawnerList
 from game.utils.vector import Vector
 
+OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
+    ObjectType.AVATAR: Avatar,
+    ObjectType.WALL: Wall,
+    ObjectType.STATION: Station,
+    ObjectType.OCCUPIABLE_STATION: OccupiableStation,
+}
+def json_to_instance(data: dict) -> GameObject:
+    obj_type = ObjectType(data['object_type'])
+    return OBJECT_TYPE_TO_CLASS[obj_type]().from_json(data)
 
 class GameBoard(GameObject):
     """
@@ -492,7 +504,7 @@ class GameBoard(GameObject):
         self.map_size: Vector = Vector().from_json(data["map_size"])
 
         self.locations: dict[Vector, list[GameObject]] = {
-            Vector().from_json(k): [obj.new_from_json(data) for obj in v] for k, v in
+            Vector().from_json(k): [json_to_instance(obj) for obj in v] for k, v in
             zip(data["location_vectors"], data["location_objects"])} if data["location_vectors"] is not None else None
 
         self.walled: bool = data["walled"]

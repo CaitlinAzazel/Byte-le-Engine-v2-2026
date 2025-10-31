@@ -141,7 +141,7 @@ class GameObjectContainer(GameObject):
 
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
-        temp_sublist: [GameObject] = [self.__from_json_helper(obj) for obj in data['sublist']] \
+        temp_sublist: list[GameObject] = [self.__from_json_helper(obj) for obj in data['sublist']] \
             if data['sublist'] is not None else []
         self.__sublist = []
         self.place_all(temp_sublist)
