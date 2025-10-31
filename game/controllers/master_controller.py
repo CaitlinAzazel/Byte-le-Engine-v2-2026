@@ -6,6 +6,13 @@ from game.common.avatar import Avatar
 from game.common.enums import *
 from game.common.player import Player
 import game.config as config   # this is for turns
+from game.common.stations.refuge import Refuge
+from game.controllers.bot_movement_controller import BotMovementController
+from game.fnaacm.bots.crawler_bot import CrawlBot
+from game.fnaacm.bots.dumb_bot import DumbBot
+from game.fnaacm.bots.ian_bot import IANBot
+from game.fnaacm.bots.jumper_bot import JumpBot
+from game.fnaacm.bots.support_bot import SupportBot
 from game.utils.thread import CommunicationThread
 from game.controllers.movement_controller import MovementController
 from game.controllers.controller import Controller
@@ -54,6 +61,14 @@ class MasterController(Controller):
         self.current_world_data: dict = None
         self.movement_controller: MovementController = MovementController()
         self.interact_controller: InteractController = InteractController()
+        self.bot_movement_controller: BotMovementController = BotMovementController()
+        self.bots = [
+            DumbBot(),
+            CrawlBot(),
+            JumpBot(),
+            IANBot(),
+            SupportBot()
+        ]
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -102,7 +117,7 @@ class MasterController(Controller):
         return args
 
     # Perform the main logic that happens per turn
-    def turn_logic(self, clients: list[Player], turn):
+    def turn_logic(self, clients: list[Player], turn: int):
         game_board: GameBoard = self.current_world_data["game_board"]
 
         for battery in game_board.battery_spawners:
@@ -111,13 +126,24 @@ class MasterController(Controller):
             scrap_spawner.tick()
 
         for client in clients:
-
             for i in range(MAX_NUMBER_OF_ACTIONS_PER_TURN):
                 try:
                     self.movement_controller.handle_actions(client.actions[i], client, game_board)
                     self.interact_controller.handle_actions(client.actions[i], client, game_board)
                 except IndexError:
                     pass
+            client.avatar.add_point()
+
+        # pve game so only one client
+        player = clients[0]
+        Refuge.refuge_tick(player.avatar, game_board)
+
+        # for each bot:
+        #   if bot.can_act(self.turn), then bot.action()
+        for bot in self.bots:
+            moves = bot.calc_next_move(game_board, player.avatar)
+            for move in moves:
+                self.bot_movement_controller.handle_actions(move, bot, game_board)
 
         # checks event logic at the end of round
         # self.handle_events(clients)

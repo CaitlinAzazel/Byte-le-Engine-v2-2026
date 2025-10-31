@@ -37,7 +37,9 @@ class ObjectType(Enum):
     SCRAP_SPAWNER = auto()
     VENT = auto()
     BATTERY = auto()
+    REFUGE = auto()
     DOOR = auto()
+    BOT = auto()
 
 class ActionType(Enum):
     NONE = auto()

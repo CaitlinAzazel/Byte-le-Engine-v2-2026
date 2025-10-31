@@ -125,3 +125,16 @@ class TestVector(unittest.TestCase):
 
     def test_vector_distance(self) -> None:
         self.assertEqual(self.vector1.distance(self.vector2), 8)
+
+    def test_farther_from(self) -> None:
+        self.assertTrue(Vector(6, 7).is_farther_from(Vector(0, 0), Vector(1, 1)))
+
+    def test_closer_to(self) -> None:
+        self.assertTrue(Vector(6, 7).is_closer_to(Vector(0, 0), Vector(100, 0)))
+
+    def test_equally_far(self) -> None:
+        self.assertFalse(Vector(198, 198).is_farther_from(Vector(99, 99), Vector(0, 0)))
+    # yes this is redundant
+    def test_equally_close(self) -> None:
+        self.assertFalse(Vector(-1, 0).is_closer_to(Vector(0, 1), Vector(1, 0)))
+

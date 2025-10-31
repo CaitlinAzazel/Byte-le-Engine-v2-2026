@@ -3,6 +3,8 @@ from game.common.game_object import GameObject
 from game.common.avatar import Avatar
 from game.common.enums import *
 from game.client.user_client import UserClient
+from game.common.map.game_board import GameBoard
+from game.common.stations.refuge import Refuge
 
 
 class Player(GameObject):

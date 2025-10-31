@@ -4,6 +4,7 @@ from game.common.player import Player
 from game.controllers.movement_controller import MovementController
 from game.common.map.game_board import GameBoard
 from game.utils.vector import Vector
+from game.fnaacm.bots.bot import Bot
 
 player = Player()
 gameboard = GameBoard()
@@ -26,7 +27,10 @@ def playerScan(bot, radius):
     while(i <= radius):
         j = 0
         while(j <= radius):
-            if (not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, i)),Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, -i)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, -j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, -j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-j, i)), Avatar)):
+            if (not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, i)),Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, -i)), Avatar)
+                    and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, j)), Avatar)
+                    and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-i, -j)), Avatar) and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(i, -j)), Avatar)
+                    and not bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(-j, i)), Avatar)):
                 j += 1
             else:
                 if bot.game_board.get_objects_from(Vector(bot_pos.add_to_vector(j, i)),Avatar):
@@ -46,9 +50,14 @@ def playerScan(bot, radius):
         i += 1
     return False, 0, 0
 
-# def stun():
-#     DumbBot.stun = True
-#     SupportBot.stun = True
-#     JumpBot.stun = True
-#     Crawler_Bot.stun = True
-#     IAN_Bot.stun = True
+def stun():
+    # Dumb_bot.stun = True
+    # Support_bot.stun = True
+    # Jumper_Bot.stun = True
+    # Crawler_Bot.stun = True
+    # IAN_Bot.stun = True
+
+    # currently this does not work since dumb_bot, support_bot, etc. are not instances of their respective classes
+    # could add a parameter that is a list[Bot], loop over it, and stun those
+    # or add parameters for each type of bot (don't do this one)
+    ...

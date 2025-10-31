@@ -3,6 +3,7 @@ from game.controllers.controller import Controller
 from game.common.player import Player
 from game.common.stations.station import Station
 from game.common.map.game_board import GameBoard
+from game.fnaacm.bots.bot import Bot
 from game.utils.vector import Vector
 
 class Attack_Controller(Controller):
@@ -76,4 +77,6 @@ def handle_actions(self, action: ActionType, client: Player, world: GameBoard, b
     vector.y += client.avatar.position.y
     play: Player = world.get_top(vector)
     if play is not None and isinstance(play, Station):
+        #consider running player.hit instead
+        #using an attack method from bot doesn't make sense
         bot.attack(client.avatar)
