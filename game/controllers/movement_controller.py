@@ -22,6 +22,18 @@ class MovementController(Controller):
     def __init__(self):
         super().__init__()
 
+    @staticmethod
+    def update_avatar_position(position: Vector, avatar: Avatar, world: GameBoard):
+        # remove the avatar from its previous location
+        world.remove(avatar.position, ObjectType.AVATAR)
+
+        # add the avatar to the top of the list of the coordinate
+        world.place(position, avatar)
+
+        # reassign the avatar's position
+        avatar.position = position
+
+
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard):
         avatar = client.avatar
 
@@ -48,11 +60,4 @@ class MovementController(Controller):
         if isinstance(occupiable, Occupiable) and not occupiable.can_occupy(avatar):
             return
 
-        # remove the avatar from its previous location
-        world.remove(avatar.position, ObjectType.AVATAR)
-
-        # add the avatar to the top of the list of the coordinate
-        world.place(destination, avatar)
-
-        # reassign the avatar's position
-        avatar.position = destination
+        MovementController.update_avatar_position(destination, avatar, world)

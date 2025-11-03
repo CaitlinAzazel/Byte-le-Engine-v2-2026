@@ -1,6 +1,7 @@
-from game.common.botcommands.General_Bot_Commands import *
+from game.fnaacm.bots.bot import Bot
+from game.fnaacm.bots.general_bot_commands import *
 
-class SupportBot:
+class SupportBot(Bot):
     def __init__(self):
         super().__init__()
         self.turnedOn = False

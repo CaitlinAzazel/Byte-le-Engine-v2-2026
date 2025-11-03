@@ -17,6 +17,10 @@ class GameObject:
         self.object_type = ObjectType.NONE
         self.state = "idle"
 
+    @classmethod
+    def new_from_json(cls, data: dict):
+        return cls().from_json(data)
+
     def to_json(self) -> dict:
         # It is recommended call this using super() in child implementations
         data = dict()
@@ -24,6 +28,8 @@ class GameObject:
         data['id'] = self.id
         data['object_type'] = self.object_type.value
         data['state'] = self.state
+
+        data['__class__'] = self.__class__.__name__
 
         return data
 

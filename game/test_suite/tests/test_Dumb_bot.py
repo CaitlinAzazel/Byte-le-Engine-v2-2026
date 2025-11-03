@@ -1,5 +1,5 @@
 import unittest
-from game.common.botcommands.Dumb_bot import DumbBot
+from game.fnaacm.bots.dumb_bot import DumbBot
 
 
 class TestDumbBot(unittest.TestCase):

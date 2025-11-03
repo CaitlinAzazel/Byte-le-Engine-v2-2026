@@ -1,12 +1,12 @@
 import ast
 import random
-from typing import Self
+from math import floor
+from typing import Self, Type
 
 from game.common.avatar import Avatar
 from game.common.enums import *
 from game.common.game_object import GameObject
 from game.common.map.game_object_container import GameObjectContainer
-from game.common.map.tile import Tile
 from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
 from game.common.stations.occupiable_station import OccupiableStation
@@ -17,6 +17,15 @@ from game.fnaacm.stations.generator import Generator
 from game.fnaacm.map.battery_spawner_list import BatterySpawnerList
 from game.utils.vector import Vector
 
+OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
+    ObjectType.AVATAR: Avatar,
+    ObjectType.WALL: Wall,
+    ObjectType.STATION: Station,
+    ObjectType.OCCUPIABLE_STATION: OccupiableStation,
+}
+def json_to_instance(data: dict) -> GameObject:
+    obj_type = ObjectType(data['object_type'])
+    return OBJECT_TYPE_TO_CLASS[obj_type]().from_json(data)
 
 class GameBoard(GameObject):
     """
@@ -126,7 +135,6 @@ class GameBoard(GameObject):
         else:
             locations[position] = [game_object]
 
-
     def __init__(self, seed: int | None = None, map_size: Vector = Vector(),
                  locations: dict[Vector, list[GameObject]] = {}, walled: bool = False):
 
@@ -230,7 +238,7 @@ class GameBoard(GameObject):
         # Update all Avatar positions if they are to be placed on the map
         for vec, objs in self.locations.items():
             for obj in objs:
-                if isinstance(obj, Avatar):
+                if hasattr(obj, 'position'):
                     obj.position = vec
                 # assume that no generator/battery spawns will be added after this
                 elif isinstance(obj, Generator):
@@ -365,6 +373,112 @@ class GameBoard(GameObject):
 
         return results
 
+    @staticmethod
+    def get_progress(a: float, b: float, value: float) -> float:
+        """
+        returns percentage "progress" of value from a to b
+        if value is "past" b then progress is 100%
+        """
+        # you cannot move "between" a and b if a == b
+        if a == b:
+            return 1
+        if value > b :
+            return 1
+        return (value - a) / (b - a)
+
+    # https://forum.gamemaker.io/index.php?threads/how-to-find-every-square-a-line-passes-through.101130/
+    @staticmethod
+    def get_positions_overlapped_by_line(line_start: Vector, line_end: Vector) -> list[Vector]:
+        overlapped_positions = []
+        # // get grid-relative coordinates
+        # var cx1 = x1 / cell_size;
+        # var cy1 = y1 / cell_size;
+        # var cx2 = x2 / cell_size;
+        # var cy2 = y2 / cell_size;
+        cx1 = line_start.x + 0.5
+        cy1 = line_start.y + 0.5
+        cx2 = line_end.x + 0.5
+        cy2 = line_end.y + 0.5
+
+        # // setup the initial parameters
+        # var xdir = x2 > x1 ? 1 : -1;
+        xdir: int = 1 if cx2 > cx1 else -1
+        # var xcurrent = floor(cx1);
+        xcurrent: int = floor(cx1)
+        # var xnext = x2 > x1 ? xcurrent + 1 : xcurrent;
+        xnext: float = (xcurrent + 1) if cx2 > cx1 else (xcurrent)
+        # var xprogress = get_progress(cx1, cx2, xnext);
+        xprogress = GameBoard.get_progress(cx1, cx2, xnext)
+
+        # var ydir = y2 > y1 ? 1 : -1;
+        ydir = 1 if cy2 > cy1 else -1
+        # var ycurrent = floor(cy1);
+        ycurrent = floor(cy1)
+        # var ynext = y2 > y1 ? ycurrent + 1 : ycurrent;
+        ynext = (ycurrent + 1) if cy2 > cy1 else (ycurrent)
+        # var yprogress = get_progress(cy1, cy2, ynext);
+        yprogress = GameBoard.get_progress(cy1, cy2, ynext)
+        #
+        # // if at this point x progress or y progress is 0
+        # // then the starting point is somewhere at a grid boundary
+        # // and the first cell to draw will be determined by the crawl
+        #
+        # // if neither progress is 0, the starting point is in the middle of a cell
+        # // and thus a cell containing the point should be drawn before the crawl
+        # if (xprogress != 0 && yprogress != 0)
+        #     draw_cell(xcurrent, ycurrent);
+        if (xprogress != 0 and yprogress != 0):
+            overlapped_positions.append(Vector(xcurrent, ycurrent))
+        #
+        # // the line-crawl loop
+        #
+        # // if the upcoming x progress is lower than the y progress
+        # // then it means the upcoming horizontal intersection between lines is closer
+        # // and thus the line should crawl horizontally in the next step
+        #
+        # // conversely, if the y progress is larger than the x progress
+        # // the line should crawl vertically in the next step
+        #
+        # // if x progress and y progress are the same
+        # // the line crawls diagonally, skipping both nearby cells
+        # while (xprogress < 1 || yprogress < 1) {
+        while (xprogress < 1 or yprogress < 1):
+            # var should_move_x = xprogress <= yprogress;
+            # var should_move_y = yprogress <= xprogress;
+            should_move_x = xprogress <= yprogress
+            should_move_y = yprogress <= xprogress
+
+            # if (should_move_x) {
+            # xcurrent += xdir;
+            # xnext += xdir;
+            # xprogress = get_progress(cx1, cx2, xnext);
+            # }
+            if should_move_x:
+                xcurrent += xdir
+                xnext += xdir
+                xprogress = GameBoard.get_progress(cx1, cx2, xnext)
+
+            # if (should_move_y) {
+            # ycurrent += ydir;
+            # ynext += ydir;
+            # yprogress = get_progress(cy1, cy2, ynext);
+            # }
+            if should_move_y:
+                ycurrent += ydir
+                ynext += ydir
+                yprogress = GameBoard.get_progress(cy1, cy2, ynext)
+
+            overlapped_positions.append(Vector(xcurrent, ycurrent))
+        # }
+
+        return overlapped_positions
+
+    @staticmethod
+    def get_positions_overlapped_by_line_sorted_by_distance(line_start: Vector, line_end: Vector) -> list[Vector]:
+        # lowkey made this for no reason
+        return sorted(GameBoard.get_positions_overlapped_by_line(line_start, line_end),
+                      key=lambda pos: (pos - line_start).magnitude_squared)
+
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
         temp: dict[Vector, GameObjectContainer] | None = {str(vec.to_json()): go_container.to_json() for
@@ -384,31 +498,13 @@ class GameBoard(GameObject):
     def generate_event(self, start: int, end: int) -> None:
         self.event_active = random.randint(start, end)
 
-    def __from_json_helper(self, data: dict) -> GameObject:
-        temp: ObjectType = ObjectType(data['object_type'])
-        match temp:
-            case ObjectType.TILE:
-                return Tile().from_json(data)
-            case ObjectType.WALL:
-                return Wall().from_json(data)
-            case ObjectType.OCCUPIABLE_STATION:
-                return OccupiableStation().from_json(data)
-            case ObjectType.STATION:
-                return Station().from_json(data)
-            case ObjectType.AVATAR:
-                return Avatar().from_json(data)
-            # If adding more ObjectTypes that can be placed on the game_board, specify here
-            case _:
-                raise ValueError(
-                    f'The object type of the object is not handled properly. The object type passed in is {temp}.')
-
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
         self.seed: int | None = data["seed"]
         self.map_size: Vector = Vector().from_json(data["map_size"])
 
         self.locations: dict[Vector, list[GameObject]] = {
-            Vector().from_json(k): [self.__from_json_helper(obj) for obj in v] for k, v in
+            Vector().from_json(k): [json_to_instance(obj) for obj in v] for k, v in
             zip(data["location_vectors"], data["location_objects"])} if data["location_vectors"] is not None else None
 
         self.walled: bool = data["walled"]

@@ -22,12 +22,22 @@ class ExampleGameObject(GameObject):
         super().from_json(data)
         self.extra_data = data['extra_data']
         self.more_data = data['more_data']
+
+
+
+        # op as fawk
+        cls = globals()[data['__class__']]
+        obj: Self = cls()
+
+
+
         return self
 
     def to_json(self) -> dict:
         data = super().to_json()
         data['extra_data'] = self.extra_data
         data['more_data'] = self.more_data
+        data['__class__'] = self.__class__.__name__
         return data
 
 class ExampleGameObjectList(GameObjectList[ExampleGameObject]):
