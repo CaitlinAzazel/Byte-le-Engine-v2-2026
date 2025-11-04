@@ -168,8 +168,11 @@ class Avatar(GameObject):
             raise ValueError(f'{self.__class__.__name__}.points must be nonnegative.')
         self.__points = value
 
+    def give_points(self, amount: int) -> None:
+        self.points += amount
+
     def add_point(self):
-        self.points += 1
+        self.give_points(1)
 
     def action(self):
         self.add_point()

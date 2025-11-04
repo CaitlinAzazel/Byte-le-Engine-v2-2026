@@ -9,6 +9,7 @@ import game.config as config   # this is for turns
 from game.common.stations.refuge import Refuge
 from game.controllers import refuge_controller
 from game.controllers.bot_movement_controller import BotMovementController
+from game.controllers.point_controller import PointController
 from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.crawler_bot import CrawlBot
 from game.fnaacm.bots.dumb_bot import DumbBot
@@ -72,6 +73,7 @@ class MasterController(Controller):
             SupportBot()
         ]
         self.refuge_controller: RefugeController = RefugeController()
+        self.point_controller: PointController = PointController()
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -135,7 +137,6 @@ class MasterController(Controller):
                     self.interact_controller.handle_actions(client.actions[i], client, game_board)
                 except IndexError:
                     pass
-            client.avatar.add_point()
 
         # pve game so only one client
         player = clients[0]
@@ -147,6 +148,8 @@ class MasterController(Controller):
             moves = bot.calc_next_move(game_board, player.avatar)
             for move in moves:
                 self.bot_movement_controller.handle_actions(move, bot, game_board)
+
+        self.point_controller.handle_actions(ActionType.NONE, player, game_board)
 
         # checks event logic at the end of round
         # self.handle_events(clients)

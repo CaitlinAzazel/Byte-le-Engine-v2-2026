@@ -7,15 +7,14 @@ from game.common.game_object import GameObject
 from game.common.avatar import Avatar
 from game.common.map.game_board import GameBoard
 from game.common.map.wall import Wall
+from game.fnaacm.bots.bot import Bot
 from game.controllers.movement_controller import MovementController
 from game.controllers.refuge_controller import RefugeController
 from game.utils.vector import Vector
 
 class TestRefuge(unittest.TestCase):
     def setUp(self):
-        Refuge.global_occupied = False
-        Refuge.global_turns_inside = 0
-        Refuge.global_turns_outside = Refuge.MIN_TURNS_OUTSIDE
+        Refuge.reset_global_state()
         self.refuge = Refuge(1,1)
         self.avatar_start_pos = self.refuge.position.add_x(-1)
         self.avatar = Avatar(position=self.avatar_start_pos)
@@ -79,8 +78,12 @@ class TestRefuge(unittest.TestCase):
         self.refuge_controller.eject_avatar_from_refuge(self.avatar, self.refuge.position, self.game_board)
         self.assertEqual(self.avatar.position, self.refuge.position + Vector(-1, 0))
 
-    # TODO: check if ejection avoids bots
-
-    # TODO: waiting on point system
-    def test_refuge_point_blockade(self):
-        ...
+    def test_refuge_ejection_avoids_bots(self):
+        Refuge.global_turns_inside = Refuge.MAX_TURNS_INSIDE
+        self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position)
+        self.game_board.place(self.refuge.position + Vector( 0, -1), Bot())
+        self.game_board.place(self.refuge.position + Vector( 0,  1), Bot())
+        self.game_board.place(self.refuge.position + Vector( 1,  0), Bot())
+        self.refuge_controller.eject_avatar_from_refuge(self.avatar, self.refuge.position, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position + Vector(-1, 0))

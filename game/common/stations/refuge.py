@@ -14,7 +14,7 @@ class Refuge(Occupiable):
 
     global_occupied = False
     global_turns_inside = 0
-    global_turns_outside = 5
+    global_turns_outside = MIN_TURNS_OUTSIDE
 
     all_positions: set[Vector] = set()
 
@@ -40,6 +40,12 @@ class Refuge(Occupiable):
         self.object_type: ObjectType = ObjectType.REFUGE
         Refuge.all_positions.add(self.vector)
 
+
+    @staticmethod
+    def reset_global_state():
+        Refuge.global_occupied = False
+        Refuge.global_turns_inside = 0
+        Refuge.global_turns_outside = Refuge.MIN_TURNS_OUTSIDE
 
     @override
     def to_json(self) -> dict:
