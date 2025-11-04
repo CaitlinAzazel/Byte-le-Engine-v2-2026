@@ -12,6 +12,9 @@ from game.utils.vector import Vector
 
 class TestRefuge(unittest.TestCase):
     def setUp(self):
+        Refuge.global_occupied = False
+        Refuge.global_turns_inside = 0
+        Refuge.global_turns_outside = Refuge.MIN_TURNS_OUTSIDE
         self.refuge = Refuge(1,1)
         self.avatar_start_pos = self.refuge.position.add_x(-1)
         self.avatar = Avatar(position=self.avatar_start_pos)
