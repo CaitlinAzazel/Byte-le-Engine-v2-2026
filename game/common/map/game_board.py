@@ -15,6 +15,7 @@ from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
 from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
 from game.fnaacm.map.battery_spawner_list import BatterySpawnerList
+from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.utils.vector import Vector
 
 OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
@@ -240,11 +241,14 @@ class GameBoard(GameObject):
             for obj in objs:
                 if hasattr(obj, 'position'):
                     obj.position = vec
-                # assume that no generator/battery spawns will be added after this
-                elif isinstance(obj, Generator):
+
+                # assume that none of the following will be added after __map_init
+                if isinstance(obj, Generator):
                     self.generators[vec] = obj
                 elif isinstance(obj, BatterySpawner):
                     self.battery_spawners.append(obj)
+                elif isinstance(obj, ScrapSpawner):
+                    self.scrap_spawners.append(obj)
 
         if self.walled:
             # Generate the walls
@@ -312,12 +316,14 @@ class GameBoard(GameObject):
 
     def get_top(self, coords: Vector) -> GameObject | None:
         """
-        Returns the last object in the GameObjectContainer (i.e, the top-most object in the stack). Returns None if
-        invalid coordinates are given.
+        Returns the last object in the GameObjectContainer (i.e, the top-most object in the stack).
+        Returns None if invalid coordinates are given or there are no objects at that position.
         :param coords:
         :return: GameObject or None
         """
-        return self.game_map[coords].get_top() if coords in self.game_map else None
+        if not self.is_valid_coords(coords):
+            return None
+        return self.get(coords).get_top()
 
     def object_is_found_at(self, coords: Vector, object_type: ObjectType) -> bool:
         """

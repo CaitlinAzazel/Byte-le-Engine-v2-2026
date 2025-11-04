@@ -1,8 +1,5 @@
 from game.fnaacm.bots.general_bot_commands import *
 from game.common.avatar import Avatar
-from game.common.game_object import GameObject
-from game.controllers.master_controller import MasterController
-from game.common.map.game_board import GameBoard
 import heapq
 from game.common.enums import ObjectType
 from game.utils.vector import Vector

@@ -7,7 +7,9 @@ from game.common.enums import *
 from game.common.player import Player
 import game.config as config   # this is for turns
 from game.common.stations.refuge import Refuge
+from game.controllers import refuge_controller
 from game.controllers.bot_movement_controller import BotMovementController
+from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.crawler_bot import CrawlBot
 from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
@@ -69,6 +71,7 @@ class MasterController(Controller):
             IANBot(),
             SupportBot()
         ]
+        self.refuge_controller: RefugeController = RefugeController()
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -136,7 +139,7 @@ class MasterController(Controller):
 
         # pve game so only one client
         player = clients[0]
-        Refuge.refuge_tick(player.avatar, game_board)
+        self.refuge_controller.handle_actions(ActionType.NONE, player, game_board)
 
         # for each bot:
         #   if bot.can_act(self.turn), then bot.action()

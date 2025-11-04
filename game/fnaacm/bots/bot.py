@@ -7,6 +7,7 @@ from game.common.map.game_board import GameBoard
 from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.occupiable import Occupiable
 from game.common.player import Player
+from game.common.stations.refuge import Refuge
 from game.utils.vector import Vector
 
 
@@ -66,7 +67,7 @@ class Bot(GameObject):
             if not self.__is_tile_open(tile_objects):
                 return False
 
-        return not player.avatar.in_refuge()
+        return not Refuge.global_occupied
 
     def calc_next_move(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         """
