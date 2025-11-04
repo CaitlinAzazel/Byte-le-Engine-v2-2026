@@ -6,6 +6,7 @@ from game.common.player import Player
 from game.common.game_object import GameObject
 from game.common.avatar import Avatar
 from game.common.map.game_board import GameBoard
+from game.common.map.wall import Wall
 from game.controllers.movement_controller import MovementController
 from game.controllers.refuge_controller import RefugeController
 from game.utils.vector import Vector
@@ -29,7 +30,6 @@ class TestRefuge(unittest.TestCase):
         self.game_board.generate_map()
 
     def test_refuge_occupiable(self):
-        # passes when ran individually
         self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
         self.assertEqual(self.avatar.position, self.refuge.position)
         self.refuge_controller.handle_actions(ActionType.NONE, self.player, self.game_board)
@@ -43,14 +43,41 @@ class TestRefuge(unittest.TestCase):
         self.assertFalse(Refuge.global_occupied)
 
     def test_refuge_ejection(self):
-        # passes when ran individually
         self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
         for _ in range(10):
             self.assertEqual(self.avatar.position, self.refuge.position)
             self.refuge_controller.handle_actions(ActionType.NONE, self.player, self.game_board)
         self.assertEqual(self.player.avatar.position, Vector(1, 2))
 
-    # TODO: test cases for ejecting to E, S, W,
+    def test_refuge_ejects_to_east(self):
+        Refuge.global_turns_inside = Refuge.MAX_TURNS_INSIDE
+        self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position)
+        self.game_board.place(self.refuge.position + Vector( 0, -1), Wall())
+        self.game_board.place(self.refuge.position + Vector( 0,  1), Wall())
+        self.game_board.place(self.refuge.position + Vector(-1,  0), Wall())
+        self.refuge_controller.eject_avatar_from_refuge(self.avatar, self.refuge.position, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position + Vector(1, 0))
+
+    def test_refuge_ejects_to_south(self):
+        Refuge.global_turns_inside = Refuge.MAX_TURNS_INSIDE
+        self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position)
+        self.game_board.place(self.refuge.position + Vector( 0, -1), Wall())
+        self.game_board.place(self.refuge.position + Vector( 1,  0), Wall())
+        self.game_board.place(self.refuge.position + Vector(-1,  0), Wall())
+        self.refuge_controller.eject_avatar_from_refuge(self.avatar, self.refuge.position, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position + Vector(0, 1))
+
+    def test_refuge_ejects_to_west(self):
+        Refuge.global_turns_inside = Refuge.MAX_TURNS_INSIDE
+        self.movement_controller.handle_actions(ActionType.MOVE_RIGHT, self.player, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position)
+        self.game_board.place(self.refuge.position + Vector( 0, -1), Wall())
+        self.game_board.place(self.refuge.position + Vector( 0,  1), Wall())
+        self.game_board.place(self.refuge.position + Vector( 1,  0), Wall())
+        self.refuge_controller.eject_avatar_from_refuge(self.avatar, self.refuge.position, self.game_board)
+        self.assertEqual(self.avatar.position, self.refuge.position + Vector(-1, 0))
 
     # TODO: check if ejection avoids bots
 
