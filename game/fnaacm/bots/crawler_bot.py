@@ -12,7 +12,6 @@ class CrawlBot(Bot):
         self.boosted : bool = False
         self.stun = False
         self.object_type = ObjectType.AVATAR
-        self.position = Avatar.position
         self.can_see_into_vent = True
 
     def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:

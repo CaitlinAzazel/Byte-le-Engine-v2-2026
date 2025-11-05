@@ -11,8 +11,7 @@ class IANBot(Bot):
         self.vision = 1
         self.boosted : bool = False
         self.stun = False
-        self.object_type = ObjectType.AVATAR
-        self.position = Avatar.position
+        self.object_type = ObjectType.BOT
 
     def a_star(self, board, start: Vector, goal: Vector) -> list[Vector]:
         open_set = []
