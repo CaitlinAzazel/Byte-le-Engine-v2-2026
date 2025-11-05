@@ -285,7 +285,13 @@ class GameBoard(GameObject):
         :param game_obj:
         :return: True or False for a successful placement of the given object
         """
-        return self.get(coords).place(game_obj) if self.is_valid_coords(coords) else False
+        if not self.is_valid_coords(coords):
+            return False
+        if not self.get(coords).place(game_obj):
+            return False
+        if hasattr(game_obj, 'position'):
+            game_obj.position = coords
+        return True
 
     def get_objects_from(self, coords: Vector, object_type: ObjectType | None = None) -> list[GameObject]:
         """
