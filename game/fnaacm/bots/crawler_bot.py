@@ -135,7 +135,7 @@ class CrawlBot(Bot):
         dy = player_pos[1] - bot_pos[1]
 
         # adjacent -> attack (cardinal only)
-        if abs(dx) + abs(dy) == 1:
+        if bot_pos.distance(player_pos) == 1:
             action = self._cardinal_attack_action(dx, dy)
             if action:
                 self.attack_controller.handle_actions(action, player, world, self)

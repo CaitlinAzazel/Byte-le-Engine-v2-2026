@@ -15,7 +15,7 @@ from game.common.game_object import GameObject
 from game.common.action import ActionType
 from game.common.player import Player
 from game.common.enums import ObjectType
-
+from game.controllers.attack_controller import Attack_Controller
 
 class TestInteractController(unittest.TestCase):
     """
@@ -40,7 +40,7 @@ class TestInteractController(unittest.TestCase):
 
     # attack and attack nothing
     def test_attack_nothing(self):
-        self.interact_controller.handle_actions(ActionType.ATTACK_DOWN, self.bot, self.game_board)
+        self.attack_controller.handle_actions(ActionType.ATTACK_DOWN, self.bot, self.game_board)
         self.assertEqual(self.bot.attack, None)
 
 
