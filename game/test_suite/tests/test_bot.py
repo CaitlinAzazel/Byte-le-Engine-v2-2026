@@ -1,8 +1,10 @@
 import unittest
 from game.common.avatar import Avatar
+from game.common.enums import ActionType
 from game.common.map.wall import Wall
 from game.common.player import Player
 from game.common.stations.refuge import Refuge
+from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.bot import DEFAULT_VISION_RADIUS, Bot
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
@@ -18,6 +20,7 @@ class TestBot(unittest.TestCase):
 
         self.vent = Vent()
         self.vent_pos = Vector()
+        self.refuge_controller = RefugeController()
 
     """
     `calc_next_move` should be tested by respective bots since
@@ -57,7 +60,7 @@ class TestBot(unittest.TestCase):
         }
         game_board = GameBoard(0, Vector(1, 2), locations)
         game_board.generate_map()
-        Refuge.refuge_tick(self.player.avatar, game_board)
+        self.refuge_controller.handle_actions(ActionType.NONE, self.player, game_board)
         self.assertFalse(self.bot.can_attack(game_board, self.player))
 
 

@@ -104,6 +104,11 @@ class GameObjectContainer(GameObject):
         return None
 
     def get_top(self) -> GameObject | None:
+        """
+        returns None if:
+            - the sublist is empty
+            - the sublist is somehow None
+        """
         return self.__sublist[-1] if self.__sublist is not None \
                              and len(self.__sublist) > 0 else None
 
