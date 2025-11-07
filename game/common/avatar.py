@@ -3,8 +3,6 @@ from typing import Self
 from game.common.enums import ObjectType
 from game.common.game_object import GameObject
 from game.common.items.item import Item
-from game.common.map.game_board import GameBoard
-from game.common.stations.refuge import Refuge
 from game.utils.vector import Vector
 
 
@@ -170,19 +168,14 @@ class Avatar(GameObject):
             raise ValueError(f'{self.__class__.__name__}.points must be nonnegative.')
         self.__points = value
 
+    def give_points(self, amount: int) -> None:
+        self.points += amount
+
     def add_point(self):
-        if self.in_refuge:
-            return
-        self.points += 1
+        self.give_points(1)
 
     def action(self):
         self.add_point()
-
-    def in_refuge(self) -> bool:
-        return Refuge.global_occupied
-
-    def in_vent(self, gameboard: GameBoard) -> bool:
-        return gameboard.object_is_found_at(self.position, ObjectType.VENT)
 
     @property
     def power(self) -> int:

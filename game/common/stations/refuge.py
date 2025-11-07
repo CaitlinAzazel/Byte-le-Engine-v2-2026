@@ -1,22 +1,20 @@
 
+from typing import Self
 from game.common.enums import ObjectType
-from typing import Self, Type
-from game.common.avatar import Avatar
-from game.common.map.game_board import GameBoard
+from game.common.game_object import GameObject
 from game.common.map.occupiable import Occupiable
-from game.controllers.movement_controller import MovementController
 from game.utils.vector import Vector
 from typing_extensions import override
 
-# FIXME: update this with bot subclasses
-BOT_OBJECT_TYPES = [
-    ObjectType.BOT,
-]
+
 
 class Refuge(Occupiable):
+    MAX_TURNS_INSIDE = 10
+    MIN_TURNS_OUTSIDE = 5
+
     global_occupied = False
     global_turns_inside = 0
-    global_turns_outside = 5
+    global_turns_outside = MIN_TURNS_OUTSIDE
 
     all_positions: set[Vector] = set()
 
@@ -43,6 +41,12 @@ class Refuge(Occupiable):
         Refuge.all_positions.add(self.vector)
 
 
+    @staticmethod
+    def reset_global_state():
+        Refuge.global_occupied = False
+        Refuge.global_turns_inside = 0
+        Refuge.global_turns_outside = Refuge.MIN_TURNS_OUTSIDE
+
     @override
     def to_json(self) -> dict:
         json = super().to_json()
@@ -59,69 +63,13 @@ class Refuge(Occupiable):
         return self
 
     @override
-    def can_occupy(self, avatar: Avatar) -> bool:
-        return Refuge.global_turns_outside >= 5
+    def can_occupy(self, game_object: GameObject) -> bool:
+        return game_object.object_type == ObjectType.AVATAR and Refuge.global_turns_outside >= Refuge.MIN_TURNS_OUTSIDE
 
-    @staticmethod
-    def ejection(avatar: Avatar, refuge_position: Vector, game_board: GameBoard) -> None:
-        directions = [Vector(0,1), Vector(1, 0), Vector(0, -1), Vector(-1, 0)]
+    @property
+    def position(self) -> Vector:
+        return self.vector
 
-        # check if N, E, S, W tiles are occupiable, no bot
-        for direction in directions:
-            eject_to = refuge_position + direction
-            if not game_board.is_occupiable(eject_to):
-                continue
-
-            objects = game_board.get_objects_from(eject_to)
-            bot_found = False
-            for obj in objects:
-                # hack to avoid importing Bot
-                if obj.object_type in BOT_OBJECT_TYPES:
-                    bot_found = True
-                    break
-            if bot_found:
-                continue
-
-            tile = game_board.get_top( eject_to )
-            if isinstance(tile, Occupiable) and not tile.can_occupy(avatar):
-                continue
-
-            MovementController.update_avatar_position(eject_to, avatar, game_board)
-
-        # pray it doesnt get here
-
-    @staticmethod
-    def refuge_countdown(avatar: Avatar, game_board: GameBoard) -> None:
-        Refuge.global_turns_inside += 1
-        if Refuge.global_turns_inside >= 10:
-            Refuge.ejection(avatar, avatar.position, game_board)
-            Refuge.global_turns_outside = 0
-
-    @staticmethod
-    def refuge_tick(avatar: Avatar, game_board: GameBoard) -> None:
-        Refuge.global_occupied = False
-        for pos in Refuge.all_positions:
-            if pos == avatar.position:
-                Refuge.global_occupied = True
-                break
-
-        if Refuge.global_occupied:
-            Refuge.refuge_countdown(avatar, game_board)
-        else:
-            Refuge.global_turns_outside += 1
-            Refuge.global_turns_inside = 0
-
-
-        """
-                   # TO SET OCCUPIED:
-                   We could do a coordinate system, where if the given Avatar matches the coordinates of the refuge, then occupied
-                   is set to true. 
-                   The issue is, grabbing coordinates from a subclass of game object requires other stuff. 
-
-                   """
-
-        """
-                # Change Occupiable status and disallow players to be here. Make sure the player is ejected out as well.
-                # With this being the case we need to ensure that there are no bots in the way, and that the method
-                    # is compatible with different Refuge spaces across regions of the map
-        """
+    @position.setter
+    def position(self, new_position: Vector) -> None:
+        self.vector = new_position
