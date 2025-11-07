@@ -1,4 +1,5 @@
 import random
+
 from game.common.avatar import Avatar
 from game.utils.vector import Vector
 from game.config import *

@@ -1,6 +1,7 @@
+from math import sqrt
 from game.common.game_object import GameObject
-from game.common.enums import ObjectType
-from typing import Self, Tuple, Union
+from game.common.enums import ActionType, ObjectType
+from typing import Self, Tuple, Union, overload
 
 
 class Vector(GameObject):
@@ -88,6 +89,14 @@ class Vector(GameObject):
             raise ValueError(f"The given y value, {y}, is not an integer.")
         self.__y = y
 
+    @property
+    def magnitude(self) -> float:
+        return sqrt(self.magnitude_squared)
+
+    @property
+    def magnitude_squared(self) -> int:
+        return self.x**2 + self.y**2
+
     @staticmethod
     def from_xy_tuple(xy_tuple: Tuple[int, int]) -> 'Vector':
         return Vector(*xy_tuple)
@@ -101,6 +110,18 @@ class Vector(GameObject):
         new_x: int = vector_1.x + vector_2.x
         new_y: int = vector_1.y + vector_2.y
         return Vector(new_x, new_y)
+
+    def is_farther_from(self, origin: Self, other: Self):
+        """
+        is `self` farther from `origin` than `other`? false if equally far
+        """
+        return (self - origin).magnitude_squared > (other - origin).magnitude_squared
+
+    def is_closer_to(self, origin: Self, other: Self):
+        """
+        is `self` closer to `origin` than `other`? false if equally close
+        """
+        return (self - origin).magnitude_squared < (other - origin).magnitude_squared
 
     def add_to_vector(self, other_vector: Self) -> 'Vector':
         return Vector(
@@ -145,8 +166,20 @@ class Vector(GameObject):
     def __sub__(self, other: 'Vector') -> 'Vector':
         return Vector(self.x - other.x, self.y - other.y)
 
+    @overload
+    def __mul__(self, other: int) -> 'Vector':
+        ...
+    @overload
     def __mul__(self, other: 'Vector') -> 'Vector':
-        return Vector(self.x * other.x, self.y * other.y)
+        ...
+    def __mul__(self, other) -> 'Vector':
+        if isinstance(other, Vector):
+            return Vector(self.x * other.x, self.y * other.y)
+        else:
+            return Vector(self.x * other, self.y * other)
+
+    def __rmul__(self, scalar: int) -> 'Vector':
+        return self * scalar
 
     def __floordiv__(self, other: 'Vector') -> Union['Vector', None]:
         if other.x == 0 or other.y == 0:

@@ -149,3 +149,9 @@ class TestAvatarInventory(unittest.TestCase):
     def test_avatar_drop_held_item_none(self):
         held_item = self.avatar.drop_held_item()
         self.assertEqual(held_item, None)
+
+
+    def test_correct_quantity_calculation(self):
+        item = Item(quantity=2025, stack_size=2025)
+        self.avatar.inventory = [item]
+        self.assertEqual(self.avatar.get_quantity_of_item_type(self.item.object_type), item.quantity)

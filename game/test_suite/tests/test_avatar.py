@@ -81,3 +81,27 @@ class TestAvatar(unittest.TestCase):
         self.assertEqual(self.avatar.held_item.durability, avatar.held_item.durability)
         self.assertEqual(self.avatar.position.object_type, avatar.position.object_type)
         self.assertEqual(str(self.avatar.position), str(avatar.position))
+
+    # test power property
+    def test_avatar_set_power(self):
+        self.avatar.power = 50
+        self.assertEqual(self.avatar.power, 50)
+
+    def test_avatar_set_power_wrong_type(self):
+        value: list[int] = []
+        with self.assertRaises(TypeError) as error:
+            self.avatar.power = value
+        # self.assertTrue('must be an int' in str(error.exception))
+        self.assertTrue(self.utils.spell_check(str(error.exception),
+                                               f'{self.avatar.__class__.__name__}.score must be an int '
+                                               f'It is a(n) {value.__class__.__name__} and has the value of {value}',
+                                               True))
+
+    def test_avatar_set_power_negative(self):
+        value: int = -1
+        with self.assertRaises(ValueError) as error:
+            self.avatar.power = value
+        # self.assertTrue('nonnegative' in str(error.exception))
+        self.assertTrue(self.utils.spell_check(str(error.exception),
+                                               f'{self.avatar.__class__.__name__}.power must be nonnegative; attempted to set it to {value}',
+                                               True))
