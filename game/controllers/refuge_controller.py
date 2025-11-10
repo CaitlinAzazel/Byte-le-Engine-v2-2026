@@ -43,7 +43,7 @@ class RefugeController(Controller):
             elif isinstance(tile, Occupiable) and not tile.can_be_occupied_by(avatar):
                 continue
 
-            MovementController.update_avatar_position(eject_to, avatar, game_board)
+            game_board.update_object_position(eject_to, avatar)
             return
 
         # pray it doesnt get here
