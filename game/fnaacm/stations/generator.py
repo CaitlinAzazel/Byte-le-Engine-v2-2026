@@ -17,18 +17,21 @@ class Generator(Station):
     class LDtkFieldIdentifiers:
         COST = 'cost'
         CONNECTED_DOORS = 'connected_doors'
+        POINT_BONUS = 'point_bonus'
 
-    def __init__(self, held_item: Item | None = None, cost: int = 1, doors: list[Door] = []):
+    def __init__(self, held_item: Item | None = None, cost: int = 1, doors: list[Door] = [], point_bonus: int = 0):
         super().__init__(held_item=held_item)
         self.object_type: ObjectType = ObjectType.GENERATOR
         self.connected_doors: list[Door] = doors
         self.__active: bool = False
         self.__cost: int = cost
+        self.__point_bonus: int = point_bonus
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance, all_doors: dict[str, Door]) -> Self:
         cost: int = -1
         connected_doors: list[Door] = []
+        point_bonus: int = -1
         for field in entity.field_instances:
             match field.identifier:
                 case Generator.LDtkFieldIdentifiers.COST:
@@ -38,11 +41,14 @@ class Generator(Station):
                         iid = ent['entityIid'] 
                         if iid is None:
                             raise RuntimeError(f'could not find iid in {ent}')
-                        door = all_doors[iid]
+                        door = all_doors.get(iid)
                         if door is None:
                             raise RuntimeError(f'could not find door (iid={iid})')
                         connected_doors.append(door)
-        return cls(cost=cost, doors=connected_doors)
+                case Generator.LDtkFieldIdentifiers.POINT_BONUS:
+                    point_bonus = field.value
+
+        return cls(cost=cost, doors=connected_doors, point_bonus=point_bonus)
 
     @override
     def from_json(self, data: dict) -> Self:
@@ -73,6 +79,7 @@ class Generator(Station):
         if total_scrap < self.cost:
             return
         avatar.take(Scrap(quantity=self.cost))
+        # TODO: give them points
         self.__active = True
         self.__toggle_doors(True)
 

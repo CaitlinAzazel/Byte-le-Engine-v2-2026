@@ -17,7 +17,8 @@ class CoinSpawner(Occupiable):
     POINTS_PER_COIN = 1
 
     class LDtkFieldIdentifers:
-        COOLDOWN_DURATION = 'cooldown_duration'
+        RESPAWN_RATE = 'respawn_rate'
+        POINT_VALUE = 'point_value'
 
     def __init__(self, position: Vector = Vector(0,0), cooldown_duration: int = 10, points: int = POINTS_PER_COIN) -> None:
         super().__init__()
@@ -32,7 +33,7 @@ class CoinSpawner(Occupiable):
         cooldown_duration: int = -1
         for field in entity.field_instances:
             match field.identifier:
-                case CoinSpawner.LDtkFieldIdentifers.COOLDOWN_DURATION:
+                case CoinSpawner.LDtkFieldIdentifers.RESPAWN_RATE:
                     cooldown_duration = field.value
         return cls(position=position, cooldown_duration=cooldown_duration)
 
@@ -75,4 +76,4 @@ class CoinSpawner(Occupiable):
 
 class CoinSpawnerList(GameObjectList[CoinSpawner]):
     def __init__(self):
-        super().__init__('batteries', CoinSpawner)
+        super().__init__('coins', CoinSpawner)

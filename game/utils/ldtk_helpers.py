@@ -1,3 +1,4 @@
+from typing import Self
 from game.common.avatar import Avatar
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
@@ -8,6 +9,7 @@ from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
 from game.fnaacm.bots.jumper_bot import JumpBot
 from game.fnaacm.bots.support_bot import SupportBot
+from game.fnaacm.map.coin_spawner import CoinSpawner
 from game.fnaacm.map.door import Door
 from game.fnaacm.map.vent import Vent
 from game.fnaacm.stations.battery_spawner import BatterySpawner
@@ -15,7 +17,7 @@ from game.fnaacm.stations.generator import Generator
 from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.common.stations.refuge import Refuge
 from game.utils.helpers import read_json_file
-from game.utils.ldtk_json import EntityInstance, LayerInstance, ldtk_json_from_dict 
+from game.utils.ldtk_json import EntityInstance, LayerInstance, Level, ldtk_json_from_dict 
 from game.utils.vector import Vector
 
 
@@ -28,7 +30,7 @@ ENTITY_LOAD_PRIORITY: dict[str, int] = {
 }
 
 def get_entity_load_priority(entity: EntityInstance) -> int:
-    return ENTITY_LOAD_PRIORITY.get(entity.identifier, 0)
+    return ENTITY_LOAD_PRIORITY.get(entity.identifier.lower(), 0)
 
 def get_spawned_entity_from_spawner(spawner: EntityInstance) -> GameObject:
     spawned_entity: GameObject | None = None
@@ -75,6 +77,8 @@ def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: Layer
                 game_object = get_spawned_entity_from_spawner(entity)
             case LDtk.EntityIdentifier.SCRAP:
                 game_object = ScrapSpawner.from_ldtk_entity(entity)
+            case LDtk.EntityIdentifier.COIN:
+                game_object = CoinSpawner.from_ldtk_entity(entity)
             case _:
                 raise ValueError(f'unhandled entity identifier: "{entity.identifier}"')
 
@@ -102,15 +106,21 @@ def load_collisions(locations: dict[Vector, list[GameObject]], collision_layer: 
             continue
         GameBoard.insert_location(locations, position, game_object)
 
-def ldtk_to_locations(path_to_ldtk_file: str) -> tuple[dict[Vector, list[GameObject]], Vector]:
+def ldtk_to_locations(path_to_ldtk_file: str, level_identifier: str = 'production') -> tuple[dict[Vector, list[GameObject]], Vector]:
     """
-    returned vector is the size of the map
+    :param level_identifier: case-insensitive identifier of the level to parse
+    :return: a tuple containing a Locations dict as used in GameBoard and the size of the map
     """
     json_data = read_json_file(path_to_ldtk_file)
     ldtk_json = ldtk_json_from_dict(json_data)
-    if len(ldtk_json.levels) < 1:
-        raise RuntimeError(f'LDtk file "{path_to_ldtk_file}" has no levels')
-    level = ldtk_json.levels[0] # hack for current game; we only have one level
+    assert len(ldtk_json.levels) >= 1, f'LDtk file "{path_to_ldtk_file}" has no levels'
+    level: Level | None = None
+    for l in ldtk_json.levels:
+        if l.identifier.lower() == level_identifier.lower():
+            level = l
+            break
+    assert not (level is None), f'LDtk file ({path_to_ldtk_file}) does not contain a level with identifier "{level_identifier}"'
+
     layers = level.layer_instances
     if layers is None:
         raise RuntimeError(f'layers of level "{level.identifier}" could not be found; check if LDtk project setting "Save levels separately" is enabled')

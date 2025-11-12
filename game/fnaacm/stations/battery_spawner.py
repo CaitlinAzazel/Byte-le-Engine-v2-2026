@@ -12,8 +12,8 @@ class BatterySpawner(Occupiable):
     """
 
     class LDtkFieldIdentifers:
-        COOLDOWN_DURATION = 'cooldown_duration'
-        RECHARGE_AMOUNT = 'recharge_amount'
+        RESPAWN_RATE = 'respawn_rate'
+        POWER_VALUE = 'power_value'
 
     def __init__(self, position: Vector = Vector(0,0), cooldown_duration: int = 10, recharge_amount: int = 10) -> None:
         super().__init__()
@@ -29,9 +29,9 @@ class BatterySpawner(Occupiable):
         recharge_amount: int = -1
         for field in entity.field_instances:
             match field.identifier:
-                case BatterySpawner.LDtkFieldIdentifers.COOLDOWN_DURATION:
+                case BatterySpawner.LDtkFieldIdentifers.RESPAWN_RATE:
                     cooldown_duration = field.value
-                case BatterySpawner.LDtkFieldIdentifers.RECHARGE_AMOUNT:
+                case BatterySpawner.LDtkFieldIdentifers.POWER_VALUE:
                     recharge_amount = field.value
         return cls(position, cooldown_duration, recharge_amount)
 

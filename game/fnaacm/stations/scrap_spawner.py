@@ -14,16 +14,24 @@ class ScrapSpawner(Occupiable):
 
     TURNS_TO_RESPAWN: int = 20
 
-    def __init__(self, position: Vector = Vector(0,0)) -> None:
+    class LDtkFieldIdentifiers:
+        RESPAWN_RATE = 'respawn_rate'
+
+    def __init__(self, position: Vector = Vector(0,0), respawn_rate: int = TURNS_TO_RESPAWN) -> None:
         super().__init__()
         self.object_type: ObjectType = ObjectType.SCRAP_SPAWNER
         self.position: Vector = position
-        self.__cooldown: Cooldown = Cooldown(ScrapSpawner.TURNS_TO_RESPAWN)
+        self.__cooldown: Cooldown = Cooldown(respawn_rate)
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
         position: Vector = Vector(entity.grid[0], entity.grid[1])
-        return cls(position=position)
+        respawn_rate: int = 0
+        for field in entity.field_instances:
+            match field.identifier:
+                case ScrapSpawner.LDtkFieldIdentifiers.RESPAWN_RATE:
+                    respawn_rate = field.value
+        return cls(position=position, respawn_rate=respawn_rate)
 
     def __eq__(self, value: object, /) -> bool:
         return \
