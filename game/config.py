@@ -66,7 +66,7 @@ class LDtk:
         DOOR = 'door'
         GENERATOR = 'generator'
         BATTERY = 'battery'
-        SPAWN = 'spawn'
+        ENTITY_SPAWN = 'entityspawn'
         SCRAP = 'scrap'
     class LayerIdentifier:
         ENTITIES = 'entities'
