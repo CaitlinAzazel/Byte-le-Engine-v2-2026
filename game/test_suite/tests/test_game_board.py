@@ -263,6 +263,12 @@ class TestGameBoard(unittest.TestCase):
     # P = player
     # B = bot
 
+    def test_get_top_uninitialized_location(self):
+        # should be a vector that is not a key in the locations dict, but is still valid
+        uninitialized_pos = Vector(2, 2)
+        # is this being None intended?
+        self.assertIsNone(self.game_board.get_top(uninitialized_pos))
+
     # test json method
     def test_game_board_json(self):
         data: dict = self.game_board.to_json()

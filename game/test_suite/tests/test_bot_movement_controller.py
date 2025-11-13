@@ -3,8 +3,7 @@ import unittest
 from game.common.enums import ActionType
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
-from game.common.map.wall import Wall
-from game.common.player import Player
+from game.common.stations.refuge import Refuge
 from game.controllers.bot_movement_controller import BotMovementController
 from game.fnaacm.bots.bot import Bot
 from game.utils.vector import Vector
@@ -16,11 +15,11 @@ class TestBotMovementController(unittest.TestCase):
         self.bot_movement_controller = BotMovementController()
         self.bot = Bot(start_position=Vector(2,2)) 
 
+        refuge_pos = Vector(0,2)
         self.locations: dict[Vector, list[GameObject]] = {
             self.bot.position: [self.bot],
             Vector(2, 0): [Vent()],
-            # TODO: 
-            # Vector(0, 2): [Refuge()],
+            refuge_pos: [Refuge(refuge_pos.x, refuge_pos.y)],
         }
         self.game_board = GameBoard(0, Vector(4, 4), self.locations, False)
         self.game_board.generate_map()

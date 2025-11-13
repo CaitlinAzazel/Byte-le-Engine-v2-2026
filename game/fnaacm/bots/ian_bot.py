@@ -1,8 +1,5 @@
 from game.fnaacm.bots.general_bot_commands import *
 from game.common.avatar import Avatar
-from game.common.game_object import GameObject
-from game.controllers.master_controller import MasterController
-from game.common.map.game_board import GameBoard
 import heapq
 from game.common.enums import ObjectType
 from game.utils.vector import Vector
@@ -14,8 +11,7 @@ class IANBot(Bot):
         self.vision = 1
         self.boosted : bool = False
         self.stun = False
-        self.object_type = ObjectType.AVATAR
-        self.position = Avatar.position
+        self.object_type = ObjectType.BOT
 
     def a_star(self, board, start: Vector, goal: Vector) -> list[Vector]:
         open_set = []

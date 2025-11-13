@@ -15,6 +15,7 @@ from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
 from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
 from game.fnaacm.map.battery_spawner_list import BatterySpawnerList
+from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.utils.vector import Vector
 
 OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
@@ -240,11 +241,14 @@ class GameBoard(GameObject):
             for obj in objs:
                 if hasattr(obj, 'position'):
                     obj.position = vec
-                # assume that no generator/battery spawns will be added after this
-                elif isinstance(obj, Generator):
+
+                # assume that none of the following will be added after __map_init
+                if isinstance(obj, Generator):
                     self.generators[vec] = obj
                 elif isinstance(obj, BatterySpawner):
                     self.battery_spawners.append(obj)
+                elif isinstance(obj, ScrapSpawner):
+                    self.scrap_spawners.append(obj)
 
         if self.walled:
             # Generate the walls
@@ -281,7 +285,13 @@ class GameBoard(GameObject):
         :param game_obj:
         :return: True or False for a successful placement of the given object
         """
-        return self.get(coords).place(game_obj) if self.is_valid_coords(coords) else False
+        if not self.is_valid_coords(coords):
+            return False
+        if not self.get(coords).place(game_obj):
+            return False
+        if hasattr(game_obj, 'position'):
+            game_obj.position = coords
+        return True
 
     def get_objects_from(self, coords: Vector, object_type: ObjectType | None = None) -> list[GameObject]:
         """
@@ -312,12 +322,14 @@ class GameBoard(GameObject):
 
     def get_top(self, coords: Vector) -> GameObject | None:
         """
-        Returns the last object in the GameObjectContainer (i.e, the top-most object in the stack). Returns None if
-        invalid coordinates are given.
+        Returns the last object in the GameObjectContainer (i.e, the top-most object in the stack).
+        Returns None if invalid coordinates are given or there are no objects at that position.
         :param coords:
         :return: GameObject or None
         """
-        return self.game_map[coords].get_top() if coords in self.game_map else None
+        if not self.is_valid_coords(coords):
+            return None
+        return self.get(coords).get_top()
 
     def object_is_found_at(self, coords: Vector, object_type: ObjectType) -> bool:
         """
@@ -349,6 +361,21 @@ class GameBoard(GameObject):
     def is_occupiable(self, coords: Vector) -> bool:
         return self.is_valid_coords(coords) and (self.get(coords).get_top() is None or
                                                  isinstance(self.get(coords).get_top(), Occupiable))
+
+    def can_object_occupy(self, coords: Vector, game_object: GameObject) -> bool:
+        """
+        returns whether `game_object` can occupy the space at `coords`
+        """
+        if not self.is_occupiable(coords):
+            return False
+
+        occupiable = self.get_top(coords)
+        if occupiable is None:
+            return True
+
+        if not isinstance(occupiable, Occupiable):
+            return False
+        return occupiable.can_be_occupied_by(game_object)
 
     # Returns the Vector and a list of GameObject for whatever objects you are trying to get
     # CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
@@ -478,6 +505,18 @@ class GameBoard(GameObject):
         # lowkey made this for no reason
         return sorted(GameBoard.get_positions_overlapped_by_line(line_start, line_end),
                       key=lambda pos: (pos - line_start).magnitude_squared)
+
+    def update_object_position(self, position: Vector, game_object: GameObject) -> None:
+        assert hasattr(game_object, 'position')
+
+        # remove the avatar from its previous location
+        self.remove(game_object.position, game_object.object_type)
+
+        # add the avatar to the top of the list of the coordinate
+        self.place(position, game_object)
+
+        # reassign the avatar's position
+        game_object.position = position
 
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
