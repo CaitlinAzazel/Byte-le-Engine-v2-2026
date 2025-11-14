@@ -36,12 +36,10 @@ class BatterySpawner(Occupiable):
         return cls(position, cooldown_duration, recharge_amount)
 
     def __eq__(self, value: object, /) -> bool:
-        if isinstance(value, self.__class__):
-            return \
-                self.position == value.position and \
-                self.__recharge_amount == value.__recharge_amount and \
-                self.__cooldown == value.__cooldown 
-        return False
+        return isinstance(value, self.__class__) and \
+            self.position == value.position and \
+            self.__recharge_amount == value.__recharge_amount and \
+            self.__cooldown == value.__cooldown 
 
     @override
     def to_json(self) -> dict:
@@ -62,6 +60,10 @@ class BatterySpawner(Occupiable):
     @property
     def is_available(self) -> bool:
         return self.__cooldown.can_activate
+
+    @property
+    def recharge_amount(self) -> int:
+        return self.__recharge_amount
 
     def tick(self) -> None:
         self.__cooldown.tick()

@@ -14,9 +14,9 @@ class Cooldown(GameObject):
         self.__counter = 0
 
     def __eq__(self, value: object, /) -> bool:
-        if isinstance(value, self.__class__):
-            return self.__dict__ == value.__dict__
-        return False
+        return isinstance(value, Cooldown) and \
+            self.__duration == value.__duration and \
+            self.__counter == value.__counter
 
     @override
     def to_json(self) -> dict:
@@ -43,6 +43,14 @@ class Cooldown(GameObject):
     @property
     def can_activate(self) -> bool:
         return self.__counter == 0
+
+    @property
+    def counter(self) -> int:
+        return self.__counter
+
+    @property
+    def duration(self) -> int:
+        return self.__duration
 
     def activate(self) -> bool:
         """

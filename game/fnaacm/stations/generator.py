@@ -27,6 +27,13 @@ class Generator(Station):
         self.__cost: int = cost
         self.__point_bonus: int = point_bonus
 
+    def __eq__(self, value: object, /) -> bool:
+        return isinstance(value, Generator) and \
+            self.connected_doors == value.connected_doors and \
+            self.active == value.active and \
+            self.cost == value.cost and \
+            self.point_bonus == value.point_bonus
+
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance, all_doors: dict[str, Door]) -> Self:
         cost: int = -1
@@ -96,6 +103,10 @@ class Generator(Station):
         if not isinstance(value, int):
             raise TypeError(f'{self.__class__}.cost must be an int; {value} is a(n) {value.__class__}')
         self.__cost = value
+
+    @property
+    def point_bonus(self) -> int:
+        return self.__point_bonus
 
     def __toggle_doors(self, open: bool):
         for door in self.connected_doors:
