@@ -16,12 +16,12 @@ class SupportBot(Bot):
         self.turnedOn = not self.turnedOn
 
     def player_hit_stun(self):
-        self.stun_counter += 15
+        self.stun_counter += 5
         self.stun = True
         self.turnedOn = False
 
     def scrap_stun(self):
-        self.stun_count += 5
+        self.stun_count += 25
         self.stun = True
         self.turnedOn = False
 
