@@ -58,6 +58,6 @@ class TestLDtkHelpers(unittest.TestCase):
             actual = game_board.get_top(position)
             self.assertEqual(type(expected), type(actual))
             # don't check if the objects are equal unless they actually store data
-            if any(map(lambda t: isinstance(actual, t), TYPES_WITHOUT_DATA)):
+            if any(isinstance(actual, t) for t in TYPES_WITHOUT_DATA):
                 continue
             self.assertEqual(expected, actual)
