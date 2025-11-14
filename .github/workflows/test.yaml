@@ -16,5 +16,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest
-    - name: Run tests
-      run: pytest -vs
+    - name: Run game tests
+      if: '!cancelled()'
+      run: pytest -vs game
+    - name: Run server tests
+      if: '!cancelled()'
+      run: pytest -vs server
