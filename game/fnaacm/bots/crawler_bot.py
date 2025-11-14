@@ -1,106 +1,149 @@
-from game.common import avatar
-from game.common.stations.refuge import Refuge
+# crawler_bot.py
+from typing import Optional, Tuple, List, Dict
 import heapq
-from game.common.enums import ObjectType
-import random
-from game.fnaacm.bots.general_bot_commands import *
+
+from game.fnaacm.bots.bot import Bot
+from game.controllers.attack_controller import Attack_Controller
+from game.common.enums import ActionType, ObjectType
+from game.utils.vector import Vector
+from game.common.map.occupiable import Occupiable
+
+
+Position = Tuple[int, int]
+
+
+def _vec_to_pos(v: Vector) -> Position:
+    return (v.x, v.y)
+
+
+def _pos_to_vec(p: Position) -> Vector:
+    return Vector(p[0], p[1])
+
+
+def _neighbors(pos: Position) -> List[Position]:
+    x, y = pos
+    return [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+
+
+def _heuristic(a: Position, b: Position) -> int:
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+
+def _a_star(world, start: Position, goal: Position, allow_vents: bool = True) -> Optional[List[Position]]:
+    """A* search that allows vents when allow_vents is True."""
+    if start == goal:
+        return [start]
+
+    frontier: List[Tuple[int, Position]] = []
+    heapq.heappush(frontier, (0, start))
+    came_from: Dict[Position, Optional[Position]] = {start: None}
+    cost_so_far: Dict[Position, int] = {start: 0}
+
+    while frontier:
+        _, current = heapq.heappop(frontier)
+
+        if current == goal:
+            path: List[Position] = []
+            cur = current
+            while cur is not None:
+                path.append(cur)
+                cur = came_from[cur]
+            path.reverse()
+            return path
+
+        for nxt in _neighbors(current):
+            vec = _pos_to_vec(nxt)
+            # bounds check
+            if not world.is_valid_coords(vec):
+                continue
+
+            top = world.get_top(vec)
+            # walls block
+            if top is not None and getattr(top, "object_type", None) == ObjectType.WALL:
+                continue
+
+            # vents: allowed only when allow_vents True (Crawler sets True)
+            if top is not None and getattr(top, "object_type", None) == ObjectType.VENT and not allow_vents:
+                continue
+
+            # non-occupiable top blocks
+            if top is not None and not isinstance(top, Occupiable):
+                continue
+
+
+            # Calculate the cost to reach the neighbor (based on A star reference)
+            # current is the current position we are checking.
+            #
+            # _neighbors(current) gives the adjacent positions (up, down, left, right).
+            #
+            # cost_so_far[current] is the cost to reach the current position from the start.
+            #
+            # +1 because moving to a neighbor tile costs 1 step.
+            #
+            # So new_cost = the total steps from start to nxt (neighbor).
+            new_cost = cost_so_far[current] + 1
+            if nxt not in cost_so_far or new_cost < cost_so_far[nxt]:
+                cost_so_far[nxt] = new_cost
+                priority = new_cost + _heuristic(goal, nxt)
+                heapq.heappush(frontier, (priority, nxt))
+                came_from[nxt] = current
+
+    return None
+
 
 class CrawlBot(Bot):
-    def __init__(self):
-        super().__init__()
-        self.vision = 1
-        self.boosted : bool = False
-        self.stun = False
-        self.object_type = ObjectType.AVATAR
-        self.can_see_into_vent = True
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.turn_delay = 4
+        self.attack_controller = Attack_Controller()
 
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        return self.blind_movement()
+    def should_move(self, turn_number: int) -> bool:
+        return (turn_number % self.turn_delay) == 0
 
+    def _cardinal_attack_action(self, dx: int, dy: int) -> Optional[ActionType]:
+        if dx == 0 and dy == -1:
+            return ActionType.ATTACK_UP
+        if dx == 0 and dy == 1:
+            return ActionType.ATTACK_DOWN
+        if dx == -1 and dy == 0:
+            return ActionType.ATTACK_LEFT
+        if dx == 1 and dy == 0:
+            return ActionType.ATTACK_RIGHT
+        return None
 
-    def blind_movement(self) -> list[ActionType]:
-        if self.stun:
-            self.stunned()
-            return []
-        return [random.choice([ActionType.MOVE_UP, ActionType.MOVE_RIGHT, ActionType.MOVE_DOWN, ActionType.MOVE_LEFT])]
+    def _move_one_step_along_path(self, world, path: List[Position]) -> None:
+        if not path or len(path) < 2:
+            return
+        next_pos = path[1]
+        next_vec = _pos_to_vec(next_pos)
+        world.remove(self.avatar.position, self.object_type)
+        world.place(next_vec, self)
+        self.avatar.position = next_vec
 
-    def can_act(self, turn: int) -> bool:
-        if self.boosted:
-            return turn % 2 ==0
-        return turn % 4 == 0
+    def take_turn(self, turn_number: int, player, world) -> None:
+        """Crawler scans whole map and uses vents when needed."""
+        if player is None or world is None:
+            return
 
-    def a_star(self, board, start: Vector, goal: Vector) -> list[Vector]:
-        open_set = []
-        heapq.heappush(open_set, (0, start))
+        if not self.should_move(turn_number):
+            return
 
-        came_from = {}
-        g_score = {start: 0}
-        f_score = {start: self.heuristic(start, goal)}
+        bot_pos = _vec_to_pos(self.avatar.position)
+        player_pos = _vec_to_pos(player.avatar.position)
 
-        visited = set()
+        dx = player_pos[0] - bot_pos[0]
+        dy = player_pos[1] - bot_pos[1]
 
-        while open_set:
-            _, current = heapq.heappop(open_set)
+        # adjacent -> attack (cardinal only)
+        if bot_pos.distance(player_pos) == 1:
+            action = self._cardinal_attack_action(dx, dy)
+            if action:
+                self.attack_controller.handle_actions(action, player, world, self)
+            return
 
-            if current == goal:
-                return self.reconstruct_path(came_from, current)
+        # Pathfind allowing vents
+        path = _a_star(world, bot_pos, player_pos, allow_vents=True)
+        if not path:
+            return
 
-            visited.add(current)
-
-            for neighbor in self.get_neighbors(current, board):
-                if neighbor in visited:
-                    continue
-
-                tentative_g_score = g_score[current] + 1
-
-                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                    came_from[neighbor] = current
-                    g_score[neighbor] = tentative_g_score
-                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
-                    heapq.heappush(open_set, (f_score[neighbor], neighbor))
-
-        actions = []
-        # for each position in the calculated path,
-        #   look at where the next position is and convert that to a direction
-        #   convert above direction into an ActionType
-        #   store that ActionType in actions
-
-        # return actions
-
-        return [start]  # No path found
-
-    def get_neighbors(self, pos: Vector, board) -> list[Vector]:
-        directions = [Vector(0, 1), Vector(0, -1), Vector(1, 0), Vector(-1, 0)]
-        neighbors = []
-
-        for d in directions:
-            neighbor = pos + d
-            if board.is_valid_coords(neighbor) and board.is_occupiable(neighbor):
-                neighbors.append(neighbor)
-
-        return neighbors
-
-    def heuristic(self, a: Vector, b: Vector) -> int:
-        # Manhattan distance
-        return abs(a.x - b.x) + abs(a.y - b.y)
-
-    def reconstruct_path(self, came_from: dict, current: Vector) -> list[Vector]:
-        path = [current]
-        while current in came_from:
-            current = came_from[current]
-            path.insert(0, current)
-        return path
-
-    def action(self, game_board, player_avatar):
-        #if not self.position or not player_avatar.position:
-          #  return
-        if Refuge.global_occupied:
-            self.__calc_next_move_patrol(game_board, player_avatar)
-        else:
-            path = self.a_star(gameboard,self.position, player.avatar.position)
-            if len(path) > 1:
-                next_step = path[1]
-                if game_board.is_occupiable(next_step):
-                    game_board.remove(self.position, self.object_type)
-                    game_board.place(next_step, self)
-                    self.position = next_step
+        self._move_one_step_along_path(world, path)
