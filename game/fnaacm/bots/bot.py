@@ -24,7 +24,7 @@ class Bot(GameObject):
         self.boosted_vision_radius: int = vision_radius * 2
         self.can_see_into_vent: bool = False
         self.stun_counter: int = 0
-
+        self.has_attacked: bool = False
 
     @abstractmethod
     def __calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
@@ -94,3 +94,20 @@ class Bot(GameObject):
 
     def can_act(self, turn: int) -> bool:
         return turn % 2 == 0
+
+
+    def attack(self, target):
+        """
+        Perform an attack on the target Avatar.
+        Tests expect:
+        - bot.has_attacked becomes True
+        - target receives the attack via target.receive_attack(bot)
+        """
+        if target is None:
+            return
+
+        # Avatar defines receive_attack()
+        if hasattr(target, "receive_attack"):
+            target.receive_attack(self)
+
+        self.has_attacked = True

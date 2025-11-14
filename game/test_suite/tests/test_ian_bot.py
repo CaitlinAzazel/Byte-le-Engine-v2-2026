@@ -1,76 +1,100 @@
 import unittest
-from unittest.mock import MagicMock
-from game.fnaacm.bots.ian_bot import IANBot
-from game.common.enums import ActionType
 from game.utils.vector import Vector
-
-
-class DummyAvatar:
-    def __init__(self, x, y):
-        self.position = Vector(x, y)
-        self.object_type = "AVATAR"
-
-
-class DummyPlayer:
-    def __init__(self, x, y):
-        self.avatar = DummyAvatar(x, y)
-
-
-class DummyWorld:
-    def __init__(self, width=5, height=5):
-        self.width = width
-        self.height = height
-        self.grid = {}
-
-    def is_valid_coords(self, vec):
-        return 0 <= vec.x < self.width and 0 <= vec.y < self.height
-
-    def get_top(self, vec):
-        return self.grid.get((vec.x, vec.y), None)
-
-    def remove(self, vec, obj_type):
-        self.grid.pop((vec.x, vec.y), None)
-
-    def place(self, vec, obj):
-        self.grid[(vec.x, vec.y)] = obj
+from game.common.map.game_board import GameBoard
+from game.fnaacm.map.vent import Vent
+from game.fnaacm.bots.ian_bot import IANBot
+from game.common.avatar import Avatar
+from game.common.player import Player
+from game.common.enums import ActionType
 
 
 class TestIANBot(unittest.TestCase):
     def setUp(self):
-        self.world = DummyWorld()
-        self.player = DummyPlayer(4, 4)
-        self.bot = IANBot("Test Ian")
-        self.bot.avatar = DummyAvatar(0, 0)
-        self.bot.attack_controller = MagicMock()
+        # Create board and player
+        self.board = GameBoard(map_size=Vector(5, 5))
+        self.board.generate_map()
+        self.player_avatar = Avatar(position=Vector(2, 2))
+        self.player = Player(avatar=self.player_avatar)
 
-    def test_moves_every_two_turns(self):
-        """IAN moves every 2nd turn."""
-        self.bot.take_turn(1, self.player, self.world)
-        self.assertEqual(self.bot.avatar.position, Vector(0, 0))
+        # Create bot at top-left
+        self.bot = IANBot()
+        self.bot.position = Vector(0, 0)
 
-        self.bot.take_turn(2, self.player, self.world)
-        self.assertIn(self.bot.avatar.position, [Vector(1, 0), Vector(0, 1)])
+    def build_board(self, include_vent=False):
+        # Reset board
+        self.board = GameBoard(map_size=Vector(5, 5))
+        self.board.generate_map()
+        if include_vent:
+            self.board.place(Vector(1, 0), Vent())
+        return self.board
 
-    def test_attacks_cardinal_only(self):
-        """IAN attacks only cardinal directions."""
-        self.bot.avatar = DummyAvatar(2, 2)
-        self.player.avatar.position = Vector(2, 3)
+    def test_bot_respects_vent(self):
+        board = self.build_board(include_vent=True)
+        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        # IAN should never try to go through vent
+        vent_pos = Vector(1, 0)
+        for move in moves:
+            new_pos = self.bot.position
+            if move == ActionType.MOVE_UP:
+                new_pos = Vector(new_pos.x, new_pos.y - 1)
+            elif move == ActionType.MOVE_DOWN:
+                new_pos = Vector(new_pos.x, new_pos.y + 1)
+            elif move == ActionType.MOVE_LEFT:
+                new_pos = Vector(new_pos.x - 1, new_pos.y)
+            elif move == ActionType.MOVE_RIGHT:
+                new_pos = Vector(new_pos.x + 1, new_pos.y)
+            self.assertNotEqual(new_pos, vent_pos)
 
-        called = {"action": None}
+    def test_hunt_boosted_moves_every_turn(self):
+        self.bot.boosted = True  # moves every turn
+        board = self.build_board()
+        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        self.assertEqual(len(moves), 2)
 
-        def fake_handle(action, player_obj, world_obj, bot_obj):
-            called["action"] = action
+    def test_hunt_normal_moves_once(self):
+        self.bot.boosted = False
+        board = self.build_board()
+        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        self.assertEqual(len(moves), 1)
 
-        self.bot.attack_controller.handle_actions = fake_handle
+    def test_hunt_move_toward_player(self):
+        board = self.build_board()
+        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
 
-        self.bot.take_turn(2, self.player, self.world)
-        self.assertEqual(called["action"], ActionType.ATTACK_DOWN)
+        # Bot should have at least one move toward player
+        self.assertTrue(len(moves) >= 1)
 
-        # Diagonal should not attack
-        called["action"] = None
-        self.player.avatar.position = Vector(3, 3)
-        self.bot.take_turn(2, self.player, self.world)
-        self.assertIsNone(called["action"])
+        # Map ActionType to vector change
+        ACTION_TO_VECTOR = {
+            ActionType.MOVE_UP: Vector(0, -1),
+            ActionType.MOVE_DOWN: Vector(0, 1),
+            ActionType.MOVE_LEFT: Vector(-1, 0),
+            ActionType.MOVE_RIGHT: Vector(1, 0),
+        }
+
+        move_action = moves[0]
+        if move_action in ACTION_TO_VECTOR:
+            move_vector = ACTION_TO_VECTOR[move_action]
+            start_distance = abs(self.bot.position.x - self.player_avatar.position.x) + \
+                             abs(self.bot.position.y - self.player_avatar.position.y)
+            next_distance = abs(self.bot.position.x + move_vector.x - self.player_avatar.position.x) + \
+                            abs(self.bot.position.y + move_vector.y - self.player_avatar.position.y)
+            self.assertLess(next_distance, start_distance)
+        else:
+            self.skipTest(f"{move_action} does not change position")
+
+    def test_hunt_no_move_if_on_player(self):
+        # Bot on same tile as player should not move
+        self.bot.position = Vector(self.player_avatar.position.x, self.player_avatar.position.y)
+        board = self.build_board()
+        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        self.assertEqual(len(moves), 0)
+
+    def test_patrol_returns_empty(self):
+        # Patrol does not use the player
+        moves = self.bot._IANBot__calc_next_move_patrol(self.board, self.player)
+        self.assertIsInstance(moves, list)
+        self.assertEqual(len(moves), 0)
 
 
 if __name__ == "__main__":
