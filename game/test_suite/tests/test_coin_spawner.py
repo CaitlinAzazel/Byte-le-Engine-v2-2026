@@ -22,7 +22,7 @@ class TestCoinSpawner(unittest.TestCase):
         self.__coin_value: int = 4
         self.coin_spawner: CoinSpawner = CoinSpawner(
             position=position,
-            cooldown_duration=self.__coin_cooldown,
+            turns_to_respawn=self.__coin_cooldown,
             points=self.__coin_value
         )
 

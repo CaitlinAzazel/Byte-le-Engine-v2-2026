@@ -14,28 +14,26 @@ class CoinSpawner(Occupiable):
     The player's avatar collects coins by walking over this tile when they are available
     """
 
-    POINTS_PER_COIN = 1
-
     class LDtkFieldIdentifers:
-        RESPAWN_RATE = 'respawn_rate'
+        TURNS_TO_RESPAWN = 'turns_to_respawn'
         POINT_VALUE = 'point_value'
 
-    def __init__(self, position: Vector = Vector(0,0), cooldown_duration: int = 10, points: int = POINTS_PER_COIN) -> None:
+    def __init__(self, position: Vector = Vector(0,0), turns_to_respawn: int = 1, points: int = 0) -> None:
         super().__init__()
         self.object_type: ObjectType = ObjectType.COIN
         self.position: Vector = position
         self.points: int = points
-        self.__cooldown = Cooldown(duration=cooldown_duration)
+        self.__cooldown = Cooldown(duration=turns_to_respawn)
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
         position: Vector = Vector(entity.grid[0], entity.grid[1])
-        cooldown_duration: int = -1
+        turns_to_respawn: int = -1
         for field in entity.field_instances:
             match field.identifier:
-                case CoinSpawner.LDtkFieldIdentifers.RESPAWN_RATE:
-                    cooldown_duration = field.value
-        return cls(position=position, cooldown_duration=cooldown_duration)
+                case CoinSpawner.LDtkFieldIdentifers.TURNS_TO_RESPAWN:
+                    turns_to_respawn = field.value
+        return cls(position=position, turns_to_respawn=turns_to_respawn)
 
     def __eq__(self, value: object, /) -> bool:
         if isinstance(value, self.__class__):

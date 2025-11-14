@@ -12,28 +12,28 @@ class BatterySpawner(Occupiable):
     """
 
     class LDtkFieldIdentifers:
-        RESPAWN_RATE = 'respawn_rate'
+        TURNS_TO_RESPAWN = 'turns_to_respawn'
         POWER_VALUE = 'power_value'
 
-    def __init__(self, position: Vector = Vector(0,0), cooldown_duration: int = 10, recharge_amount: int = 10) -> None:
+    def __init__(self, position: Vector = Vector(0, 0), turns_to_respawn: int = 1, recharge_amount: int = 0) -> None:
         super().__init__()
         self.object_type: ObjectType = ObjectType.BATTERY
         self.position: Vector = position
         self.__recharge_amount: int = recharge_amount
-        self.__cooldown = Cooldown(duration=cooldown_duration)
+        self.__cooldown = Cooldown(duration=turns_to_respawn)
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
         position: Vector = Vector(entity.grid[0], entity.grid[1])
-        cooldown_duration: int = -1
+        turns_to_respawn: int = -1
         recharge_amount: int = -1
         for field in entity.field_instances:
             match field.identifier:
-                case BatterySpawner.LDtkFieldIdentifers.RESPAWN_RATE:
-                    cooldown_duration = field.value
+                case BatterySpawner.LDtkFieldIdentifers.TURNS_TO_RESPAWN:
+                    turns_to_respawn = field.value
                 case BatterySpawner.LDtkFieldIdentifers.POWER_VALUE:
                     recharge_amount = field.value
-        return cls(position, cooldown_duration, recharge_amount)
+        return cls(position, turns_to_respawn, recharge_amount)
 
     def __eq__(self, value: object, /) -> bool:
         return isinstance(value, self.__class__) and \

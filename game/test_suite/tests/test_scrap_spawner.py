@@ -14,8 +14,10 @@ class TestScrapSpawner(unittest.TestCase):
         self.far_avatar: Avatar = Avatar(position = Vector(1, 1))
         self.late_avatar: Avatar = Avatar(position = position)
 
+        self.turns_to_respawn = 4
         self.scrap_spawner: ScrapSpawner = ScrapSpawner(
             position=position,
+            turns_to_respawn=self.turns_to_respawn
         )
 
     def test_gives_scrap(self):
@@ -38,11 +40,11 @@ class TestScrapSpawner(unittest.TestCase):
 
     def test_gives_several_scrap(self):
         repetitions = 3
-        total_turns = ((ScrapSpawner.TURNS_TO_RESPAWN + 1) * repetitions) + 1
+        total_turns = ((self.turns_to_respawn + 1) * repetitions) + 1
         for i in range(total_turns):
             self.scrap_spawner.tick()
             self.scrap_spawner.handle_turn(self.avatar)
-            expected = (i // ScrapSpawner.TURNS_TO_RESPAWN) + 1
+            expected = (i // self.turns_to_respawn) + 1
             self.assertEqual(self.avatar.get_quantity_of_item_type(ObjectType.SCRAP), expected, f'failed on turn {i}')
 
     def test_cooldown_activates(self):
