@@ -17,7 +17,7 @@ class TestCaseA(unittest.TestCase):
         self.boosting_controller = BoostingController(self.supportBot, self.jumpBot, self.dumbBot, self.crawlerBot, self.ianBot)
 
     def test_boosting_turned_off(self):
-        self.supportBot.turned_on = False
+        self.supportBot.turnedOn = False
         self.assertFalse(self.crawlerBot.boosted)
         self.assertFalse(self.dumbBot.boosted)
         self.assertFalse(self.jumpBot.boosted)
