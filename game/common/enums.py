@@ -40,6 +40,7 @@ class ObjectType(Enum):
     REFUGE = auto()
     DOOR = auto()
     BOT = auto()
+    COIN = auto()
 
 class ActionType(Enum):
     NONE = auto()

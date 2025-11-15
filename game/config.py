@@ -54,7 +54,7 @@ class Debug:                    # Keeps track of the current debug level of the 
 
 # Other Settings Here --------------------------------------------------------------------------------------------------
 
-LDTK_MAP_FILE_PATH = os.path.join(os.getcwd(), 'map.ldtk')
+PATH_TO_LDTK_PROJECT = os.path.join(os.getcwd(), 'map.ldtk')
 # should mirror values in LDtk editor, but lowercase
 class LDtk:
     class CollisionType:
@@ -66,8 +66,9 @@ class LDtk:
         DOOR = 'door'
         GENERATOR = 'generator'
         BATTERY = 'battery'
-        SPAWN = 'spawn'
+        ENTITY_SPAWN = 'entityspawn'
         SCRAP = 'scrap'
+        COIN = 'coin'
     class LayerIdentifier:
         ENTITIES = 'entities'
         COLLISIONS = 'collisions'
