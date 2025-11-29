@@ -158,6 +158,17 @@ class Avatar(GameObject):
         self.health: int = 3
         self.__points: int = 0
 
+    def __eq__(self, value: object, /) -> bool:
+        return isinstance(value, Avatar) and \
+            self.score == value.score and \
+            self.position == value.position and \
+            self.max_inventory_size == value.max_inventory_size and \
+            self.inventory == value.inventory and \
+            self.held_item == value.held_item and \
+            self.power == value.power and \
+            self.health == value.health and \
+            self.points == value.points
+
     @property
     def points(self):
         return self.__points

@@ -1,8 +1,14 @@
 import unittest
 
+from game.common.avatar import Avatar
 from game.common.map.game_board import GameBoard
 from game.common.map.wall import Wall
 from game.config import PATH_TO_LDTK_PROJECT
+from game.fnaacm.bots.crawler_bot import CrawlBot
+from game.fnaacm.bots.dumb_bot import DumbBot
+from game.fnaacm.bots.ian_bot import IANBot
+from game.fnaacm.bots.jumper_bot import JumpBot
+from game.fnaacm.bots.support_bot import SupportBot
 from game.fnaacm.map.door import Door
 from game.fnaacm.map.vent import Vent
 from game.fnaacm.stations.scrap_spawner import ScrapSpawner
@@ -32,6 +38,12 @@ class TestLDtkHelpers(unittest.TestCase):
             Vector(1, 2): [BatterySpawner(turns_to_respawn=99, recharge_amount=2025)],
             Vector(1, 3): [ScrapSpawner(turns_to_respawn=99)],
             Vector(1, 4): [CoinSpawner(turns_to_respawn=99, points=67)],
+            Vector(2, 0): [Avatar()],
+            Vector(2, 1): [IANBot()],
+            Vector(2, 2): [CrawlBot(patrol_route=[Vector(7, 0), Vector(0, 7)])],
+            Vector(2, 3): [JumpBot()],
+            Vector(2, 4): [SupportBot()],
+            Vector(2, 5): [DumbBot()],
             Vector(7, 7): [second_door]
         }
         self.expected_game_board = GameBoard(locations=locations, map_size=map_size)

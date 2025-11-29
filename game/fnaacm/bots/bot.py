@@ -29,8 +29,20 @@ class Bot(GameObject):
         self.boosted_vision_radius: int = vision_radius * 2
         self.can_see_into_vent: bool = False
         self.stun_counter: int = 0
-        self.patrol_routes: list[Vector] = patrol_route
+        self.patrol_route: list[Vector] = patrol_route
         self.current_patrol_waypoint_index: int = 0
+
+    def __eq__(self, value: object, /) -> bool:
+        return isinstance(value, Bot) and \
+            self.boosted == value.boosted and \
+            self.is_stunned == value.is_stunned and \
+            self.position == value.position and \
+            self.vision_radius == value.vision_radius and \
+            self.boosted_vision_radius == value.boosted_vision_radius and \
+            self.can_see_into_vent == value.can_see_into_vent and \
+            self.stun_counter == value.stun_counter and \
+            self.patrol_route == value.patrol_route and \
+            self.current_patrol_waypoint_index == value.current_patrol_waypoint_index
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
@@ -39,8 +51,10 @@ class Bot(GameObject):
         for field in entity.field_instances:
             match field.identifier:
                 case Bot.LDtkFieldIdentifiers.PATROL_ROUTE:
-                    for x in field.value:
-                        print(x)
+                    for ldtk_vector in field.value:
+                        ldtk_vector: dict
+                        # let the keyerror happen
+                        patrol_route.append(Vector(ldtk_vector['cx'], ldtk_vector['cy']))
         return cls(start_position=position, patrol_route=patrol_route)
 
     @abstractmethod
