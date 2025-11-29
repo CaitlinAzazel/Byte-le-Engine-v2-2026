@@ -6,15 +6,6 @@ from game.controllers.pathfind_controller import a_star_path
 
 
 class IANBot(Bot):
-<<<<<<< HEAD
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.vision = 1
-        self.boosted : bool = False
-        self.stun = False
-        self.object_type = ObjectType.BOT
-=======
->>>>>>> CrawlerIan
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
