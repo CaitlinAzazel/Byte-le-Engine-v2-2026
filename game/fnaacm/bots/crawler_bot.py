@@ -1,29 +1,8 @@
-<<<<<<< HEAD
-from game.common import avatar
-from game.common.stations.refuge import Refuge
-import heapq
-from game.common.enums import ObjectType
-import random
-from game.fnaacm.bots.general_bot_commands import *
-
-class CrawlBot(Bot):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.vision = 1
-        self.boosted : bool = False
-        self.stun = False
-        self.object_type = ObjectType.AVATAR
-        self.can_see_into_vent = True
-
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        return self.blind_movement()
-=======
 from typing import List, Optional
 from game.fnaacm.bots.bot import Bot
 from game.common.enums import ActionType
 from game.utils.vector import Vector
 from game.controllers.pathfind_controller import a_star_path
->>>>>>> CrawlerIan
 
 
 class CrawlerBot(Bot):

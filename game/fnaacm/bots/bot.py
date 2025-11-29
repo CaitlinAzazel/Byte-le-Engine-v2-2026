@@ -29,7 +29,6 @@ class Bot(GameObject):
         self.boosted_vision_radius: int = vision_radius * 2
         self.can_see_into_vent: bool = False
         self.stun_counter: int = 0
-<<<<<<< HEAD
         self.patrol_route: list[Vector] = patrol_route
         self.current_patrol_waypoint_index: int = 0
 
@@ -57,17 +56,19 @@ class Bot(GameObject):
                         # let the keyerror happen
                         patrol_route.append(Vector(ldtk_vector['cx'], ldtk_vector['cy']))
         return cls(start_position=position, patrol_route=patrol_route)
-=======
-        self.has_attacked: bool = False
->>>>>>> CrawlerIan
 
     @abstractmethod
     def __calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         pass
+    def calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+        return self.__calc_next_move_hunt(gameboard, player)
 
     @abstractmethod
     def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         pass
+    def calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+        return self.__calc_next_move_patrol(gameboard, player)
+
 
     def __is_tile_open(self, tile_data: GameObjectContainer) -> bool:
         """
