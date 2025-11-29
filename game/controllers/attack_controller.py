@@ -62,16 +62,23 @@ class Attack_Controller(Controller):
 
         target_pos = bot.position + direction
 
-        # Get whole tile stack (not just top)
         tile_stack = world.get(target_pos)
 
-        # Attack blocked if ANY vent exists on the target tile
-        if any(isinstance(obj, Vent) for obj in tile_stack):
-            return
+        # --- NEW: Vent blocks attacks ---
+        for obj in tile_stack:
+            if isinstance(obj, Vent):
+                return  # DO NOT set has_attacked
 
         # Attack Avatar if visible in the tile stack
         for obj in tile_stack:
             if isinstance(obj, Avatar):
+
                 bot.attack(obj)
+
+                # --- Turn all generators OFF ---
+                if hasattr(world, "generators"):
+                    for _, generator in world.generators.items():
+                        generator.active = False
+
                 bot.has_attacked = True
                 return

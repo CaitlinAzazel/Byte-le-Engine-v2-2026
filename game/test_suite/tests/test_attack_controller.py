@@ -92,3 +92,67 @@ class TestAttackController(unittest.TestCase):
         )
 
         self.assertFalse(self.attacking_bot.has_attacked)
+    def test_attack_turns_generators_off_when_avatar_hit(self):
+        # Setup bot position
+        self.attacking_bot.position = Vector(0, 1)
+
+        # Create generators and set them ON
+        class DummyGen:
+            def __init__(self):
+                self.active = True
+
+        gen1 = DummyGen()
+        gen2 = DummyGen()
+
+        board = self.build_board({
+            Vector(0, 0): [self.player_avatar],
+            Vector(0, 1): [self.attacking_bot]
+        })
+
+        # Inject generators into the board
+        board.generators = {"g1": gen1, "g2": gen2}
+
+        # Execute attack
+        self.attack_controller.handle_actions(
+            ActionType.ATTACK_UP,
+            self.target_player,
+            board,
+            self.attacking_bot
+        )
+
+        self.assertTrue(self.attacking_bot.has_attacked)
+        self.assertFalse(gen1.active)
+        self.assertFalse(gen2.active)
+    def test_generators_unchanged_when_no_avatar_hit(self):
+        # Setup bot position
+        self.attacking_bot.position = Vector(0, 1)
+
+        # Generators initially ON
+        class DummyGen:
+            def __init__(self):
+                self.active = True
+
+        gen1 = DummyGen()
+        gen2 = DummyGen()
+
+        # Put only a Station (no Avatar) in target tile
+        station = GameObject()
+        board = self.build_board({
+            Vector(0, 0): [station],
+            Vector(0, 1): [self.attacking_bot]
+        })
+
+        board.generators = {"g1": gen1, "g2": gen2}
+
+        # Execute attack (won't hit Avatar)
+        self.attack_controller.handle_actions(
+            ActionType.ATTACK_UP,
+            Player(avatar=Avatar(Vector(3, 3))),
+            board,
+            self.attacking_bot
+        )
+
+        # Should not attack and should NOT toggle generators
+        self.assertFalse(self.attacking_bot.has_attacked)
+        self.assertTrue(gen1.active)
+        self.assertTrue(gen2.active)

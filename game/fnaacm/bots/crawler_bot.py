@@ -33,6 +33,9 @@ class CrawlerBot(Bot):
 
         return [action, action] if self.boosted else [action]
 
+    def boosting(self, value: bool):
+        self.boosted = value
+
     def __calc_next_move_patrol(self, gameboard, player) -> List[ActionType]:
         return []  # Crawler has no patrol
 

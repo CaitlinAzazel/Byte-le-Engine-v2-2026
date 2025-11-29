@@ -8,7 +8,7 @@ class JumpBot(Bot):
     def __init__(self):
         super().__init__()
         self.vision = 2
-        self.boosted : bool = False
+        self.boosted: bool = False
         self.stun = False
         self.cooldown = 0
 
@@ -30,6 +30,9 @@ class JumpBot(Bot):
         if self.stun:
             self.stunned()
             return []
+
+        def boosting(self, value: bool):
+            self.boosted = value
 
         player_pos = player.avatar.position
         direction_to_player = (player_pos - self.position)

@@ -110,4 +110,8 @@ class Bot(GameObject):
         if hasattr(target, "receive_attack"):
             target.receive_attack(self)
 
+        # Bot stunned after hitting the player
+        self.is_stunned = True
+        self.stun_counter = 0
+
         self.has_attacked = True

@@ -3,7 +3,7 @@ from game.fnaacm.bots.jumper_bot import JumpBot
 from game.fnaacm.bots.ian_bot import IANBot
 from game.fnaacm.bots.support_bot import SupportBot
 from game.fnaacm.bots.dumb_bot import DumbBot
-from game.fnaacm.bots.crawler_bot import CrawlBot
+from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.controllers.boosting_controller import BoostingController
 
 
@@ -12,7 +12,7 @@ class TestCaseA(unittest.TestCase):
         self.jumpBot = JumpBot()
         self.supportBot = SupportBot()
         self.ianBot = IANBot()
-        self.crawlerBot = CrawlBot()
+        self.crawlerBot = CrawlerBot()
         self.dumbBot = DumbBot()
         self.boosting_controller = BoostingController(self.supportBot, self.jumpBot, self.dumbBot, self.crawlerBot, self.ianBot)
 
