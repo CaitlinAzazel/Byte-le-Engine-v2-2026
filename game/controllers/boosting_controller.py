@@ -2,12 +2,12 @@ from game.fnaacm.bots.jumper_bot import JumpBot
 from game.fnaacm.bots.ian_bot import IANBot
 from game.fnaacm.bots.support_bot import SupportBot
 from game.fnaacm.bots.dumb_bot import DumbBot
-from game.fnaacm.bots.crawler_bot import CrawlBot
+from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.controllers.controller import Controller
 
 class BoostingController(Controller):
 
-    def __init__(self, supportBot: SupportBot, jumpBot: JumpBot, dumbBot: DumbBot, crawlerBot: CrawlBot, ianBot: IANBot):
+    def __init__(self, supportBot: SupportBot, jumpBot: JumpBot, dumbBot: DumbBot, crawlerBot: CrawlerBot, ianBot: IANBot):
         super().__init__()
         self.jumpBot = jumpBot
         self.supportBot = supportBot
@@ -26,4 +26,5 @@ class BoostingController(Controller):
             self.dumbBot.boosting(False)
             self.crawlerBot.boosting(False)
             self.ianBot.boosting(False)
+
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from game.common import avatar
 from game.common.stations.refuge import Refuge
 import heapq
@@ -16,91 +17,56 @@ class CrawlBot(Bot):
 
     def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         return self.blind_movement()
+=======
+from typing import List, Optional
+from game.fnaacm.bots.bot import Bot
+from game.common.enums import ActionType
+from game.utils.vector import Vector
+from game.controllers.pathfind_controller import a_star_path
+>>>>>>> CrawlerIan
 
 
-    def blind_movement(self) -> list[ActionType]:
-        if self.stun:
-            self.stunned()
+class CrawlerBot(Bot):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.turn_delay = 4  # moves every 4 turns unboosted
+
+    def __calc_next_move_hunt(self, gameboard, player) -> List[ActionType]:
+        bot_pos = self.position
+        player_pos = player.avatar.position
+
+        path = a_star_path(
+            start=bot_pos,
+            goal=player_pos,
+            world=gameboard,
+            allow_vents=True  # crawler special rule
+        )
+
+        if not path or len(path) < 2:
             return []
-        return [random.choice([ActionType.MOVE_UP, ActionType.MOVE_RIGHT, ActionType.MOVE_DOWN, ActionType.MOVE_LEFT])]
 
-    def can_act(self, turn: int) -> bool:
-        if self.boosted:
-            return turn % 2 ==0
-        return turn % 4 == 0
+        next_step: Vector = path[1]
+        direction = next_step - bot_pos
+        action = self._vector_to_action(direction)
+        if not action:
+            return []
 
-    def a_star(self, board, start: Vector, goal: Vector) -> list[Vector]:
-        open_set = []
-        heapq.heappush(open_set, (0, start))
+        return [action, action] if self.boosted else [action]
 
-        came_from = {}
-        g_score = {start: 0}
-        f_score = {start: self.heuristic(start, goal)}
+    def boosting(self, value: bool):
+        self.boosted = value
 
-        visited = set()
+    def __calc_next_move_patrol(self, gameboard, player) -> List[ActionType]:
+        return []  # Crawler has no patrol
 
-        while open_set:
-            _, current = heapq.heappop(open_set)
-
-            if current == goal:
-                return self.reconstruct_path(came_from, current)
-
-            visited.add(current)
-
-            for neighbor in self.get_neighbors(current, board):
-                if neighbor in visited:
-                    continue
-
-                tentative_g_score = g_score[current] + 1
-
-                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                    came_from[neighbor] = current
-                    g_score[neighbor] = tentative_g_score
-                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
-                    heapq.heappush(open_set, (f_score[neighbor], neighbor))
-
-        actions = []
-        # for each position in the calculated path,
-        #   look at where the next position is and convert that to a direction
-        #   convert above direction into an ActionType
-        #   store that ActionType in actions
-
-        # return actions
-
-        return [start]  # No path found
-
-    def get_neighbors(self, pos: Vector, board) -> list[Vector]:
-        directions = [Vector(0, 1), Vector(0, -1), Vector(1, 0), Vector(-1, 0)]
-        neighbors = []
-
-        for d in directions:
-            neighbor = pos + d
-            if board.is_valid_coords(neighbor) and board.is_occupiable(neighbor):
-                neighbors.append(neighbor)
-
-        return neighbors
-
-    def heuristic(self, a: Vector, b: Vector) -> int:
-        # Manhattan distance
-        return abs(a.x - b.x) + abs(a.y - b.y)
-
-    def reconstruct_path(self, came_from: dict, current: Vector) -> list[Vector]:
-        path = [current]
-        while current in came_from:
-            current = came_from[current]
-            path.insert(0, current)
-        return path
-
-    def action(self, game_board, player_avatar):
-        #if not self.position or not player_avatar.position:
-          #  return
-        if Refuge.global_occupied:
-            self.__calc_next_move_patrol(game_board, player_avatar)
-        else:
-            path = self.a_star(gameboard,self.position, player.avatar.position)
-            if len(path) > 1:
-                next_step = path[1]
-                if game_board.is_occupiable(next_step):
-                    game_board.remove(self.position, self.object_type)
-                    game_board.place(next_step, self)
-                    self.position = next_step
+    def _vector_to_action(self, delta: Vector) -> Optional[ActionType]:
+        if delta.x == 0 and delta.y == -1:
+            return ActionType.MOVE_UP
+        if delta.x == 0 and delta.y == 1:
+            return ActionType.MOVE_DOWN
+        if delta.x == -1 and delta.y == 0:
+            return ActionType.MOVE_LEFT
+        if delta.x == 1 and delta.y == 0:
+            return ActionType.MOVE_RIGHT
+        return None

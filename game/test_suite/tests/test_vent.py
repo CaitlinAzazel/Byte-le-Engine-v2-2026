@@ -7,7 +7,7 @@ from game.common.map.game_board import GameBoard
 from game.common.player import Player
 from game.controllers.bot_movement_controller import BotMovementController
 from game.controllers.movement_controller import MovementController
-from game.fnaacm.bots.crawler_bot import CrawlBot
+from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
 from game.fnaacm.bots.jumper_bot import JumpBot
@@ -27,7 +27,7 @@ class TestVent(unittest.TestCase):
         self.avatar = Avatar()
         self.avatar.position=self.vent_pos+Vector(-1, 0)
 
-        self.crawler = CrawlBot()
+        self.crawler = CrawlerBot()
         self.dummy = DumbBot()
         self.ian = IANBot()
         self.jumper = JumpBot()

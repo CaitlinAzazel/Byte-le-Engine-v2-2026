@@ -1,81 +1,60 @@
-from game.fnaacm.bots.general_bot_commands import *
-from game.common.avatar import Avatar
-import heapq
-from game.common.enums import ObjectType
-from game.utils.vector import Vector
+from typing import List, Optional
 from game.fnaacm.bots.bot import Bot
+from game.common.enums import ActionType
+from game.utils.vector import Vector
+from game.controllers.pathfind_controller import a_star_path
+
 
 class IANBot(Bot):
+<<<<<<< HEAD
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.vision = 1
         self.boosted : bool = False
         self.stun = False
         self.object_type = ObjectType.BOT
+=======
+>>>>>>> CrawlerIan
 
-    def a_star(self, board, start: Vector, goal: Vector) -> list[Vector]:
-        open_set = []
-        heapq.heappush(open_set, (0, start))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.turn_delay = 2  # moves every 2 turns
 
-        came_from = {}
-        g_score = {start: 0}
-        f_score = {start: self.heuristic(start, goal)}
+    def __calc_next_move_hunt(self, gameboard, player) -> List[ActionType]:
+        bot_pos = self.position
+        player_pos = player.avatar.position
 
-        visited = set()
+        path = a_star_path(
+            start=bot_pos,
+            goal=player_pos,
+            world=gameboard,
+            allow_vents=False
+        )
 
-        while open_set:
-            _, current = heapq.heappop(open_set)
+        if not path or len(path) < 2:
+            return []
 
-            if current == goal:
-                return self.reconstruct_path(came_from, current)
+        next_step = path[1]
+        delta = next_step - bot_pos
+        action = self._vector_to_action(delta)
+        if not action:
+            return []
 
-            visited.add(current)
+        return [action, action] if self.boosted else [action]
 
-            for neighbor in self.get_neighbors(current, board):
-                if neighbor in visited:
-                    continue
+    def boosting(self, value: bool):
+        self.boosted = value
 
-                tentative_g_score = g_score[current] + 1
+    def __calc_next_move_patrol(self, gameboard, player) -> List[ActionType]:
+        return []  # IAN has no patrol in these tests
 
-                if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                    came_from[neighbor] = current
-                    g_score[neighbor] = tentative_g_score
-                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
-                    heapq.heappush(open_set, (f_score[neighbor], neighbor))
-
-        return [start]  # No path found
-
-    def get_neighbors(self, pos: Vector, board) -> list[Vector]:
-        directions = [Vector(0, 1), Vector(0, -1), Vector(1, 0), Vector(-1, 0)]
-        neighbors = []
-
-        for d in directions:
-            neighbor = pos + d
-            if board.is_valid_coords(neighbor) and board.is_occupiable(neighbor):
-                neighbors.append(neighbor)
-
-        return neighbors
-
-    def heuristic(self, a: Vector, b: Vector) -> int:
-        # Manhattan distance
-        return abs(a.x - b.x) + abs(a.y - b.y)
-
-    def reconstruct_path(self, came_from: dict, current: Vector) -> list[Vector]:
-        path = [current]
-        while current in came_from:
-            current = came_from[current]
-            path.insert(0, current)
-        return path
-
-    def action(self, game_board, player_avatar):
-        if not self.position or not player_avatar.position:
-            return
-
-        path = self.a_star(game_board, self.position, player_avatar.position)
-
-        if len(path) > 1:
-            next_step = path[1]
-            if game_board.is_occupiable(next_step):
-                game_board.remove(self.position, self.object_type)
-                game_board.place(next_step, self)
-                self.position = next_step
+    def _vector_to_action(self, delta: Vector) -> Optional[ActionType]:
+        if delta.x == 0 and delta.y == -1:
+            return ActionType.MOVE_UP
+        if delta.x == 0 and delta.y == 1:
+            return ActionType.MOVE_DOWN
+        if delta.x == -1 and delta.y == 0:
+            return ActionType.MOVE_LEFT
+        if delta.x == 1 and delta.y == 0:
+            return ActionType.MOVE_RIGHT
+        return None
