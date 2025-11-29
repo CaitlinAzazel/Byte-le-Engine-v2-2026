@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import Self
 
 from game.common.avatar import Avatar
 from game.common.enums import ActionType
@@ -8,6 +9,7 @@ from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.occupiable import Occupiable
 from game.common.player import Player
 from game.common.stations.refuge import Refuge
+from game.utils.ldtk_json import EntityInstance
 from game.utils.vector import Vector
 
 
@@ -15,7 +17,10 @@ DEFAULT_STUN_DURATION = 5
 DEFAULT_VISION_RADIUS = 1
 
 class Bot(GameObject):
-    def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
+    class LDtkFieldIdentifiers:
+        PATROL_ROUTE = 'patrol_route'
+
+    def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS, patrol_route: list[Vector] = []):
         super().__init__()
         self.boosted : bool = False
         self.is_stunned : bool = False
@@ -24,7 +29,19 @@ class Bot(GameObject):
         self.boosted_vision_radius: int = vision_radius * 2
         self.can_see_into_vent: bool = False
         self.stun_counter: int = 0
+        self.patrol_routes: list[Vector] = patrol_route
+        self.current_patrol_waypoint_index: int = 0
 
+    @classmethod
+    def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
+        position: Vector = Vector(entity.grid[0], entity.grid[1])
+        patrol_route = []
+        for field in entity.field_instances:
+            match field.identifier:
+                case Bot.LDtkFieldIdentifiers.PATROL_ROUTE:
+                    for x in field.value:
+                        print(x)
+        return cls(start_position=position, patrol_route=patrol_route)
 
     @abstractmethod
     def __calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:

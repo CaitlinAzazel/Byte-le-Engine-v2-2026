@@ -6,8 +6,8 @@ import random
 from game.fnaacm.bots.general_bot_commands import *
 
 class CrawlBot(Bot):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.vision = 1
         self.boosted : bool = False
         self.stun = False

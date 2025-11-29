@@ -6,8 +6,8 @@ from game.utils.vector import Vector
 from game.fnaacm.bots.bot import Bot
 
 class IANBot(Bot):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.vision = 1
         self.boosted : bool = False
         self.stun = False

@@ -6,8 +6,8 @@ from game.controllers.movement_controller import MovementController
 from game.fnaacm.bots.bot import Bot
 
 class DumbBot(Bot):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.vision = 1
         self.boosted : bool = False
         self.stun = False

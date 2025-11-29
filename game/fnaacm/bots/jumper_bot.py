@@ -5,8 +5,8 @@ from game.common.map.game_board import GameBoard
 from game.fnaacm.bots.bot import Bot
 
 class JumpBot(Bot):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.vision = 2
         self.boosted : bool = False
         self.stun = False

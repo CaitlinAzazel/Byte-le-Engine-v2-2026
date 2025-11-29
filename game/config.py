@@ -66,16 +66,21 @@ class LDtk:
         DOOR = 'door'
         GENERATOR = 'generator'
         BATTERY = 'battery'
-        ENTITY_SPAWN = 'entityspawn'
+        PLAYER_SPAWN = 'playerspawn'
+        BOT_SPAWN = 'botspawn'
         SCRAP = 'scrap'
         COIN = 'coin'
     class LayerIdentifier:
         ENTITIES = 'entities'
         COLLISIONS = 'collisions'
-    class SpawnedEntityType:
-        PLAYER = 'player'
+    class BotType:
         IAN = 'ian'
         CRAWLER = 'crawler'
         JUMPER = 'jumper'
         SUPPORT = 'support'
         DUMMY = 'dummy'
+    # not worth a separate file Tbh
+    class BotSpawner:
+        class FieldIdentifiers:
+            BOT_TO_SPAWN = 'bot_to_spawn'
+

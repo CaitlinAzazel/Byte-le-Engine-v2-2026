@@ -32,32 +32,30 @@ ENTITY_LOAD_PRIORITY: dict[str, int] = {
 def get_entity_load_priority(entity: EntityInstance) -> int:
     return ENTITY_LOAD_PRIORITY.get(entity.identifier.lower(), 0)
 
-def get_spawned_entity_from_spawner(spawner: EntityInstance) -> GameObject:
-    spawned_entity: GameObject | None = None
+def get_bot_from_spawner(spawner: EntityInstance) -> GameObject:
+    spawned_bot: GameObject | None = None
     parsed_value: str = ''
     for field in spawner.field_instances:
-        if field.identifier.lower() != 'spawned_entity':
+        if field.identifier.lower() != LDtk.BotSpawner.FieldIdentifiers.BOT_TO_SPAWN:
             continue
 
         parsed_value = field.value
         match field.value.lower():
-            case LDtk.SpawnedEntityType.PLAYER:
-                spawned_entity = Avatar()
-            case LDtk.SpawnedEntityType.IAN:
-                spawned_entity = IANBot()
-            case LDtk.SpawnedEntityType.CRAWLER:
-                spawned_entity = CrawlBot()
-            case LDtk.SpawnedEntityType.JUMPER:
-                spawned_entity = JumpBot()
-            case LDtk.SpawnedEntityType.SUPPORT:
-                spawned_entity = SupportBot()
-            case LDtk.SpawnedEntityType.DUMMY:
-                spawned_entity = DumbBot()
+            case LDtk.BotType.IAN:
+                spawned_bot = IANBot.from_ldtk_entity(spawner)
+            case LDtk.BotType.CRAWLER:
+                spawned_bot = CrawlBot.from_ldtk_entity(spawner)
+            case LDtk.BotType.JUMPER:
+                spawned_bot = JumpBot.from_ldtk_entity(spawner)
+            case LDtk.BotType.SUPPORT:
+                spawned_bot = SupportBot.from_ldtk_entity(spawner)
+            case LDtk.BotType.DUMMY:
+                spawned_bot = DumbBot.from_ldtk_entity(spawner)
             case _:
                 raise ValueError(f'unhandled spawner entity type: "{field.value}"')
-    if spawned_entity is None:
+    if spawned_bot is None:
         raise RuntimeError(f'could not determine spawner\'s entity type; best guess is "{parsed_value}"')
-    return spawned_entity
+    return spawned_bot
 
 
 def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: LayerInstance):
@@ -73,8 +71,10 @@ def load_entities(locations: dict[Vector, list[GameObject]], entity_layer: Layer
                 game_object = Generator.from_ldtk_entity(entity, doors)
             case LDtk.EntityIdentifier.BATTERY:
                 game_object = BatterySpawner.from_ldtk_entity(entity)
-            case LDtk.EntityIdentifier.ENTITY_SPAWN:
-                game_object = get_spawned_entity_from_spawner(entity)
+            case LDtk.EntityIdentifier.PLAYER_SPAWN:
+                game_object = Avatar()
+            case LDtk.EntityIdentifier.BOT_SPAWN:
+                game_object = get_bot_from_spawner(entity)
             case LDtk.EntityIdentifier.SCRAP:
                 game_object = ScrapSpawner.from_ldtk_entity(entity)
             case LDtk.EntityIdentifier.COIN:
