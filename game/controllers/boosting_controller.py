@@ -16,7 +16,7 @@ class BoostingController(Controller):
         self.dumbBot = dumbBot
 
     def boosting(self):
-        if self.supportBot.turned_on():
+        if self.supportBot.turned_on:
             self.jumpBot.boosting(True)
             self.dumbBot.boosting(True)
             self.crawlerBot.boosting(True)

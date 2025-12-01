@@ -1,4 +1,3 @@
-
 from typing import Self, override
 from game.common.avatar import Avatar
 from game.common.enums import ObjectType
@@ -11,7 +10,8 @@ from game.utils.ldtk_json import EntityInstance
 
 class Generator(Station):
     """
-    Opens connected doors once fed scrap via interaction
+    Opens connected doors once fed scrap via interaction.
+    Can also be forcibly disabled (e.g., from attacks).
     """
 
     class LDtkFieldIdentifiers:
@@ -35,7 +35,7 @@ class Generator(Station):
                     cost = field.value
                 case Generator.LDtkFieldIdentifiers.CONNECTED_DOORS:
                     for ent in field.value:
-                        iid = ent['entityIid'] 
+                        iid = ent['entityIid']
                         if iid is None:
                             raise RuntimeError(f'could not find iid in {ent}')
                         door = all_doors[iid]
@@ -90,7 +90,13 @@ class Generator(Station):
             raise TypeError(f'{self.__class__}.cost must be an int; {value} is a(n) {value.__class__}')
         self.__cost = value
 
+    # allows generators to be turned OFF by attacks
+    def deactivate(self):
+        """Force generator offline."""
+        if not self.__active:
+            return
+        self.__active = False
+
     def __toggle_doors(self, open: bool):
         for door in self.connected_doors:
             door.open = open
-

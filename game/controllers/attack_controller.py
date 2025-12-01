@@ -30,6 +30,7 @@ from game.fnaacm.map.vent import Vent
 
     These interactions are managed by using the provided ActionType enums in the enums.py file.
 """
+
 class Attack_Controller(Controller):
 
     def __init__(self):
@@ -38,47 +39,50 @@ class Attack_Controller(Controller):
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot) -> None:
         bot.has_attacked = False
 
-        direction = None
+        # Base direction map for all actions
+        direction_map = {
+            ActionType.ATTACK_UP: Vector(0, -1),
+            ActionType.ATTACK_DOWN: Vector(0, 1),
+            ActionType.ATTACK_LEFT: Vector(-1, 0),
+            ActionType.ATTACK_RIGHT: Vector(1, 0),
+            ActionType.ATTACK_TOP_LEFT: Vector(-1, -1),
+            ActionType.ATTACK_BOTTOM_LEFT: Vector(-1, 1),
+            ActionType.ATTACK_TOP_RIGHT: Vector(1, -1),
+            ActionType.ATTACK_BOTTOM_RIGHT: Vector(1, 1)
+        }
 
-        match action:
-            case ActionType.ATTACK_UP:
-                direction = Vector(0, -1)
-            case ActionType.ATTACK_DOWN:
-                direction = Vector(0, 1)
-            case ActionType.ATTACK_LEFT:
-                direction = Vector(-1, 0)
-            case ActionType.ATTACK_RIGHT:
-                direction = Vector(1, 0)
-            case ActionType.ATTACK_TOP_LEFT:
-                direction = Vector(-1, -1)
-            case ActionType.ATTACK_BOTTOM_LEFT:
-                direction = Vector(-1, 1)
-            case ActionType.ATTACK_TOP_RIGHT:
-                direction = Vector(1, -1)
-            case ActionType.ATTACK_BOTTOM_RIGHT:
-                direction = Vector(1, 1)
-            case _:
-                return
+        if action not in direction_map:
+            return
 
-        target_pos = bot.position + direction
+        directions_to_check = [direction_map[action]]
 
-        tile_stack = world.get(target_pos)
+        # --- Special case for boosted JumperBot ---
+        if getattr(bot, "is_jumper", False) and getattr(bot, "boosted", False):
+            # Include adjacent tiles as well for boosted jumper attacks
+            if direction_map[action].x != 0 and direction_map[action].y != 0:  # diagonal
+                directions_to_check.extend([
+                    Vector(direction_map[action].x, 0),
+                    Vector(0, direction_map[action].y)
+                ])
 
-        # --- NEW: Vent blocks attacks ---
-        for obj in tile_stack:
-            if isinstance(obj, Vent):
-                return  # DO NOT set has_attacked
+        # Attack each target position
+        for direction in directions_to_check:
+            target_pos = bot.position + direction
+            tile_stack = world.get(target_pos)
 
-        # Attack Avatar if visible in the tile stack
-        for obj in tile_stack:
-            if isinstance(obj, Avatar):
+            # Skip if Vent is present
+            if any(isinstance(obj, Vent) for obj in tile_stack):
+                continue
 
-                bot.attack(obj)
+            # Attack first Avatar found
+            for obj in tile_stack:
+                if isinstance(obj, Avatar):
+                    bot.attack(obj)
 
-                # --- Turn all generators OFF ---
-                if hasattr(world, "generators"):
-                    for _, generator in world.generators.items():
-                        generator.active = False
+                    # Turn all generators off if present
+                    if hasattr(world, "generators"):
+                        for generator in world.generators.values():
+                            generator.deactivate()
 
-                bot.has_attacked = True
-                return
+                    bot.has_attacked = True
+                    return

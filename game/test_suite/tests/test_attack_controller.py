@@ -4,11 +4,12 @@ from game.common.enums import ActionType
 from game.common.avatar import Avatar
 from game.common.player import Player
 from game.common.map.game_board import GameBoard
-from game.common.game_object import GameObject
 from game.fnaacm.bots.bot import Bot
 from game.fnaacm.map.vent import Vent
 from game.common.stations.station import Station
 from game.utils.vector import Vector
+from game.fnaacm.stations.generator import Generator
+from game.common.game_object import GameObject
 
 
 class TestAttackController(unittest.TestCase):
@@ -51,7 +52,7 @@ class TestAttackController(unittest.TestCase):
 
         self.attack_controller.handle_actions(
             ActionType.ATTACK_UP,
-            Player(avatar=Avatar(Vector(1, 1))),  # attacking player's controller avatar doesn't matter
+            Player(avatar=Avatar(Vector(1, 1))),
             board,
             self.attacking_bot
         )
@@ -92,17 +93,30 @@ class TestAttackController(unittest.TestCase):
         )
 
         self.assertFalse(self.attacking_bot.has_attacked)
+
+    class TestGenerator(Generator):
+        def __init__(self):
+            super().__init__()
+            self._is_active = True  # start as active for tests
+
+        @property
+        def active(self):
+            return getattr(self, "_is_active", False)
+
+        def deactivate(self):
+            self._is_active = False
+
+        def activate(self):
+            self._is_active = True
+
     def test_attack_turns_generators_off_when_avatar_hit(self):
-        # Setup bot position
         self.attacking_bot.position = Vector(0, 1)
 
-        # Create generators and set them ON
-        class DummyGen:
-            def __init__(self):
-                self.active = True
-
-        gen1 = DummyGen()
-        gen2 = DummyGen()
+        # Use TestGenerator instances to simulate activation
+        gen1 = self.TestGenerator()
+        gen2 = self.TestGenerator()
+        gen1.activate()
+        gen2.activate()
 
         board = self.build_board({
             Vector(0, 0): [self.player_avatar],
@@ -123,20 +137,17 @@ class TestAttackController(unittest.TestCase):
         self.assertTrue(self.attacking_bot.has_attacked)
         self.assertFalse(gen1.active)
         self.assertFalse(gen2.active)
+
     def test_generators_unchanged_when_no_avatar_hit(self):
-        # Setup bot position
         self.attacking_bot.position = Vector(0, 1)
 
-        # Generators initially ON
-        class DummyGen:
-            def __init__(self):
-                self.active = True
-
-        gen1 = DummyGen()
-        gen2 = DummyGen()
+        gen1 = self.TestGenerator()
+        gen2 = self.TestGenerator()
+        gen1.activate()
+        gen2.activate()
 
         # Put only a Station (no Avatar) in target tile
-        station = GameObject()
+        station = Station(position=Vector(0, 0))
         board = self.build_board({
             Vector(0, 0): [station],
             Vector(0, 1): [self.attacking_bot]
@@ -152,7 +163,7 @@ class TestAttackController(unittest.TestCase):
             self.attacking_bot
         )
 
-        # Should not attack and should NOT toggle generators
+        # Should not attack and generators remain active
         self.assertFalse(self.attacking_bot.has_attacked)
         self.assertTrue(gen1.active)
         self.assertTrue(gen2.active)
