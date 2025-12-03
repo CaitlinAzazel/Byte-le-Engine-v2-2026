@@ -64,6 +64,8 @@ class DumbBot(Bot):
         else:
             return self.movement()
 
+    def boosting(self, value: bool):
+        self.boosted = value
 
     def action(self, player: Player):
         if self.can_see_player:

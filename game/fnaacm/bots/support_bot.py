@@ -7,7 +7,7 @@ class SupportBot(Bot):
         self.turnedOn = False
         self.movement_controller: MovementController = MovementController()
         self.stun = False
-
+    @property
     def turned_on(self):
         return self.turnedOn
 

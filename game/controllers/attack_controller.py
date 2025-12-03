@@ -1,10 +1,36 @@
-from game.common.enums import *
+from game.common.enums import ActionType
 from game.controllers.controller import Controller
 from game.common.player import Player
-from game.common.stations.station import Station
 from game.common.map.game_board import GameBoard
 from game.fnaacm.bots.bot import Bot
+from game.common.avatar import Avatar
 from game.utils.vector import Vector
+from game.fnaacm.map.vent import Vent
+from game.fnaacm.bots.jumper_bot import JumperBot
+
+"""
+`Attack Controller Notes:`
+
+    The Attack Controller manages the actions the bots try to execute. As the game is played, a bot can
+    attack a surrounding player, adjacent stations from where they are currently positioned. For the jumping bot
+    they are able to attack the diagonal stations from where they are currently positioned and when boosted both
+    the diagonal stations and the adjacent stations from where they are currently positioned.
+
+    Example:
+    ::  Normal Bots    Jumper Boost   Jumper Norm
+        x x x x x x    x x x x x x    x x x x x x
+        x         x    x         x    x         x
+        x   O     x    x  O O O  x    x O   P   x
+        x O B P   x    x  0 B P  x    x   B     x
+        x   O     x    x  O O O  x    x O   O   x
+        x x x x x x    x x x x x x    x x x x x x
+
+    The given visual shows what bots can interact with. "B represents the bot; "P" represents the player; "O"\
+    represents the spaces that can be interacted with (including where the "P" and "B" is); and
+    "x" represents the walls and map border.
+
+    These interactions are managed by using the provided ActionType enums in the enums.py file.
+"""
 
 class Attack_Controller(Controller):
     """
@@ -72,11 +98,35 @@ def handle_actions(self, action: ActionType, client: Player, world: GameBoard, b
             vector = Vector(x=1, y=1)
             stunned = True
             return
-    # find result in interaction
-    vector.x += client.avatar.position.x
-    vector.y += client.avatar.position.y
-    play: Player = world.get_top(vector)
-    if play is not None and isinstance(play, Station):
-        #consider running player.hit instead
-        #using an attack method from bot doesn't make sense
-        bot.attack(client.avatar)
+
+        base_direction = direction_map[action]
+        directions_to_check = [base_direction]
+
+        # Boosted JumperBot special case
+        if isinstance(bot, JumperBot) and bot.boosted:
+            if base_direction.x != 0 and base_direction.y != 0:
+                directions_to_check.extend([
+                    Vector(base_direction.x, 0),
+                    Vector(0, base_direction.y)
+                ])
+
+        # Process Attacks
+        for direction in directions_to_check:
+            target_pos = bot.position + direction
+            tile_stack = world.get(target_pos)
+
+            # Vents block attacks entirely
+            if any(isinstance(obj, Vent) for obj in tile_stack):
+                continue
+
+            # Attack first Avatar on stack
+            for obj in tile_stack:
+                if isinstance(obj, Avatar):
+                    bot.attack(obj)
+
+                    # Turn off all generators
+                    for gen in world.generators.values():
+                        gen.deactivate()
+
+                    bot.has_attacked = True
+                    return
