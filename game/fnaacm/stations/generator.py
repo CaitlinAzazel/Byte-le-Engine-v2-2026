@@ -108,6 +108,17 @@ class Generator(Station):
     def point_bonus(self) -> int:
         return self.__point_bonus
 
+    # allows generators to be turned OFF by attacks
+    def deactivate(self):
+        """Force generator offline (doors remain unchanged)."""
+        if not self.__active:
+            return
+        self.__active = False
+
+    def activate(self):
+        """Turn generator on (used for testing)."""
+        self.__active = True
+
     def __toggle_doors(self, open: bool):
         for door in self.connected_doors:
             door.open = open

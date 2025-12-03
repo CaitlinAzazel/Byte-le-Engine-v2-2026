@@ -57,46 +57,26 @@ class Attack_Controller(Controller):
         These interactions are managed by using the provided ActionType enums in the enums.py file.
     """
 
-def __init__(self):
-    super().__init__()
+    def __init__(self):
+        super().__init__()
 
-def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot) -> None:
-    """
-        Given the ActionType for interacting in a direction, the Player's avatar will engage with the object.
-        :param action:
-        :param client:
-        :param world:
-        :param bot:
-        :return: None
-        """
-    stunned = False
-    # match interaction type with x and y
-    vector: Vector
-    match action:
-        case ActionType.ATTACK_UP:
-            vector = Vector(x=0, y=-1)
-            stunned = True
-        case ActionType.ATTACK_DOWN:
-            vector = Vector(x=0, y=1)
-            stunned = True
-        case ActionType.ATTACK_LEFT:
-            vector = Vector(x=-1, y=0)
-            stunned = True
-        case ActionType.ATTACK_RIGHT:
-            vector = Vector(x=1, y=0)
-            stunned = True
-        case ActionType.ATTACK_TOP_LEFT:
-            vector = Vector(x=-1, y=-1)
-            stunned = True
-        case ActionType.ATTACK_BOTTOM_LEFT:
-            vector = Vector(x=-1, y=1)
-            stunned = True
-        case ActionType.ATTACK_TOP_RIGHT:
-            vector = Vector(x=1, y=-1)
-            stunned = True
-        case ActionType.ATTACK_BOTTOM_RIGHT:
-            vector = Vector(x=1, y=1)
-            stunned = True
+    def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot) -> None:
+        bot.has_attacked = False
+
+        # Base direction map for all actions
+        direction_map = {
+            ActionType.ATTACK_UP: Vector(0, -1),
+            ActionType.ATTACK_DOWN: Vector(0, 1),
+            ActionType.ATTACK_LEFT: Vector(-1, 0),
+            ActionType.ATTACK_RIGHT: Vector(1, 0),
+            ActionType.ATTACK_TOP_LEFT: Vector(-1, -1),
+            ActionType.ATTACK_BOTTOM_LEFT: Vector(-1, 1),
+            ActionType.ATTACK_TOP_RIGHT: Vector(1, -1),
+            ActionType.ATTACK_BOTTOM_RIGHT: Vector(1, 1)
+        }
+
+        # Invalid attack type
+        if action not in direction_map:
             return
 
         base_direction = direction_map[action]
