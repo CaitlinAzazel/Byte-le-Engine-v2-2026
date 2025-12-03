@@ -1,4 +1,5 @@
 import random
+from typing import override
 
 from game.fnaacm.bots.general_bot_commands import *
 from game.common.map.game_board import GameBoard
@@ -12,10 +13,12 @@ class JumperBot(Bot):
         self.stun = False
         self.cooldown = 0
 
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+    @override
+    def _calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         return self.movement()
 
-    def __calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
+    @override
+    def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         return self.player_seen_movement(player)
 
     def movement(self) -> list[ActionType]:
@@ -30,9 +33,6 @@ class JumperBot(Bot):
         if self.stun:
             self.stunned()
             return []
-
-        def boosting(self, value: bool):
-            self.boosted = value
 
         player_pos = player.avatar.position
         direction_to_player = (player_pos - self.position)
@@ -61,8 +61,6 @@ class JumperBot(Bot):
                     return [ActionType.MOVE_UP, ActionType.MOVE_RIGHT]
                 elif playerX < 0 and playerY > 0:
                     return [ActionType.MOVE_DOWN, ActionType.MOVE_LEFT]
-                else:
-                    return self.movement()
             elif self.cooldown == 0:
                 self.cooldown = random.randint(1,3)
                 if playerX > 0 and playerY == 0:
@@ -81,13 +79,10 @@ class JumperBot(Bot):
                     return [ActionType.MOVE_UP, ActionType.MOVE_RIGHT, ActionType.MOVE_UP, ActionType.MOVE_RIGHT]
                 elif playerX < 0 and playerY > 0:
                     return [ActionType.MOVE_DOWN, ActionType.MOVE_LEFT, ActionType.MOVE_DOWN, ActionType.MOVE_LEFT]
-                else:
-                    return self.movement()
-            else:
-                self.movement()
         elif not self.boosted:
             if self.cooldown != 0:
                 self.cooldown -= 1
+                return []
             if playerX > 0 and playerY == 0:
                 randomvar = random.choice([ActionType.MOVE_UP, ActionType.MOVE_DOWN])
                 return [randomvar, ActionType.MOVE_RIGHT]
@@ -108,11 +103,6 @@ class JumperBot(Bot):
                 return [ActionType.MOVE_UP, ActionType.MOVE_RIGHT]
             elif playerX < 0 and playerY > 0:
                 return [ActionType.MOVE_DOWN, ActionType.MOVE_LEFT]
-            else:
-                return self.movement()
 
-    def action(self):
-        if self.can_see_player:
-            self.__calc_next_move_hunt(self.game_board, player)
-        else:
-            self.__calc_next_move_patrol(self.game_board, player)
+        return self.movement()
+

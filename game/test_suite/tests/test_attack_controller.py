@@ -114,33 +114,3 @@ class TestAttackController(unittest.TestCase):
             Vector(1, 1): [gen2]
         })
 
-        # board.generators is populated automatically during generation
-
-class TestInteractController(unittest.TestCase):
-    """
-    `Test Attack Controller Notes:`
-
-        self.assertTrue(self.attacking_bot.has_attacked)
-        self.assertFalse(gen1.active)
-        self.assertFalse(gen2.active)
-
-    def test_generators_unchanged_when_no_avatar_hit(self):
-        self.attacking_bot.position = Vector(0, 1)
-
-        gen1 = Generator()
-        gen2 = Generator()
-        gen1.activate()
-        gen2.activate()
-
-        station = Station(position=Vector(0, 0))
-        board = self.build_board({
-            Vector(0, 0): [station],
-            Vector(0, 1): [self.attacking_bot],
-            Vector(1, 0): [gen1],
-            Vector(1, 1): [gen2]
-        })
-
-
-    def test_stunned_bot(self):
-        self.interact_controller.handle_actions(ActionType.ATTACK_LEFT, self.player, self.game_board)
-        self.assertEqual(self.bot.stunned, True)

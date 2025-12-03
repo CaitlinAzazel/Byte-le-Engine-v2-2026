@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, override
 from game.fnaacm.bots.bot import Bot
 from game.common.enums import ActionType
 from game.utils.vector import Vector
@@ -11,7 +11,8 @@ class CrawlerBot(Bot):
         super().__init__(*args, **kwargs)
         self.turn_delay = 4  # moves every 4 turns unboosted
 
-    def __calc_next_move_hunt(self, gameboard, player) -> List[ActionType]:
+    @override
+    def _calc_next_move_hunt(self, gameboard, player) -> List[ActionType]:
         bot_pos = self.position
         player_pos = player.avatar.position
 
@@ -33,10 +34,8 @@ class CrawlerBot(Bot):
 
         return [action, action] if self.boosted else [action]
 
-    def boosting(self, value: bool):
-        self.boosted = value
-
-    def __calc_next_move_patrol(self, gameboard, player) -> List[ActionType]:
+    @override
+    def _calc_next_move_patrol(self, gameboard, player) -> List[ActionType]:
         return []  # Crawler has no patrol
 
     def _vector_to_action(self, delta: Vector) -> Optional[ActionType]:
