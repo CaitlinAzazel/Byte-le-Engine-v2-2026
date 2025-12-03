@@ -4,10 +4,10 @@ from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
 from game.common.map.wall import Wall
 from game.config import LDtk
-from game.fnaacm.bots.crawler_bot import CrawlBot
+from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
-from game.fnaacm.bots.jumper_bot import JumpBot
+from game.fnaacm.bots.jumper_bot import JumperBot
 from game.fnaacm.bots.support_bot import SupportBot
 from game.fnaacm.map.coin_spawner import CoinSpawner
 from game.fnaacm.map.door import Door
@@ -46,9 +46,9 @@ def get_spawned_entity_from_spawner(spawner: EntityInstance) -> GameObject:
             case LDtk.SpawnedEntityType.IAN:
                 spawned_entity = IANBot()
             case LDtk.SpawnedEntityType.CRAWLER:
-                spawned_entity = CrawlBot()
+                spawned_entity = CrawlerBot()
             case LDtk.SpawnedEntityType.JUMPER:
-                spawned_entity = JumpBot()
+                spawned_entity = JumperBot()
             case LDtk.SpawnedEntityType.SUPPORT:
                 spawned_entity = SupportBot()
             case LDtk.SpawnedEntityType.DUMMY:
