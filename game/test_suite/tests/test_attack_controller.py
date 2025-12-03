@@ -144,7 +144,6 @@ class TestAttackController(unittest.TestCase):
             Vector(1, 1): [gen2]
         })
 
-        board.generators = {"g1": gen1, "g2": gen2}
 
         self.attack_controller.handle_actions(
             ActionType.ATTACK_UP,
