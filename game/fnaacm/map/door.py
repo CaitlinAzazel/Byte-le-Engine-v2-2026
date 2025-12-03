@@ -22,6 +22,10 @@ class Door(Occupiable):
         self.object_type: ObjectType = ObjectType.DOOR
         self._open = False
 
+    def __eq__(self, value: object, /) -> bool:
+        return isinstance(value, Door) and \
+            self.open == value.open
+
     @override
     def to_json(self) -> dict:
         json = super().to_json()

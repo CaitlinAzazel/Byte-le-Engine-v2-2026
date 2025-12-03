@@ -36,17 +36,8 @@ class BotMovementController(Controller):
 
         destination: Vector = bot.position + direction
 
-        # if the top of the given coordinates are not occupiable or are invalid, return to do nothing
-        if not world.is_occupiable(destination):
+        if not world.can_object_occupy(destination, bot):
             return
 
-        occupiable = world.get_top(destination)
-        if isinstance(occupiable, Occupiable) and not occupiable.can_occupy(bot):
-            return
-
-        # each bot has its own ObjectType
-        world.remove(bot.position, bot.object_type)
-        world.place(destination, bot)
-        bot.position = destination
-
+        world.update_object_position(destination, bot)
 

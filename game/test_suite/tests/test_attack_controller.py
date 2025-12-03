@@ -116,12 +116,9 @@ class TestAttackController(unittest.TestCase):
 
         # board.generators is populated automatically during generation
 
-        self.attack_controller.handle_actions(
-            ActionType.ATTACK_UP,
-            self.target_player,
-            board,
-            self.attacking_bot
-        )
+class TestInteractController(unittest.TestCase):
+    """
+    `Test Attack Controller Notes:`
 
         self.assertTrue(self.attacking_bot.has_attacked)
         self.assertFalse(gen1.active)
@@ -144,13 +141,6 @@ class TestAttackController(unittest.TestCase):
         })
 
 
-        self.attack_controller.handle_actions(
-            ActionType.ATTACK_UP,
-            Player(avatar=Avatar(Vector(3, 3))),
-            board,
-            self.attacking_bot
-        )
-
-        self.assertFalse(self.attacking_bot.has_attacked)
-        self.assertTrue(gen1.active)
-        self.assertTrue(gen2.active)
+    def test_stunned_bot(self):
+        self.interact_controller.handle_actions(ActionType.ATTACK_LEFT, self.player, self.game_board)
+        self.assertEqual(self.bot.stunned, True)

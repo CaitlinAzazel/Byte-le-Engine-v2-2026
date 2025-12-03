@@ -14,6 +14,7 @@ class PointController(Controller):
 
     def __init__(self, points_per_turn: int = DEFAULT_POINTS_PER_TURN):
         super().__init__()
+        self.__multiplier = 1
         self.__points_per_turn = points_per_turn
 
     @property
@@ -23,7 +24,11 @@ class PointController(Controller):
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard):
         del action
 
+        # no points if in refuge
         if Refuge.global_occupied:
             return
 
+        # TODO: each generator increases point multiplier
+
+        points = self.__points_per_turn * self.__multiplier 
         client.avatar.give_points(self.__points_per_turn)
