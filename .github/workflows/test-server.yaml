@@ -4,7 +4,10 @@ on: [push]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
     - uses: actions/checkout@v5
     - name: Set up Python
@@ -16,9 +19,5 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest
-    - name: Run game tests
-      if: '!cancelled()'
-      run: pytest -vs game
-    - name: Run server tests
-      if: '!cancelled()'
+    - name: Run tests
       run: pytest -vs server
