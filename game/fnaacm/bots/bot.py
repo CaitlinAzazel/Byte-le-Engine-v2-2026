@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 from game.common.avatar import Avatar
 from game.common.enums import ActionType
 from game.common.game_object import GameObject
@@ -26,15 +24,13 @@ class Bot(GameObject):
         self.stun_counter: int = 0
         self.has_attacked: bool = False
 
-    @abstractmethod
-    def __calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        pass
+    def _calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+        return []
 
-    @abstractmethod
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        pass
+    def _calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+        return []
 
-    def __is_tile_open(self, tile_data: GameObjectContainer) -> bool:
+    def _is_tile_open(self, tile_data: GameObjectContainer) -> bool:
         """
         determines if a tile "blocks" this bot's line of sight or not
 
@@ -64,7 +60,7 @@ class Bot(GameObject):
         positions_between = GameBoard.get_positions_overlapped_by_line(self.position, player.avatar.position)
         for position in positions_between:
             tile_objects = game_board.get(position)
-            if not self.__is_tile_open(tile_objects):
+            if not self._is_tile_open(tile_objects):
                 return False
 
         return not Refuge.global_occupied
@@ -74,8 +70,8 @@ class Bot(GameObject):
         returns actions that the bot should take to get to wherever it wants to go (typically player vector)
         """
         if self.can_see_player(gameboard, player):
-            return self.__calc_next_move_hunt(gameboard, player)
-        return self.__calc_next_move_patrol(gameboard, player)
+            return self._calc_next_move_hunt(gameboard, player)
+        return self._calc_next_move_patrol(gameboard, player)
 
     def can_attack(self, game_board: GameBoard, player: Player) -> bool:
         # distance check is just a shortcut for checking up/down/left/right

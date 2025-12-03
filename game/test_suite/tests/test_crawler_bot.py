@@ -30,7 +30,7 @@ class TestCrawlerBot(unittest.TestCase):
 
     def test_bot_moves_around_vent(self):
         board = self.build_board(include_vent=True)
-        moves = self.bot._CrawlerBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
         # Crawler can go through vents, should have at least one move
         self.assertTrue(len(moves) >= 1)
         # Ensure it does not step on the player
@@ -39,13 +39,13 @@ class TestCrawlerBot(unittest.TestCase):
     def test_hunt_boosted_moves_once(self):
         self.bot.boosted = True  # reduces turn_delay
         board = self.build_board()
-        moves = self.bot._CrawlerBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
         # When boosted, bot returns 2 moves
         self.assertEqual(len(moves), 2)
 
     def test_hunt_move_toward_player(self):
         board = self.build_board()
-        moves = self.bot._CrawlerBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
 
         # Bot should have at least one move toward player
         self.assertTrue(len(moves) >= 1)
@@ -74,12 +74,12 @@ class TestCrawlerBot(unittest.TestCase):
         # Bot on same tile as player should not move
         self.bot.position = Vector(self.player_avatar.position.x, self.player_avatar.position.y)
         board = self.build_board()
-        moves = self.bot._CrawlerBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
         self.assertEqual(len(moves), 0)
 
     def test_patrol_returns_empty(self):
         # Patrol does not use the player
-        moves = self.bot._CrawlerBot__calc_next_move_patrol(self.board, self.player)
+        moves = self.bot._calc_next_move_patrol(self.board, self.player)
         self.assertIsInstance(moves, list)
 
 if __name__ == "__main__":

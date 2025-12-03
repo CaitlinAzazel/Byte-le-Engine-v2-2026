@@ -5,8 +5,8 @@ class SupportBot(Bot):
     def __init__(self):
         super().__init__()
         self.turnedOn = False
-        self.movement_controller: MovementController = MovementController()
         self.stun = False
+
     @property
     def turned_on(self):
         return self.turnedOn

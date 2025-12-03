@@ -11,6 +11,7 @@ from game.controllers import refuge_controller
 from game.controllers.bot_movement_controller import BotMovementController
 from game.controllers.point_controller import PointController
 from game.controllers.refuge_controller import RefugeController
+from game.fnaacm.bots.bot import Bot
 from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
@@ -65,7 +66,7 @@ class MasterController(Controller):
         self.movement_controller: MovementController = MovementController()
         self.interact_controller: InteractController = InteractController()
         self.bot_movement_controller: BotMovementController = BotMovementController()
-        self.bots = [
+        self.bots: list[Bot] = [
             DumbBot(),
             CrawlerBot(),
             JumperBot(),
@@ -145,7 +146,8 @@ class MasterController(Controller):
         # for each bot:
         #   if bot.can_act(self.turn), then bot.action()
         for bot in self.bots:
-            moves = bot.calc_next_move(game_board, player.avatar)
+            moves = bot.calc_next_move(game_board, player)
+            assert not moves is None, f'{bot.__class__}\'s next move was... None?'
             for move in moves:
                 self.bot_movement_controller.handle_actions(move, bot, game_board)
 

@@ -30,7 +30,7 @@ class TestIANBot(unittest.TestCase):
 
     def test_bot_respects_vent(self):
         board = self.build_board(include_vent=True)
-        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
         # IAN should never try to go through vent
         vent_pos = Vector(1, 0)
         for move in moves:
@@ -48,18 +48,18 @@ class TestIANBot(unittest.TestCase):
     def test_hunt_boosted_moves_every_turn(self):
         self.bot.boosted = True  # moves every turn
         board = self.build_board()
-        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
         self.assertEqual(len(moves), 2)
 
     def test_hunt_normal_moves_once(self):
         self.bot.boosted = False
         board = self.build_board()
-        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
         self.assertEqual(len(moves), 1)
 
     def test_hunt_move_toward_player(self):
         board = self.build_board()
-        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
 
         # Bot should have at least one move toward player
         self.assertTrue(len(moves) >= 1)
@@ -87,12 +87,12 @@ class TestIANBot(unittest.TestCase):
         # Bot on same tile as player should not move
         self.bot.position = Vector(self.player_avatar.position.x, self.player_avatar.position.y)
         board = self.build_board()
-        moves = self.bot._IANBot__calc_next_move_hunt(board, self.player)
+        moves = self.bot._calc_next_move_hunt(board, self.player)
         self.assertEqual(len(moves), 0)
 
     def test_patrol_returns_empty(self):
         # Patrol does not use the player
-        moves = self.bot._IANBot__calc_next_move_patrol(self.board, self.player)
+        moves = self.bot._calc_next_move_patrol(self.board, self.player)
         self.assertIsInstance(moves, list)
         self.assertEqual(len(moves), 0)
 

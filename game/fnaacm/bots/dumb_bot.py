@@ -1,4 +1,5 @@
 import random
+from typing import override
 
 from game.fnaacm.bots.general_bot_commands import *
 from game.common.map.game_board import GameBoard
@@ -12,10 +13,12 @@ class DumbBot(Bot):
         self.boosted : bool = False
         self.stun = False
 
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+    @override
+    def _calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         return self.movement()
 
-    def __calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
+    @override
+    def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         return self.player_seen_movement(player)
 
     def movement(self) -> list[ActionType]:
@@ -64,11 +67,8 @@ class DumbBot(Bot):
         else:
             return self.movement()
 
-    def boosting(self, value: bool):
-        self.boosted = value
-
     def action(self, player: Player):
         if self.can_see_player:
-            self.__calc_next_move_hunt(self.game_board, player)
+            self._calc_next_move_hunt(self.game_board, player)
         else:
-            self.__calc_next_move_patrol(self.game_board, player)
+            self._calc_next_move_patrol(self.game_board, player)
