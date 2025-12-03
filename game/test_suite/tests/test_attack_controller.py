@@ -115,7 +115,6 @@ class TestAttackController(unittest.TestCase):
         })
 
         # board.generators is populated automatically during generation
-        board.generators = {"g1": gen1, "g2": gen2}
 
         self.attack_controller.handle_actions(
             ActionType.ATTACK_UP,
