@@ -14,7 +14,7 @@ from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
-from game.fnaacm.bots.jumper_bot import JumpBot
+from game.fnaacm.bots.jumper_bot import JumperBot
 from game.fnaacm.bots.support_bot import SupportBot
 from game.utils.thread import CommunicationThread
 from game.controllers.movement_controller import MovementController
@@ -68,7 +68,7 @@ class MasterController(Controller):
         self.bots = [
             DumbBot(),
             CrawlerBot(),
-            JumpBot(),
+            JumperBot(),
             IANBot(),
             SupportBot()
         ]

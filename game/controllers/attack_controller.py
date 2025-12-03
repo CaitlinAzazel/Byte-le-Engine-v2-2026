@@ -6,6 +6,7 @@ from game.fnaacm.bots.bot import Bot
 from game.common.avatar import Avatar
 from game.utils.vector import Vector
 from game.fnaacm.map.vent import Vent
+from game.fnaacm.bots.jumper_bot import JumperBot
 
 """
 `Attack Controller Notes:`
@@ -51,38 +52,38 @@ class Attack_Controller(Controller):
             ActionType.ATTACK_BOTTOM_RIGHT: Vector(1, 1)
         }
 
+        # Invalid attack type
         if action not in direction_map:
             return
 
-        directions_to_check = [direction_map[action]]
+        base_direction = direction_map[action]
+        directions_to_check = [base_direction]
 
-        # --- Special case for boosted JumperBot ---
-        if getattr(bot, "is_jumper", False) and getattr(bot, "boosted", False):
-            # Include adjacent tiles as well for boosted jumper attacks
-            if direction_map[action].x != 0 and direction_map[action].y != 0:  # diagonal
+        # Boosted JumperBot special case
+        if isinstance(bot, JumperBot) and bot.boosted:
+            if base_direction.x != 0 and base_direction.y != 0:
                 directions_to_check.extend([
-                    Vector(direction_map[action].x, 0),
-                    Vector(0, direction_map[action].y)
+                    Vector(base_direction.x, 0),
+                    Vector(0, base_direction.y)
                 ])
 
-        # Attack each target position
+        # Process Attacks
         for direction in directions_to_check:
             target_pos = bot.position + direction
             tile_stack = world.get(target_pos)
 
-            # Skip if Vent is present
+            # Vents block attacks entirely
             if any(isinstance(obj, Vent) for obj in tile_stack):
                 continue
 
-            # Attack first Avatar found
+            # Attack first Avatar on stack
             for obj in tile_stack:
                 if isinstance(obj, Avatar):
                     bot.attack(obj)
 
-                    # Turn all generators off if present
-                    if hasattr(world, "generators"):
-                        for generator in world.generators.values():
-                            generator.deactivate()
+                    # Turn off all generators
+                    for gen in world.generators.values():
+                        gen.deactivate()
 
                     bot.has_attacked = True
                     return
