@@ -1,5 +1,4 @@
 import random
-
 from game.fnaacm.bots.general_bot_commands import *
 from game.common.map.game_board import GameBoard
 from game.fnaacm.bots.bot import Bot
