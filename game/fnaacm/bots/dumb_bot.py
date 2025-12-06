@@ -1,5 +1,4 @@
 import random
-from typing import override
 
 from game.fnaacm.bots.general_bot_commands import *
 from game.common.map.game_board import GameBoard
@@ -14,9 +13,23 @@ class DumbBot(Bot):
         self.stun = False
 
     @override
-    def _calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         return self.movement()
 
+    @override
+    def __calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
+        route = self.player_seen_movement(player)
+        execute_action = [route[0]]
+        return execute_action
+
+    @override
+    def calc_next_move(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
+        """
+        returns actions that the bot should take to get to wherever it wants to go (typically player vector)
+        """
+        if self.can_see_player(gameboard, player):
+            return self.__calc_next_move_hunt(gameboard, player)
+        return self.__calc_next_move_patrol(gameboard, player)
     @override
     def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         return self.player_seen_movement(player)
@@ -67,8 +80,9 @@ class DumbBot(Bot):
         else:
             return self.movement()
 
+
     def action(self, player: Player):
         if self.can_see_player:
-            self._calc_next_move_hunt(self.game_board, player)
+            self.__calc_next_move_hunt(self.game_board, player)
         else:
-            self._calc_next_move_patrol(self.game_board, player)
+            self.__calc_next_move_patrol(self.game_board, player)
