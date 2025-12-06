@@ -1,5 +1,7 @@
 from abc import abstractmethod
 
+from sqlalchemy import false
+
 from game.common.avatar import Avatar
 from game.common.enums import ActionType
 from game.common.game_object import GameObject
@@ -57,17 +59,37 @@ class Bot(GameObject):
     def can_see_player(self, game_board: GameBoard, player: Player) -> bool:
         distance_to_player: int = self.position.distance(player.avatar.position)
         vision_radius = self.boosted_vision_radius if self.boosted else self.vision_radius
-        in_vision: bool = distance_to_player <= vision_radius
+        in_vision: bool = self.in_vision_radius(player.avatar.position)
+        if Refuge.global_occupied:
+            return False
+
         if not in_vision:
             return False
 
-        positions_between = GameBoard.get_positions_overlapped_by_line(self.position, player.avatar.position)
+        positions_between = GameBoard.get_positions_overlapped_by_line(player.avatar.position, self.position)
         for position in positions_between:
             tile_objects = game_board.get(position)
             if not self.__is_tile_open(tile_objects):
                 return False
 
-        return not Refuge.global_occupied
+
+    """
+    The position input into this method will almost entirely be used for Avatar. 
+    However, this method can also be used to compute whether objects like a generator, door, or vent
+    are within a vision radius
+    """
+    def in_vision_radius(self, pos: Vector) -> bool:
+        if self.boosted:
+            top_left = Vector(self.position.x - self.boosted_vision_radius, self.position.y - self.boosted_vision_radius)
+            bottom_right = Vector(self.position.x + self.boosted_vision_radius, self.position.y + self.boosted_vision_radius)
+        else:
+            top_left = Vector(self.position.x - self.vision_radius, self.position.y - self.vision_radius)
+            bottom_right = Vector(self.position.x + self.vision_radius, self.position.y + self.vision_radius)
+
+        if top_left.x <= pos.x <= bottom_right.x and top_left.y <= pos.y <= bottom_right.y:
+            return True
+        return False
+
 
     def calc_next_move(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         """
