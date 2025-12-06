@@ -35,7 +35,7 @@ def test_get_submission() -> None:
     Tests getting a submission via the submission id and team uuid in the URL.
     :return: None
     """
-    response = client.get('/submission?submission_id=1&team_uuid=1')
+    response = client.get('/submission/1/1/')
     assert response.status_code == 200
     assert response.json() == {"submission_id": 1,
                                "submission_time": "2000-10-31T06:30:00Z",

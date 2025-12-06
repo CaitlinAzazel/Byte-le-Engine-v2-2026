@@ -75,8 +75,12 @@ def run_with_return_to_client(func: Callable) -> Callable:
         """
         try:
             return func(*args, **kwargs)
+        # keep the status code if e was an HTTPException
+        except HTTPException as e:
+            raise e
+        # otherwise default to 500 since the error WAS serverside
         except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e))
 
     return wrapper
 
@@ -136,7 +140,7 @@ def get_team_info(uuid: str, db: Session = Depends(get_db)):
 
 
 # gets the INDIVIDUAL submission data of a specific team
-@app.get('/submission', response_model=SubmissionSchema)
+@app.get('/submission/{submission_id}/{team_uuid}', response_model=SubmissionSchema)
 @run_with_return_to_client
 def get_submission(submission_id: int, team_uuid: str, db: Session = Depends(get_db)):
     """
