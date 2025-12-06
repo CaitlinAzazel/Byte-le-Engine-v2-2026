@@ -1,7 +1,5 @@
 from abc import abstractmethod
 
-from sqlalchemy import false
-
 from game.common.avatar import Avatar
 from game.common.enums import ActionType
 from game.common.game_object import GameObject
@@ -26,17 +24,15 @@ class Bot(GameObject):
         self.boosted_vision_radius: int = vision_radius * 2
         self.can_see_into_vent: bool = False
         self.stun_counter: int = 0
+        self.has_attacked: bool = False
 
+    def _calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+        return []
 
-    @abstractmethod
-    def __calc_next_move_hunt(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        pass
+    def _calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
+        return []
 
-    @abstractmethod
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        pass
-
-    def __is_tile_open(self, tile_data: GameObjectContainer) -> bool:
+    def _is_tile_open(self, tile_data: GameObjectContainer) -> bool:
         """
         determines if a tile "blocks" this bot's line of sight or not
 
@@ -69,7 +65,7 @@ class Bot(GameObject):
         positions_between = GameBoard.get_positions_overlapped_by_line(player.avatar.position, self.position)
         for position in positions_between:
             tile_objects = game_board.get(position)
-            if not self.__is_tile_open(tile_objects):
+            if not self._is_tile_open(tile_objects):
                 return False
 
 
@@ -96,8 +92,8 @@ class Bot(GameObject):
         returns actions that the bot should take to get to wherever it wants to go (typically player vector)
         """
         if self.can_see_player(gameboard, player):
-            return self.__calc_next_move_hunt(gameboard, player)
-        return self.__calc_next_move_patrol(gameboard, player)
+            return self._calc_next_move_hunt(gameboard, player)
+        return self._calc_next_move_patrol(gameboard, player)
 
     def can_attack(self, game_board: GameBoard, player: Player) -> bool:
         # distance check is just a shortcut for checking up/down/left/right
@@ -116,3 +112,24 @@ class Bot(GameObject):
 
     def can_act(self, turn: int) -> bool:
         return turn % 2 == 0
+
+
+    def attack(self, target):
+        """
+        Perform an attack on the target Avatar.
+        Tests expect:
+        - bot.has_attacked becomes True
+        - target receives the attack via target.receive_attack(bot)
+        """
+        if target is None:
+            return
+
+        # Avatar defines receive_attack()
+        if hasattr(target, "receive_attack"):
+            target.receive_attack(self)
+
+        # Bot stunned after hitting the player
+        self.is_stunned = True
+        self.stun_counter = 0
+
+        self.has_attacked = True

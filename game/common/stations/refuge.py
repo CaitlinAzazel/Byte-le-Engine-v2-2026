@@ -40,6 +40,9 @@ class Refuge(Occupiable):
         self.object_type: ObjectType = ObjectType.REFUGE
         Refuge.all_positions.add(self.vector)
 
+    def __eq__(self, value: object, /) -> bool:
+        return isinstance(value, Refuge) and \
+            self.vector == value.vector
 
     @staticmethod
     def reset_global_state():

@@ -362,6 +362,21 @@ class GameBoard(GameObject):
         return self.is_valid_coords(coords) and (self.get(coords).get_top() is None or
                                                  isinstance(self.get(coords).get_top(), Occupiable))
 
+    def can_object_occupy(self, coords: Vector, game_object: GameObject) -> bool:
+        """
+        returns whether `game_object` can occupy the space at `coords`
+        """
+        if not self.is_occupiable(coords):
+            return False
+
+        occupiable = self.get_top(coords)
+        if occupiable is None:
+            return True
+
+        if not isinstance(occupiable, Occupiable):
+            return False
+        return occupiable.can_be_occupied_by(game_object)
+
     # Returns the Vector and a list of GameObject for whatever objects you are trying to get
     # CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
     def get_objects(self, look_for: ObjectType) -> list[tuple[Vector, list[GameObject]]]:
@@ -490,6 +505,18 @@ class GameBoard(GameObject):
         # lowkey made this for no reason
         return sorted(GameBoard.get_positions_overlapped_by_line(line_start, line_end),
                       key=lambda pos: (pos - line_start).magnitude_squared)
+
+    def update_object_position(self, position: Vector, game_object: GameObject) -> None:
+        assert hasattr(game_object, 'position')
+
+        # remove the avatar from its previous location
+        self.remove(game_object.position, game_object.object_type)
+
+        # add the avatar to the top of the list of the coordinate
+        self.place(position, game_object)
+
+        # reassign the avatar's position
+        game_object.position = position
 
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
