@@ -3,6 +3,8 @@ from functools import reduce
 from enum import Flag, auto
 
 import os
+
+from visualizer.config import Config
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
@@ -58,9 +60,10 @@ class PlaybackTemplate:
         self.fastest_speed_button: Button = Button(self.screen, '4x', lambda: PlaybackButtons.FASTEST_SPEED_BUTTON,
                                                    font_size=18)
 
-        self.prev_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-80, 225).as_tuple()
-        self.pause_button.rect.center = Vector(*self.screen.get_rect().center).add_y(225).as_tuple()
-        self.next_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(80, 225).as_tuple()
+        HALF_SCREEN_HEIGHT = Config().SCREEN_SIZE.y // 2
+        self.prev_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-80, -HALF_SCREEN_HEIGHT+18).as_tuple()
+        self.pause_button.rect.center = Vector(*self.screen.get_rect().center).add_y(-HALF_SCREEN_HEIGHT+18).as_tuple()
+        self.next_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(80, -HALF_SCREEN_HEIGHT+18).as_tuple()
         self.start_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-80, 275).as_tuple()
         self.save_button.rect.center = Vector(*self.screen.get_rect().center).add_y(275).as_tuple()
         self.end_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(80, 275).as_tuple()

@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from game.common.enums import *
+from game.utils.vector import Vector
 
 """
 This file is important for configuring settings for the project. All parameters in this file have comments to explain 
@@ -49,6 +50,7 @@ LOGS_FILE = os.path.join(LOGS_DIR, LOGS_FILE_NAME)
 GAME_MAP_FILE_NAME = "game_map.json"                                # Name and extension of game file that holds generated world
 GAME_MAP_DIR = os.path.join(os.getcwd(), "logs")                    # Location of game map file
 GAME_MAP_FILE = os.path.join(GAME_MAP_DIR, GAME_MAP_FILE_NAME)      # Filepath for game map file
+GAME_MAP_SIZE = Vector(38, 20)
 
 class Debug:                    # Keeps track of the current debug level of the game
     level = DebugLevel.NONE

@@ -18,7 +18,7 @@ def generate(seed: int = random.randint(0, 1000000000)):
 
     print(f'Generating game map... seed: {seed}')
 
-    temp: GameBoard = GameBoard(seed, map_size=Vector(6, 6), locations={Vector(1, 1): [Avatar(),],
+    temp: GameBoard = GameBoard(seed, map_size=GAME_MAP_SIZE, locations={Vector(1, 1): [Avatar(),],
                                                                         Vector(4, 4): [Avatar(),]}, walled=True)
     temp.generate_map()
     data: dict = {'game_board': temp.to_json()}
