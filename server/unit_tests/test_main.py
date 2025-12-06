@@ -11,8 +11,8 @@ def test_read_root():
 
 
 def test_read_get_submission():
-    response = client.get('/submission/1/1/')
-    assert response.status_code == 200
+    response = client.get('/submission?submission_id=1&team_uuid=1')
+    assert response.status_code == 200, response.json()['detail']
     assert response.json() == {"submission_id": 1,
          "submission_time": "2000-10-31T01:30:00-05:00",
          "file_txt": "test",
@@ -30,7 +30,8 @@ def test_read_get_submission():
 
 
 def test_read_get_submissions():
-    response = client.get('/get_submissions/1')
+    response = client.get('/submissions?team_uuid=1')
+    assert response.status_code == 200, response.json()['detail']
     assert response.json() == [{"submission_id": 1,
         "submission_time": "2000-10-31T01:30:00-05:00",
         "file_txt": "test",

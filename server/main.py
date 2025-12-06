@@ -140,7 +140,7 @@ def get_team_info(uuid: str, db: Session = Depends(get_db)):
 
 
 # gets the INDIVIDUAL submission data of a specific team
-@app.get('/submission/{submission_id}/{team_uuid}', response_model=SubmissionSchema)
+@app.get('/submission', response_model=SubmissionSchema)
 @run_with_return_to_client
 def get_submission(submission_id: int, team_uuid: str, db: Session = Depends(get_db)):
     """
@@ -154,10 +154,8 @@ def get_submission(submission_id: int, team_uuid: str, db: Session = Depends(get
     submission_list: list[Submission] | None = crud_submission.read_all_W_filter(
         db, submission_id=submission_id, team_uuid=team_uuid)
 
-    if submission_list is None:
+    if submission_list is None or len(submission_list) == 0:
         raise HTTPException(status_code=404, detail="Submission not found!")
-    if len(submission_list) == 0:
-        raise HTTPException(status_code=500, detail=f"No submission exists for submission_id:{submission_id} and team_uuid:{team_uuid}")
 
     return submission_list[0]  # returns a single SubmissionSchema to give the submission data to the user
 
