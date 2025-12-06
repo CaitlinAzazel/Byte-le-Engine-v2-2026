@@ -256,12 +256,28 @@ class TestGameBoard(unittest.TestCase):
             self.assertTrue(position.is_farther_from(line_start, previous_position), f'{position} is closer to {line_start} than {previous_position}')
             previous_position = position
 
-    # TODO: test edge cases like
-    # WP
-    # BW
-    # W = wall
-    # P = player
-    # B = bot
+    # does it return the correct positions along a "perfect" diagonal?
+    def test_overlapped_pos_diagonal(self):
+        line_start = Vector(0, 0)
+        positions = GameBoard.get_positions_overlapped_by_line(line_start, Vector(3,3))
+        self.assertListEqual(positions, [Vector(i,i) for i in range(4)])
+
+    # same as above just between two tiles
+    def test_overlapped_pos_short_diagonal(self):
+        line_start = Vector(0, 0)
+        positions = GameBoard.get_positions_overlapped_by_line(line_start, Vector(1,1))
+        self.assertListEqual(positions, [Vector(0,0), Vector(1,1)])
+
+    def test_overlapped_pos_negative_start(self):
+        positions = GameBoard.get_positions_overlapped_by_line(Vector(-3,-3), Vector())
+        expected_positions = [Vector(-i, -i) for i in reversed(range(4))]
+        self.assertListEqual(positions, expected_positions)
+
+    def test_overlapped_pos_negative_direction(self):
+        positions = GameBoard.get_positions_overlapped_by_line(Vector(), Vector(-2,0))
+        expected_positions = [Vector(-i, 0) for i in range(3)]
+        self.assertEqual(len(positions), len(expected_positions))
+        self.assertListEqual(positions, expected_positions)
 
     def test_get_top_uninitialized_location(self):
         # should be a vector that is not a key in the locations dict, but is still valid
