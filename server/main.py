@@ -152,6 +152,8 @@ def get_submission(submission_id: int, team_uuid: str, db: Session = Depends(get
 
     if submission_list is None:
         raise HTTPException(status_code=404, detail="Submission not found!")
+    if len(submission_list) == 0:
+        raise HTTPException(status_code=500, detail=f"No submission exists for submission_id:{submission_id} and team_uuid:{team_uuid}")
 
     return submission_list[0]  # returns a single SubmissionSchema to give the submission data to the user
 
