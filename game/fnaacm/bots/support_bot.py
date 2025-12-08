@@ -21,7 +21,7 @@ class SupportBot(Bot):
         self.turnedOn = False
 
     def scrap_stun(self):
-        self.stun_count += 25
+        self.stun_counter = 25
         self.stun = True
         self.turnedOn = False
 
