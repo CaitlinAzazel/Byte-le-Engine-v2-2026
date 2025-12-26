@@ -1,15 +1,8 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from server.main import app
-
-client = TestClient(app=app)
-
-# Test Team methods in main.py
-
-# Test post method
+from sqlalchemy.orm import Session
 
 
-def test_post_team() -> None:
+def test_post_team(session: Session, client: TestClient, universities, team_types) -> None:
     """
     Tests that creating a team works as expected.
     :return: None
