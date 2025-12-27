@@ -16,7 +16,7 @@ this file is used by pytest to share the fixtures below with other files that co
 """
 
 
-@pytest.fixture(name='session', scope='session')
+@pytest.fixture(name='session')
 def session_fixture():
     engine = create_engine(
         'sqlite:///:memory:',
@@ -42,32 +42,33 @@ def client_fixture(session: Session):
     yield client
     app.dependency_overrides.clear()
 
-
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def universities(session: Session):
-    university_data = [
-        (1, 'NDSU'),
-        (2, 'MSUM'),
-        (3, 'UND'),
-        (4, 'Concordia'),
-        (5, 'U of M'),
+    university_names = [
+        'NDSU',
+        'MSUM',
+        'UND',
+        'Concordia',
+        'U of M',
     ]
-    for data in university_data:
+    for i, name in enumerate(university_names):
+        # NOTE: the value of uni_id is not actually used since it's an auto-incremented field
         crud_university.create(session, UniversityBase(
-            uni_id=data[0],
-            uni_name=data[1],
+            uni_id=i+1,
+            uni_name=name,
         ))
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def team_types(session: Session):
     team_type_data = [
-        (1, 'Undergrad', True),
-        (2, 'Graduate', False), 
-        (3, 'Alumni', False),
+        ('Undergrad', True),
+        ('Graduate', False), 
+        ('Alumni', False),
     ]
-    for data in team_type_data:
+    for i, data in enumerate(team_type_data):
+        # NOTE: the value of team_type_id is not actually used since it's an auto-incremented field
         crud_team_type.create(session, TeamTypeBase(
-            team_type_id=data[0],
-            team_type_name=data[1],
-            eligible=data[2],
+            team_type_id=i+1,
+            team_type_name=data[0],
+            eligible=data[1],
         ))

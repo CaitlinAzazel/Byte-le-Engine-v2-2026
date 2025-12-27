@@ -122,7 +122,7 @@ def post_team(team: TeamBase, db: Session = Depends(get_db)):
     # Throw error when team name already exists
     try:
         return crud_team.create(team, db)
-    except IntegrityError:
+    except IntegrityError as err:
         raise Exception('Encountered an Integrity Error, most likely due to your team name matching a pre-existing '
                         'team name. Please choose a different name.')
 
