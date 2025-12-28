@@ -248,7 +248,7 @@ def get_tournaments(db: Session = Depends(get_db)):
     temp: list[Tournament] = crud_tournament.read_all(db)
 
     if len(temp) == 0:
-        raise Exception('No tournaments found.')
+        raise HTTPException(status_code=404, detail='No tournaments found.')
 
     return temp
 

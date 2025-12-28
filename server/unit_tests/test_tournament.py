@@ -1,23 +1,18 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from server.main import app
-import pytest
-
-client = TestClient(app=app)
 
 
 # Test Submission methods in main.py
 
 # Test get method
 
-def test_get_tournaments() -> None:
+def test_get_tournaments(client: TestClient) -> None:
     """
     Tests getting the list of tournaments that are stored in teh database.
     :return: None
     """
     response = client.get('/tournaments/')
 
-    assert response.status_code == 200
+    assert response.status_code == 200, response.json()['detail']
     assert response.json() == [
         {
             "tournament_id": 1,
