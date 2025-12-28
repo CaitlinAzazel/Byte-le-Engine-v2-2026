@@ -1,5 +1,6 @@
-from datetime import datetime
 import pytest
+
+from datetime import datetime, timezone 
 from fastapi.testclient import TestClient
 from sqlalchemy import StaticPool, create_engine
 from sqlalchemy.orm import Session
@@ -20,6 +21,12 @@ this file is used by pytest to share the fixtures below with other files that co
 
 
 EXAMPLE_DATETIME = datetime.fromisoformat('2000-10-31T01:30:00-05:00')
+EXAMPLE_DATETIME_UTC = EXAMPLE_DATETIME.astimezone(timezone.utc)
+# datetimes in fastapi responses are represented as strings in ISO 8601 format https://fastapi.tiangolo.com/tutorial/extra-data-types/#other-data-types
+# our datetimes will always be in UTC
+# -> so their UTC offset is 0
+# -> which is replaced with a Z in ISO 8601 https://en.wikipedia.org/wiki/ISO_8601#:~:text=If%20the%20time%20is%20in%20UTC
+EXAMPLE_DATETIME_ISO_8601_STR = EXAMPLE_DATETIME_UTC.isoformat().replace('+00:00', 'Z')
 
 
 @pytest.fixture(name='session')
