@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from server.crud import crud_team
 from server.schemas.team.team_base import TeamBase
 
+
 @pytest.fixture
 def request_json():
     return {
