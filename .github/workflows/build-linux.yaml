@@ -21,5 +21,3 @@ jobs:
       run: python launcher.pyz g
     - name: Run game
       run: python launcher.pyz r
-    - name: Run visualizer
-      run: python launcher.pyz v
