@@ -19,12 +19,5 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest
-    - name: (debug) list repo
-      run: |
-        echo "PWD: $(pwd)"
-        echo "Top-level files:"
-        ls -la
-        echo "Recursive listing:"
-        ls -laR | sed -n '1,200p'
     - name: Run tests
       run: pytest -vs game
