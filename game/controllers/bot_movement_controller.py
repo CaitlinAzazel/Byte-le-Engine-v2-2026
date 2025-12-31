@@ -1,3 +1,4 @@
+import random
 from game.fnaacm.bots.bot import Bot
 from game.common.enums import ActionType, ObjectType
 from game.common.map.occupiable import Occupiable
@@ -10,7 +11,35 @@ class BotMovementController(Controller):
     def __init__(self):
         super().__init__()
 
-    def handle_actions(self, action: ActionType, bot: Bot, world : GameBoard ):
+    @staticmethod
+    def random_horizontal_move() -> ActionType:
+        return random.choice([ActionType.MOVE_RIGHT, ActionType.MOVE_LEFT,])
+
+    @staticmethod
+    def random_vertical_move() -> ActionType:
+        return random.choice([ActionType.MOVE_UP, ActionType.MOVE_DOWN,])
+
+    def calc_next_moves(self, bot: Bot, world: GameBoard, turn: int) -> list[ActionType]:
+        """
+        :return: moves `bot` should take to get wherever it wants to go
+        """
+        moves = []
+        if bot.is_stunned:
+            return moves
+        if turn % bot.turn_delay != 0:
+            return moves
+
+        if bot.can_see_player:
+            # path to them
+            ...
+        # path to patrol
+        # dumb: random n/e/s/w
+        # crawler: nothing
+        # ian: nothing
+        # jumper: random diagonal
+        # support: nothing
+
+    def handle_actions(self, action: ActionType, bot: Bot, world: GameBoard, turn: int):
         """
         Noah's Note: Calculate the Bot's desired position which should return a list of movement actions,
             and then validate and process each movement action

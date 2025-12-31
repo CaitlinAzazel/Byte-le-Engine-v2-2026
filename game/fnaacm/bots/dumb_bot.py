@@ -15,19 +15,13 @@ class DumbBot(Bot):
 
     @override
     def _calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        return self.movement()
-
-    @override
-    def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
-        return self.player_seen_movement(player)
-
-    def movement(self) -> list[ActionType]:
         if self.stun:
             self.stunned()
             return []
         return [random.choice([ActionType.MOVE_UP, ActionType.MOVE_RIGHT, ActionType.MOVE_DOWN, ActionType.MOVE_LEFT])]
 
-    def player_seen_movement(self, player: Player) -> list[ActionType]:
+    @override
+    def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         if self.stun:
             self.stunned()
             return []
@@ -65,10 +59,4 @@ class DumbBot(Bot):
             else:
                 return [ActionType.MOVE_LEFT]
         else:
-            return self.movement()
-
-    def action(self, player: Player):
-        if self.can_see_player:
-            self._calc_next_move_hunt(self.game_board, player)
-        else:
-            self._calc_next_move_patrol(self.game_board, player)
+            return self._calc_next_move_patrol(gameboard, player)

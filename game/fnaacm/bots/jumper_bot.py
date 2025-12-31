@@ -15,13 +15,6 @@ class JumperBot(Bot):
 
     @override
     def _calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
-        return self.movement()
-
-    @override
-    def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
-        return self.player_seen_movement(player)
-
-    def movement(self) -> list[ActionType]:
         if self.stun:
             self.stunned()
             return []
@@ -29,7 +22,8 @@ class JumperBot(Bot):
         random2 = random.choice([ActionType.MOVE_RIGHT, ActionType.MOVE_LEFT])
         return [random1, random2]
 
-    def player_seen_movement(self, player: Player) -> list[ActionType]:
+    @override
+    def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         if self.stun:
             self.stunned()
             return []
@@ -105,4 +99,3 @@ class JumperBot(Bot):
                 return [ActionType.MOVE_DOWN, ActionType.MOVE_LEFT]
 
         return self.movement()
-

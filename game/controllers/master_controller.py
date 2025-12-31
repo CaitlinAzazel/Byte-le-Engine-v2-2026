@@ -9,6 +9,7 @@ import game.config as config   # this is for turns
 from game.common.stations.refuge import Refuge
 from game.controllers import refuge_controller
 from game.controllers.bot_movement_controller import BotMovementController
+from game.controllers.bot_vision_controller import BotVisionController
 from game.controllers.point_controller import PointController
 from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.bot import Bot
@@ -66,6 +67,7 @@ class MasterController(Controller):
         self.movement_controller: MovementController = MovementController()
         self.interact_controller: InteractController = InteractController()
         self.bot_movement_controller: BotMovementController = BotMovementController()
+        self.bot_vision_controller: BotVisionController = BotVisionController()
         self.bots: list[Bot] = [
             DumbBot(),
             CrawlerBot(),
@@ -146,10 +148,11 @@ class MasterController(Controller):
         # for each bot:
         #   if bot.can_act(self.turn), then bot.action()
         for bot in self.bots:
+            self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
             moves = bot.calc_next_move(game_board, player)
             assert not moves is None, f'{bot.__class__}\'s next move was... None?'
             for move in moves:
-                self.bot_movement_controller.handle_actions(move, bot, game_board)
+                self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
 
         self.point_controller.handle_actions(ActionType.NONE, player, game_board)
 

@@ -6,7 +6,6 @@ from game.controllers.pathfind_controller import a_star_path
 
 
 class CrawlerBot(Bot):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.turn_delay = 4  # moves every 4 turns unboosted
