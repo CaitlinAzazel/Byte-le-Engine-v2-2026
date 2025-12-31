@@ -20,7 +20,7 @@ from game.client.user_client import UserClient
 
 class Engine:
     def __init__(self, quiet_mode=False):
-        self.clients = list()
+        self.clients: list[Player] = list()
         self.master_controller = MasterController()
         self.tick_number = 0
 
@@ -32,6 +32,7 @@ class Engine:
 
     # Starting point of the engine. Runs other methods then sits on top of a basic game loop until over
     def loop(self):
+        source = None
         try:
             # If quiet mode is activated, replace stdout with devnull
             f = sys.stdout
@@ -53,8 +54,9 @@ class Engine:
         except Exception as e:
             print(f"Exception raised during runtime: {str(e)}")
             print(f"{traceback.print_exc()}")
+            source = 'Game_error'
         finally:
-            self.shutdown()
+            self.shutdown(source=source)
 
     # Finds, checks, and instantiates clients
     def boot(self):
@@ -273,7 +275,7 @@ class Engine:
         # Retrieve and write results information
         results_information = None
         if SET_NUMBER_OF_CLIENTS_START == 1:
-            results_information = self.master_controller.return_final_results(self.clients[0], self.tick_number)
+            results_information = self.master_controller.return_final_results(self.clients[:1], self.tick_number)
         else:
             results_information = self.master_controller.return_final_results(self.clients, self.tick_number)
 
