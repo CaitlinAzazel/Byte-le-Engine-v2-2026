@@ -4,8 +4,8 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from game.config import *
 from typing import Callable, Any
-from visualizer.bytesprites.exampleTileBS import TileBytespriteFactoryExample
-from visualizer.bytesprites.exampleWallBS import WallBytespriteFactoryExample
+from visualizer.bytesprites.tileBS import TileBS
+from visualizer.bytesprites.wallBS import WallBS
 from visualizer.bytesprites.exampleBS import AvatarBytespriteFactoryExample
 from game.utils.vector import Vector
 from visualizer.utils.text import Text
@@ -24,7 +24,7 @@ class Adapter:
         self.screen: pygame.Surface = screen
         self.bytesprites: list[ByteSprite] = []
         self.populate_bytesprite: pygame.sprite.Group = pygame.sprite.Group()
-        self.menu: MenuTemplate = Basic(screen, 'Basic Title')
+        self.menu: MenuTemplate = Basic(screen, 'Five Nights at The ACM')
         self.playback: PlaybackTemplate = PlaybackTemplate(screen)
         self.turn_number: int = 0
         self.turn_max: int = MAX_TICKS
@@ -87,16 +87,17 @@ class Adapter:
         """
         self.turn_number = turn_log['tick']
 
+    from visualizer.bytesprites.tileBS import TileBS
+
     def populate_bytesprite_factories(self) -> dict[int, Callable[[pygame.Surface], ByteSprite]]:
         """
         Instantiate all bytesprites for each objectType and add them here using the value of ObjectType as the key
-        and the factory function as the value
-        :return: dict[int, Callable[[pygame.Surface], ByteSprite]]
+        and the factory function as the value.
         """
         return {
             4: AvatarBytespriteFactoryExample.create_bytesprite,
-            7: TileBytespriteFactoryExample.create_bytesprite,
-            8: WallBytespriteFactoryExample.create_bytesprite,
+            7: TileBS.create_bytesprite,
+            8: WallBS.create_bytesprite,
         }
 
     def render(self) -> None:
