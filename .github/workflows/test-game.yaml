@@ -26,7 +26,5 @@ jobs:
         ls -la
         echo "Recursive listing:"
         ls -laR | sed -n '1,200p'
-        echo ".gitattributes:"
-        cat .gitattributes
     - name: Run tests
       run: pytest -vs game
