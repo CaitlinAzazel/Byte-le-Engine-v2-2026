@@ -57,8 +57,11 @@ class Debug:                    # Keeps track of the current debug level of the 
 
 
 parts = Path(__file__).parts
-root_idx = parts.index('Byte-le-Engine-v2-2026') # will break if this is not the root directory name :)
-PATH_TO_ROOT_DIR = Path(*parts[:root_idx+1])
+# will break if this is not the root directory name :)
+# does not break, however, if the project root is nested in a directory of the same name :^)
+# will probably break if the project contains a directory with the same name for some reason 8^)
+root_idx = len(parts) - list(reversed(parts)).index('Byte-le-Engine-v2-2026') 
+PATH_TO_ROOT_DIR = Path(*parts[:root_idx])
 PATH_TO_LDTK_PROJECT = str(PATH_TO_ROOT_DIR / 'map.ldtk') # uber chopped but works
 
 # should mirror values in LDtk editor, but lowercase
