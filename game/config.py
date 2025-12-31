@@ -55,7 +55,12 @@ class Debug:                    # Keeps track of the current debug level of the 
 
 # Other Settings Here --------------------------------------------------------------------------------------------------
 
-PATH_TO_LDTK_PROJECT = Path(__file__).parent.parent.resolve() / 'map.ldtk' # kinda chopped but it works fine
+
+parts = Path(__file__).parts
+root_idx = parts.index('Byte-le-Engine-v2-2026') # will break if this is not the root directory name :)
+PATH_TO_ROOT_DIR = Path(*parts[:root_idx+1])
+PATH_TO_LDTK_PROJECT = str(PATH_TO_ROOT_DIR / 'map.ldtk') # uber chopped but works
+
 # should mirror values in LDtk editor, but lowercase
 class LDtk:
     class CollisionType:
