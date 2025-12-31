@@ -1,5 +1,5 @@
 from game.common.avatar import Avatar
-from game.common.enums import ActionType
+from game.common.enums import ActionType, ObjectType
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
 from game.common.map.game_object_container import GameObjectContainer
@@ -15,6 +15,7 @@ DEFAULT_VISION_RADIUS = 1
 class Bot(GameObject):
     def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
         super().__init__()
+        self.object_type = ObjectType.BOT
         self.boosted : bool = False
         self.is_stunned : bool = False
         self.position : Vector = start_position
