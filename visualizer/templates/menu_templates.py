@@ -5,7 +5,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 from game.utils.vector import Vector
-from visualizer.utils.button import Button
+from visualizer.utils.button import Button, ButtonColors
 from visualizer.utils.text import Text
 
 """
@@ -53,7 +53,14 @@ class MenuTemplate:
         Renders the Start button.
         :return: None
         """
-        self.start_button.render()
+
+        def start_render(self) -> None:
+            # Draw background image first
+            self.screen.blit(self.background, (0, 0))
+
+            # Draw buttons and title on top
+            super().start_render()
+            self.title.render()
 
     def load_results_screen(self, results: dict): ...
 
@@ -84,18 +91,58 @@ class Basic(MenuTemplate):
 
     def __init__(self, screen: pygame.Surface, title: str):
         super().__init__(screen)
-        self.title: Text = Text(screen, title, 48)  # creates the title using the Text class; refer to text.py
-        self.title.rect.center = Vector(*self.screen.get_rect().center).add_y(-100).as_tuple()
+        self.title: Text = Text(screen, title, 48)
+        self.title.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-100, -100).as_tuple()
+        self.winning_team_name: Text = Text(screen, '', 0)
 
-        self.winning_team_name: Text = Text(screen, '', 0)  # name is determined by endgame results
+        # START MENU IMAGE
+        self.background = pygame.image.load(
+            os.path.join(os.getcwd(), "visualizer/images/staticsprites/StartMenu.png")
+        ).convert_alpha()
+        self.background = pygame.transform.smoothscale(self.background, self.screen.get_size())
+
+        menu_colors = ButtonColors(
+            fg_color="#ffffff",  # White text
+            fg_color_hover="#ffff00",  # Yellow text on hover
+            fg_color_clicked="#00ff00",  # Green text when clicked
+            bg_color="#333399",  # Dark purple background
+            bg_color_hover="#6666cc",  # Lighter purple on hover
+            bg_color_clicked="#111166"  # Darker purple when clicked
+        )
+
+        # Recreate Start Button with colors and position
+        self.start_button = Button(
+            screen=self.screen,
+            text="Start Game",
+            action=lambda: False,  # Replace with actual start function
+            font_size=24,
+            padding=12,
+            colors=menu_colors,
+            position=Vector(self.screen.get_width() // 2 - 500, self.screen.get_height() // 2 + 50)
+        )
+
+        # Recreate Exit Button with colors and position
+        self.results_button = Button(
+            screen=self.screen,
+            text="Exit",
+            action=lambda: False,  # Replace with actual exit function
+            font_size=24,
+
+            padding=12,
+            colors=menu_colors,
+            position=Vector(self.screen.get_width() // 2 - 500, self.screen.get_height() // 2 + 120)
+        )
 
     def start_render(self) -> None:
         """
         This method calls the inherited method to render the start button. It also renders the title
         :return: None
         """
+
+        self.screen.blit(self.background, (0, 0))
+        self.start_button.render()
+        self.results_button.render()
         super().start_render()
-        self.title.render()
 
     def load_results_screen(self, results: dict) -> None:
         """
@@ -104,8 +151,9 @@ class Basic(MenuTemplate):
         :return: None
         """
         winning_teams = self.__get_winning_teams(results['players'])
-        self.winning_team_name = Text(self.screen, winning_teams, 36)
-        self.winning_team_name.rect.center = self.screen.get_rect().center
+        self.winning_team_name = Text(self.screen, winning_teams, 36, color=(255, 0, 0))
+        self.winning_team_name.rect.center = Vector(*self.screen.get_rect().center).add_x(-425).as_tuple()
+
 
     def results_render(self) -> None:
         """
@@ -113,8 +161,9 @@ class Basic(MenuTemplate):
         :return:
         """
         super().results_render()
-        self.title.render()
+        self.screen.blit(self.background, (0, 0))
         self.winning_team_name.render()
+        self.results_button.render()
 
     def __get_winning_teams(self, players: list) -> str:
         """

@@ -6,11 +6,11 @@ from game.utils.vector import Vector
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
 
 
-class TileBS(ByteSpriteFactory):
+class BatteryBS(ByteSpriteFactory):
     """
-    Static Tile bytesprite using Tile.png.
+    Static Battery bytesprite using Battery.png.
     """
-    TILE_PATH = os.path.join(os.getcwd(), 'visualizer/images/staticsprites/Tile.png')
+    BATTERY_PATH = os.path.join(os.getcwd(), 'visualizer/images/staticsprites/Battery.png')
 
     @staticmethod
     def update(data: dict, layer: int, pos: Vector, spritesheets: list[list[pyg.Surface]]) -> list[pyg.Surface]:
@@ -22,9 +22,9 @@ class TileBS(ByteSpriteFactory):
         # Pass path to ByteSprite; it will load internally
         return ByteSprite(
             screen,
-            TileBS.TILE_PATH,  # positional argument
+            BatteryBS.BATTERY_PATH,  # positional argument
             2,                 # layer
             8,                 # object type
-            TileBS.update,     # update function
+            BatteryBS.update,     # update function
             colorkey=pyg.Color(0, 0, 0, 0)  # transparency
         )

@@ -6,13 +6,13 @@ from game.config import *
 from typing import Callable, Any
 from visualizer.bytesprites.tileBS import TileBS
 from visualizer.bytesprites.wallBS import WallBS
-from visualizer.bytesprites.exampleBS import AvatarBytespriteFactoryExample
+from visualizer.bytesprites.avatarBS import AvatarBS
 from game.utils.vector import Vector
 from visualizer.utils.text import Text
 from visualizer.bytesprites.bytesprite import ByteSprite
 from visualizer.templates.menu_templates import Basic, MenuTemplate
 from visualizer.templates.playback_template import PlaybackTemplate, PlaybackButtons
-
+from visualizer.templates.game_frame import GameFrame
 
 class Adapter:
     """
@@ -28,6 +28,7 @@ class Adapter:
         self.playback: PlaybackTemplate = PlaybackTemplate(screen)
         self.turn_number: int = 0
         self.turn_max: int = MAX_TICKS
+        self.game_frame = GameFrame(self.screen)
 
     # Define any methods button may run
 
@@ -95,7 +96,7 @@ class Adapter:
         and the factory function as the value.
         """
         return {
-            4: AvatarBytespriteFactoryExample.create_bytesprite,
+            4: AvatarBS.create_bytesprite,
             7: TileBS.create_bytesprite,
             8: WallBS.create_bytesprite,
         }
@@ -106,10 +107,25 @@ class Adapter:
         during the playback phase.
         :return: None
         """
-        text = Text(self.screen, f'{self.turn_number} / {self.turn_max}', 48)
-        text.rect.center = Vector(*self.screen.get_rect().midtop).add_y(50).as_tuple()
+
+        # Draw the game background as transparent black outside the frame
+        frame_rect = self.game_frame.get_rect()
+        overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 160))  # semi-transparent black
+        overlay.fill((0, 0, 0, 0), frame_rect)  # clear out game area
+        self.screen.blit(overlay, (0, 0))
+
+        # Draw the border
+        self.game_frame.render()
+
+        # Draw the scoreboard above the border
+        text = Text(self.screen, f'{self.turn_number} / {self.turn_max}', 32)
+        text.rect.center = Vector(*frame_rect.midtop).add_y(20).as_tuple()
         text.render()
+
+        # Draw playback buttons/UI
         self.playback.playback_render()
+
 
     def clean_up(self) -> None:
         """
