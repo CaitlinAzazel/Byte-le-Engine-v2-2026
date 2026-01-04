@@ -5,7 +5,7 @@ from game.common.map.wall import Wall
 from game.common.player import Player
 from game.common.stations.refuge import Refuge
 from game.controllers.refuge_controller import RefugeController
-from game.fnaacm.bots.bot import DEFAULT_VISION_RADIUS, Bot
+from game.fnaacm.bots.bot import Bot
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
 from game.fnaacm.map.vent import Vent

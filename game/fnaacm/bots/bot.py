@@ -1,7 +1,7 @@
 from game.common.avatar import Avatar
 from game.common.enums import ObjectType
 from game.common.game_object import GameObject
-from game.common.map.game_object_container import GameObjectContainer
+# from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.occupiable import Occupiable
 from game.utils.vector import Vector
 
@@ -27,26 +27,6 @@ class Bot(GameObject):
 
     def get_current_vision_radius(self) -> int:
         return self.boosted_vision_radius if self.boosted else self.vision_radius
-
-    def _is_tile_open(self, tile_data: GameObjectContainer) -> bool:
-        """
-        determines if a tile "blocks" this bot's line of sight or not
-
-        override in Bot subclasses if more complex behavior is needed
-        """
-        for game_object in tile_data:
-            # "see through" other bots and players
-            if isinstance(game_object, Bot):
-                continue
-            if isinstance(game_object, Avatar):
-                continue
-
-            # crawler can occupy vents, so it can see into them; other bots cannot
-            # unless something like windows are added, this will work
-            if isinstance(game_object, Occupiable) and not game_object.can_be_occupied_by(self):
-                return False
-
-        return True
 
     def can_attack(self, avatar: Avatar) -> bool:
         # distance check is just a shortcut for checking up/down/left/right

@@ -1,5 +1,6 @@
 from game.common.avatar import Avatar
 from game.common.game_object import GameObject
+from game.common.map.json_to_instance import json_to_instance
 from game.common.map.occupiable import Occupiable
 from game.common.enums import ObjectType
 from game.common.map.wall import Wall
@@ -128,25 +129,9 @@ class GameObjectContainer(GameObject):
         data['sublist'] = [obj.to_json() for obj in self.__sublist] if self.__sublist is not None else []
         return data
 
-    def __from_json_helper(self, data: dict) -> GameObject:
-        temp: ObjectType = ObjectType(data['object_type'])
-        match temp:
-            case ObjectType.WALL:
-                return Wall().from_json(data)
-            case ObjectType.OCCUPIABLE_STATION:
-                return OccupiableStation().from_json(data)
-            case ObjectType.STATION:
-                return Station().from_json(data)
-            case ObjectType.AVATAR:
-                return Avatar().from_json(data)
-            # If adding more ObjectTypes that can be placed on the game_board, specify here
-            case _:
-                raise ValueError(
-                    f'The object type of the object is not handled properly. The object type passed in is {temp}.')
-
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
-        temp_sublist: list[GameObject] = [self.__from_json_helper(obj) for obj in data['sublist']] \
+        temp_sublist: list[GameObject] = [json_to_instance(obj) for obj in data['sublist']] \
             if data['sublist'] is not None else []
         self.__sublist = []
         self.place_all(temp_sublist)

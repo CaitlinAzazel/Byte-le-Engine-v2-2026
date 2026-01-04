@@ -1,4 +1,5 @@
 from game.common.avatar import Avatar
+from game.common.map.game_object_container import GameObjectContainer
 from game.common.stations.refuge import Refuge
 from game.fnaacm.bots.bot import Bot
 from game.common.enums import ActionType, ObjectType
@@ -12,6 +13,26 @@ class BotVisionController(Controller):
     def __init__(self):
         super().__init__()
 
+    def is_tile_open(self, bot: Bot, tile_data: GameObjectContainer) -> bool:
+        """
+        determines if a tile "blocks" this bot's line of sight or not
+
+        override in Bot subclasses if more complex behavior is needed
+        """
+        for game_object in tile_data:
+            # "see through" other bots and players
+            if isinstance(game_object, Bot):
+                continue
+            if isinstance(game_object, Avatar):
+                continue
+
+            # crawler can occupy vents, so it can see into them; other bots cannot
+            # unless something like windows are added, this will work
+            if isinstance(game_object, Occupiable) and not game_object.can_be_occupied_by(bot):
+                return False
+
+        return True
+
     def can_see_avatar(self, avatar: Avatar, bot: Bot, world: GameBoard) -> bool:
         assert avatar.position is not None
         distance_to_player: int = bot.position.distance(avatar.position)
@@ -23,7 +44,7 @@ class BotVisionController(Controller):
         for position in positions_between:
             tile_objects = world.get(position)
             assert tile_objects is not None
-            if not bot._is_tile_open(tile_objects):
+            if not self.is_tile_open(bot, tile_objects):
                 return False
 
         if Refuge.global_occupied:

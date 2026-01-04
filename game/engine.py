@@ -139,7 +139,7 @@ class Engine:
                                                 MAX_CLIENTS_START)
 
         if client_num_correct is not None:
-            self.shutdown(source='Client_error')
+            self.shutdown(source=f'Client_error ({client_num_correct})')
         else:
             # Sort clients based on name, for the client runner
             self.clients.sort(key=lambda clnt: clnt.team_name, reverse=True)
@@ -243,7 +243,7 @@ class Engine:
                                                 MIN_CLIENTS_CONTINUE,
                                                 MAX_CLIENTS_CONTINUE)
         if client_num_correct is not None:
-            self.shutdown(source='Client_error')
+            self.shutdown(source=f'Client_error ({client_num_correct})')
 
         # Finally, consult master controller for game logic
         if SET_NUMBER_OF_CLIENTS_START == 1:
