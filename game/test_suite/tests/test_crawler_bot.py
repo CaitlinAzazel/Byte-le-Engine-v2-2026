@@ -1,4 +1,6 @@
 import unittest
+from game.controllers.bot_movement_controller import BotMovementController
+from game.controllers.bot_vision_controller import BotVisionController
 from game.utils.vector import Vector
 from game.common.map.game_board import GameBoard
 from game.common.map.wall import Wall
@@ -19,6 +21,7 @@ class TestCrawlerBot(unittest.TestCase):
         # Create bot at top-left
         self.bot = CrawlerBot()
         self.bot.position = Vector(0, 0)
+        self.bot_movement_controller = BotMovementController()
 
     def build_board(self, include_vent=False):
         # Reset board (rebuild map)
@@ -29,26 +32,28 @@ class TestCrawlerBot(unittest.TestCase):
         return self.board
 
     def test_bot_moves_around_vent(self):
-        board = self.build_board(include_vent=True)
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        self.build_board(include_vent=True)
+        self.board.place(self.player_avatar.position, self.player_avatar)
+        self.board.place(self.bot.position, self.bot)
+        moves = self.bot_movement_controller.crawler_hunt(self.bot, self.player_avatar, self.board)
         # Crawler can go through vents, should have at least one move
-        self.assertTrue(len(moves) >= 1)
+        self.assertGreaterEqual(len(moves), 1)
         # Ensure it does not step on the player
         self.assertNotEqual(moves[0], self.player_avatar.position)
 
     def test_hunt_boosted_moves_once(self):
         self.bot.boosted = True  # reduces turn_delay
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.crawler_hunt(self.bot, self.player_avatar, self.board)
         # When boosted, bot returns 2 moves
         self.assertEqual(len(moves), 2)
 
     def test_hunt_move_toward_player(self):
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.crawler_hunt(self.bot, self.player_avatar, self.board)
 
         # Bot should have at least one move toward player
-        self.assertTrue(len(moves) >= 1)
+        self.assertGreaterEqual(len(moves), 1)
 
         # Map only the moves that actually change position
         ACTION_TO_VECTOR = {
@@ -74,12 +79,12 @@ class TestCrawlerBot(unittest.TestCase):
         # Bot on same tile as player should not move
         self.bot.position = Vector(self.player_avatar.position.x, self.player_avatar.position.y)
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, board, 0)
         self.assertEqual(len(moves), 0)
 
     def test_patrol_returns_empty(self):
         # Patrol does not use the player
-        moves = self.bot._calc_next_move_patrol(self.board, self.player)
+        moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, self.board, 0)
         self.assertIsInstance(moves, list)
 
 if __name__ == "__main__":

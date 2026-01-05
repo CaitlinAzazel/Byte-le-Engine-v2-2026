@@ -1,4 +1,5 @@
 import unittest
+from game.controllers.bot_movement_controller import BotMovementController
 from game.utils.vector import Vector
 from game.common.map.game_board import GameBoard
 from game.fnaacm.map.vent import Vent
@@ -20,17 +21,21 @@ class TestIANBot(unittest.TestCase):
         self.bot = IANBot()
         self.bot.position = Vector(0, 0)
 
+        self.bot_movement_controller = BotMovementController()
+
     def build_board(self, include_vent=False):
         # Reset board
         self.board = GameBoard(map_size=Vector(5, 5))
         self.board.generate_map()
+        self.board.place(self.bot.position, self.bot)
+        self.board.place(self.player_avatar.position, self.player_avatar)
         if include_vent:
             self.board.place(Vector(1, 0), Vent())
         return self.board
 
     def test_bot_respects_vent(self):
         board = self.build_board(include_vent=True)
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.ian_hunt(self.bot, self.player_avatar, self.board)
         # IAN should never try to go through vent
         vent_pos = Vector(1, 0)
         for move in moves:
@@ -48,18 +53,18 @@ class TestIANBot(unittest.TestCase):
     def test_hunt_boosted_moves_every_turn(self):
         self.bot.boosted = True  # moves every turn
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.ian_hunt(self.bot, self.player_avatar, self.board)
         self.assertEqual(len(moves), 2)
 
     def test_hunt_normal_moves_once(self):
         self.bot.boosted = False
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.ian_hunt(self.bot, self.player_avatar, self.board)
         self.assertEqual(len(moves), 1)
 
     def test_hunt_move_toward_player(self):
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.ian_hunt(self.bot, self.player_avatar, self.board)
 
         # Bot should have at least one move toward player
         self.assertTrue(len(moves) >= 1)
@@ -87,12 +92,12 @@ class TestIANBot(unittest.TestCase):
         # Bot on same tile as player should not move
         self.bot.position = Vector(self.player_avatar.position.x, self.player_avatar.position.y)
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.ian_hunt(self.bot, self.player_avatar, board)
         self.assertEqual(len(moves), 0)
 
     def test_patrol_returns_empty(self):
         # Patrol does not use the player
-        moves = self.bot._calc_next_move_patrol(self.board, self.player)
+        moves = self.bot_movement_controller.ian_patrol()
         self.assertIsInstance(moves, list)
         self.assertEqual(len(moves), 0)
 

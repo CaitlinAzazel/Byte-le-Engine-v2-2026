@@ -1,6 +1,7 @@
 import heapq
 from typing import Dict, List, Tuple, Optional
 from game.common.enums import ObjectType
+from game.common.game_object import GameObject
 from game.common.map.occupiable import Occupiable
 from game.utils.vector import Vector
 
@@ -23,9 +24,9 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
             path = []
             while current is not None:
                 x, y = current
-                path.append(Vector(x, y))
+                path.insert(0, Vector(x, y))
                 current = came_from[current]
-            return list(reversed(path))
+            return path
 
         for dx, dy in DIRECTIONS:
             nxt = (current[0] + dx, current[1] + dy)
@@ -35,23 +36,23 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
                 continue
 
             top = world.get_top(vec)
+            if top and top.object_type != ObjectType.AVATAR:
+                # walls block
+                if top.object_type == ObjectType.WALL:
+                    continue
 
-            # walls block
-            if top and getattr(top, "object_type", None) == ObjectType.WALL:
-                continue
+                # vents block unless allowed
+                if top.object_type == ObjectType.VENT and not allow_vents:
+                    continue
 
-            # vents block unless allowed
-            if top and getattr(top, "object_type", None) == ObjectType.VENT and not allow_vents:
-                continue
-
-            # can't pass through non-occupiable
-            if top and not isinstance(top, Occupiable):
-                continue
+                # can't pass through non-occupiable
+                if not isinstance(top, Occupiable):
+                    continue
 
             new_cost = cost[current] + 1
             if nxt not in cost or new_cost < cost[nxt]:
                 cost[nxt] = new_cost
-                priority = new_cost + abs(goal_p[0]-nxt[0]) + abs(goal_p[1]-nxt[1])
+                priority = new_cost + vec.distance(goal)
                 heapq.heappush(frontier, (priority, nxt))
                 came_from[nxt] = current
 
