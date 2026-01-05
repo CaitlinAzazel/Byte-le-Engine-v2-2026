@@ -9,6 +9,8 @@ class CrawlerBot(Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.turn_delay = 4  # moves every 4 turns unboosted
+        self.vision_radius = 40
+        self.boosted_vision_radius = 40
 
     # @override
     # def _calc_next_move_hunt(self, gameboard, player) -> List[ActionType]:

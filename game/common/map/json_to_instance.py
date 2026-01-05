@@ -3,7 +3,9 @@ from game.common.avatar import Avatar
 from game.common.enums import ObjectType
 from game.common.game_object import GameObject
 from game.common.map.wall import Wall
+from game.common.stations.occupiable_station import OccupiableStation
 from game.common.stations.refuge import Refuge
+from game.common.stations.station import Station
 from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
@@ -23,8 +25,10 @@ OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
     ObjectType.COIN: CoinSpawner,
     ObjectType.DOOR: Door,
     ObjectType.GENERATOR: Generator,
-    ObjectType.SCRAP_SPAWNER: ScrapSpawner,
+    ObjectType.OCCUPIABLE_STATION: OccupiableStation,
     ObjectType.REFUGE: Refuge,
+    ObjectType.SCRAP_SPAWNER: ScrapSpawner,
+    ObjectType.STATION: Station,
     ObjectType.VENT: Vent,
     ObjectType.WALL: Wall,
 }

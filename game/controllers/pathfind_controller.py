@@ -1,6 +1,7 @@
 import heapq
 from typing import Dict, List, Tuple, Optional
 from game.common.enums import ObjectType
+from game.common.game_object import GameObject
 from game.common.map.occupiable import Occupiable
 from game.utils.vector import Vector
 
@@ -23,9 +24,9 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
             path = []
             while current is not None:
                 x, y = current
-                path.append(Vector(x, y))
+                path.insert(0, Vector(x, y))
                 current = came_from[current]
-            return list(reversed(path))
+            return path
 
         for dx, dy in DIRECTIONS:
             nxt = (current[0] + dx, current[1] + dy)
@@ -47,6 +48,9 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
             # can't pass through non-occupiable
             if top and not isinstance(top, Occupiable):
                 continue
+
+            # if agent and not world.can_object_occupy(vec, agent):
+            #     continue
 
             new_cost = cost[current] + 1
             if nxt not in cost or new_cost < cost[nxt]:

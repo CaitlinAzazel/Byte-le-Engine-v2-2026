@@ -1,3 +1,4 @@
+from logging import warning
 import random
 from typing import Optional
 from game.common.avatar import Avatar
@@ -11,6 +12,7 @@ from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
 from game.fnaacm.bots.jumper_bot import JumperBot
+from game.fnaacm.bots.support_bot import SupportBot
 from game.utils.vector import Vector
 
 
@@ -40,7 +42,7 @@ class BotMovementController(Controller):
         return None
 
     def dumb_patrol(self) -> list[ActionType]:
-        return [BotMovementController.random_move()]
+        return [self.random_move()]
 
     def dumb_hunt(self, dumb_bot: DumbBot, avatar: Avatar) -> list[ActionType]:
         player_pos = avatar.position
@@ -89,10 +91,11 @@ class BotMovementController(Controller):
             start=bot_pos,
             goal=player_pos,
             world=world,
-            allow_vents=True  # crawler special rule
+            allow_vents=True,  # crawler special rule
         )
 
         if not path or len(path) < 2:
+            warning(f'could not find a valid path')
             return []
 
         next_step: Vector = path[1]
@@ -201,7 +204,7 @@ class BotMovementController(Controller):
 
         return self.jumper_patrol()
 
-    def calc_next_moves(self, bot: Bot, world: GameBoard, turn: int) -> list[ActionType]:
+    def calc_next_moves(self, bot: Bot, avatar: Avatar, world: GameBoard, turn: int) -> list[ActionType]:
         """
         :return: moves `bot` should take to get wherever it wants to go
         """
@@ -210,20 +213,31 @@ class BotMovementController(Controller):
             return moves
         if turn % bot.turn_delay != 0:
             return moves
+        if isinstance(bot, SupportBot):
+            return moves
 
         if bot.can_see_player:
-            # path to them
-            ...
+            if isinstance(bot, CrawlerBot):
+                moves = self.crawler_hunt(bot, avatar, world)
+            elif isinstance(bot, DumbBot):
+                moves = self.dumb_hunt(bot, avatar)
+            elif isinstance(bot, IANBot):
+                moves = self.ian_hunt(bot, avatar, world)
+            elif isinstance(bot, JumperBot):
+                moves = self.jumper_hunt(bot, avatar)
+        else:
+            if isinstance(bot, CrawlerBot):
+                moves = self.crawler_patrol()
+            elif isinstance(bot, DumbBot):
+                moves = self.dumb_patrol()
+            elif isinstance(bot, IANBot):
+                moves = self.ian_patrol()
+            elif isinstance(bot, JumperBot):
+                moves = self.jumper_patrol()
 
-        # match bot.__class__.__name__:
-        # path to patrol
-        # dumb: random n/e/s/w
-        # crawler: nothing
-        # ian: nothing
-        # jumper: random diagonal
-        # support: nothing
+        return moves
 
-    def handle_actions(self, action: ActionType, bot: Bot, world: GameBoard, turn: int):
+    def handle_actions(self, action: ActionType, bot: Bot, world: GameBoard, turn: int = 0):
         """
         Noah's Note: Calculate the Bot's desired position which should return a list of movement actions,
             and then validate and process each movement action
