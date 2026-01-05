@@ -144,10 +144,10 @@ class Engine:
             # Sort clients based on name, for the client runner
             self.clients.sort(key=lambda clnt: clnt.team_name, reverse=True)
             # Finally, request master controller to establish clients with basic objects
-            if SET_NUMBER_OF_CLIENTS_START == 1:
-                self.master_controller.give_clients_objects(self.clients[0], self.world)
-            else:
-                self.master_controller.give_clients_objects(self.clients, self.world)
+            # if SET_NUMBER_OF_CLIENTS_START == 1:
+            #     self.master_controller.give_clients_objects(self.clients[0], self.world)
+            # else:
+            self.master_controller.give_clients_objects(self.clients, self.world)
 
     # Loads in the world
     def load(self):
@@ -177,10 +177,10 @@ class Engine:
         self.tick_number += 1
 
         # Send current world information to master controller for purposes
-        if SET_NUMBER_OF_CLIENTS_START == 1:
-            self.master_controller.interpret_current_turn_data(self.clients[0], self.world, self.tick_number)
-        else:
-            self.master_controller.interpret_current_turn_data(self.clients, self.world, self.tick_number)
+        # if SET_NUMBER_OF_CLIENTS_START == 1:
+        #     self.master_controller.interpret_current_turn_data(self.clients[0], self.world, self.tick_number)
+        # else:
+        self.master_controller.interpret_current_turn_data(self.clients, self.world, self.tick_number)
 
     # Does actions like lets the player take their turn and asks master controller to perform game logic
     def tick(self):
@@ -246,19 +246,19 @@ class Engine:
             self.shutdown(source=f'Client_error ({client_num_correct})')
 
         # Finally, consult master controller for game logic
-        if SET_NUMBER_OF_CLIENTS_START == 1:
-            self.master_controller.turn_logic(self.clients[0], self.tick_number)
-        else:
-            self.master_controller.turn_logic(self.clients, self.tick_number)
+        # if SET_NUMBER_OF_CLIENTS_START == 1:
+        #     self.master_controller.turn_logic(self.clients[0], self.tick_number)
+        # else:
+        self.master_controller.turn_logic(self.clients, self.tick_number)
 
     # Does any actions that need to happen after the game logic, then creates the game log for the turn
     def post_tick(self):
         # Add logs to logs list
         data = None
-        if SET_NUMBER_OF_CLIENTS_START == 1:
-            data = self.master_controller.create_turn_log(self.clients[0], self.tick_number)
-        else:
-            data = self.master_controller.create_turn_log(self.clients, self.tick_number)
+        # if SET_NUMBER_OF_CLIENTS_START == 1:
+        #     data = self.master_controller.create_turn_log(self.clients[0], self.tick_number)
+        # else:
+        data = self.master_controller.create_turn_log(self.clients, self.tick_number)
 
         threading.Thread(target=write_json_file,
                          args=(data, os.path.join(LOGS_DIR, f'turn_{self.tick_number:04d}.json'))).start()
@@ -274,10 +274,10 @@ class Engine:
 
         # Retrieve and write results information
         results_information = None
-        if SET_NUMBER_OF_CLIENTS_START == 1:
-            results_information = self.master_controller.return_final_results(self.clients[:1], self.tick_number)
-        else:
-            results_information = self.master_controller.return_final_results(self.clients, self.tick_number)
+        # if SET_NUMBER_OF_CLIENTS_START == 1:
+        #     results_information = self.master_controller.return_final_results(self.clients[:1], self.tick_number)
+        # else:
+        results_information = self.master_controller.return_final_results(self.clients, self.tick_number)
 
         if source:
             results_information['reason'] = source

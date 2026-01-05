@@ -367,7 +367,7 @@ class GameBoard(GameObject):
         return occupiable.can_be_occupied_by(game_object)
 
     # Returns the Vector and a list of GameObject for whatever objects you are trying to get
-    # CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
+    # TODO: CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
     def get_objects(self, look_for: ObjectType) -> list[tuple[Vector, list[GameObject]]]:
         """
         Zips together the game map's keys and values. A nested for loop then iterates through the zipped lists, and
