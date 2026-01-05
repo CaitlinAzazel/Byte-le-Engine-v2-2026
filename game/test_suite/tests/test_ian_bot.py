@@ -27,6 +27,8 @@ class TestIANBot(unittest.TestCase):
         # Reset board
         self.board = GameBoard(map_size=Vector(5, 5))
         self.board.generate_map()
+        self.board.place(self.bot.position, self.bot)
+        self.board.place(self.player_avatar.position, self.player_avatar)
         if include_vent:
             self.board.place(Vector(1, 0), Vent())
         return self.board

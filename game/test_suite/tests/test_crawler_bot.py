@@ -25,10 +25,7 @@ class TestCrawlerBot(unittest.TestCase):
 
     def build_board(self, include_vent=False):
         # Reset board (rebuild map)
-        self.board = GameBoard(map_size=Vector(5, 5), locations={
-            self.bot.position: [self.bot],
-            self.player_avatar.position: [self.player_avatar],
-        })
+        self.board = GameBoard(map_size=Vector(5, 5))
         self.board.generate_map()
         if include_vent:
             self.board.place(Vector(1, 0), Vent())
@@ -36,6 +33,8 @@ class TestCrawlerBot(unittest.TestCase):
 
     def test_bot_moves_around_vent(self):
         self.build_board(include_vent=True)
+        self.board.place(self.player_avatar.position, self.player_avatar)
+        self.board.place(self.bot.position, self.bot)
         moves = self.bot_movement_controller.crawler_hunt(self.bot, self.player_avatar, self.board)
         # Crawler can go through vents, should have at least one move
         self.assertGreaterEqual(len(moves), 1)

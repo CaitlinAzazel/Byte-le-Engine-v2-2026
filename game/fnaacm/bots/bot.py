@@ -19,7 +19,6 @@ class Bot(GameObject):
         self.position : Vector = start_position
         self.vision_radius: int = vision_radius
         self.boosted_vision_radius: int = vision_radius * 2
-        self.can_see_into_vent: bool = False
         self.stun_counter: int = 0
         self.has_attacked: bool = False
         self.can_see_player: bool = False # to be updated by `BotVisionController`

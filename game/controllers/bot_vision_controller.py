@@ -27,7 +27,7 @@ class BotVisionController(Controller):
                 continue
 
             # crawler can occupy vents, so it can see into them; other bots cannot
-            # unless something like windows are added, this will work
+            # works for everything besides things like windows (cannot stand in them, but you can see through them)
             if isinstance(game_object, Occupiable) and not game_object.can_be_occupied_by(bot):
                 return False
 

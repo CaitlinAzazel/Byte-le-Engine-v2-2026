@@ -36,18 +36,18 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
                 continue
 
             top = world.get_top(vec)
+            if top and top.object_type != ObjectType.AVATAR:
+                # walls block
+                if top.object_type == ObjectType.WALL:
+                    continue
 
-            # walls block
-            if top and top.object_type == ObjectType.WALL:
-                continue
+                # vents block unless allowed
+                if top.object_type == ObjectType.VENT and not allow_vents:
+                    continue
 
-            # vents block unless allowed
-            if top and top.object_type == ObjectType.VENT and not allow_vents:
-                continue
-
-            # can't pass through non-occupiable
-            if top and not isinstance(top, Occupiable):
-                continue
+                # can't pass through non-occupiable
+                if not isinstance(top, Occupiable):
+                    continue
 
             new_cost = cost[current] + 1
             if nxt not in cost or new_cost < cost[nxt]:

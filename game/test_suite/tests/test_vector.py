@@ -159,3 +159,12 @@ class TestVector(unittest.TestCase):
         for position in positions[1:]:
             self.assertTrue(position.is_farther_from(line_start, previous_position), f'{position} is closer to {line_start} than {previous_position}')
             previous_position = position
+
+    def test_overlapped_pos_upwards(self):
+        actual_positions = Vector.get_positions_overlapped_by_line(Vector(0, 2), Vector(0, 0))
+        expected_positions = [
+            Vector(0, 2),
+            Vector(0, 1),
+            Vector(0, 0),
+        ]
+        self.assertListEqual(actual_positions, expected_positions)
