@@ -36,6 +36,7 @@ class TestCrawlerBot(unittest.TestCase):
 
     def test_bot_moves_around_vent(self):
         self.build_board(include_vent=True)
+        self.bot.can_see_player = True
         moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, self.board, 0)
         # Crawler can go through vents, should have at least one move
         self.assertTrue(len(moves) >= 1)
@@ -80,12 +81,12 @@ class TestCrawlerBot(unittest.TestCase):
         # Bot on same tile as player should not move
         self.bot.position = Vector(self.player_avatar.position.x, self.player_avatar.position.y)
         board = self.build_board()
-        moves = self.bot._calc_next_move_hunt(board, self.player)
+        moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, board, 0)
         self.assertEqual(len(moves), 0)
 
     def test_patrol_returns_empty(self):
         # Patrol does not use the player
-        moves = self.bot._calc_next_move_patrol(self.board, self.player)
+        moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, self.board, 0)
         self.assertIsInstance(moves, list)
 
 if __name__ == "__main__":

@@ -38,24 +38,21 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
             top = world.get_top(vec)
 
             # walls block
-            if top and getattr(top, "object_type", None) == ObjectType.WALL:
+            if top and top.object_type == ObjectType.WALL:
                 continue
 
             # vents block unless allowed
-            if top and getattr(top, "object_type", None) == ObjectType.VENT and not allow_vents:
+            if top and top.object_type == ObjectType.VENT and not allow_vents:
                 continue
 
             # can't pass through non-occupiable
             if top and not isinstance(top, Occupiable):
                 continue
 
-            # if agent and not world.can_object_occupy(vec, agent):
-            #     continue
-
             new_cost = cost[current] + 1
             if nxt not in cost or new_cost < cost[nxt]:
                 cost[nxt] = new_cost
-                priority = new_cost + abs(goal_p[0]-nxt[0]) + abs(goal_p[1]-nxt[1])
+                priority = new_cost + vec.distance(goal)
                 heapq.heappush(frontier, (priority, nxt))
                 came_from[nxt] = current
 

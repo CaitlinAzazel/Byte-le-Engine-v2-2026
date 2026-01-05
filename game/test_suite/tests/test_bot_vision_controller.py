@@ -5,6 +5,7 @@ from game.common.avatar import Avatar
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
 from game.common.player import Player
+from game.common.stations.refuge import Refuge
 from game.controllers.bot_vision_controller import BotVisionController
 from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.bot import Bot
@@ -23,6 +24,7 @@ class TestBotMovementController(unittest.TestCase):
         self.vent = Vent()
         self.vent_pos = Vector()
         self.refuge_controller = RefugeController()
+        Refuge.reset_global_state()
 
     # can the bot SEE in "optimal" conditions?
     def test_can_see(self):
