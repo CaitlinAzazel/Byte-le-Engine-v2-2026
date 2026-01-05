@@ -149,7 +149,7 @@ class MasterController(Controller):
         #   if bot.can_act(self.turn), then bot.action()
         for bot in self.bots:
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
-            moves = bot.calc_next_move(game_board, player)
+            moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
             assert not moves is None, f'{bot.__class__}\'s next move was... None?'
             for move in moves:
                 self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)

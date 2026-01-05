@@ -36,26 +36,25 @@ class TestCrawlerBot(unittest.TestCase):
 
     def test_bot_moves_around_vent(self):
         self.build_board(include_vent=True)
-        self.bot.can_see_player = True
-        moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, self.board, 0)
+        moves = self.bot_movement_controller.crawler_hunt(self.bot, self.player_avatar, self.board)
         # Crawler can go through vents, should have at least one move
-        self.assertTrue(len(moves) >= 1)
+        self.assertGreaterEqual(len(moves), 1)
         # Ensure it does not step on the player
         self.assertNotEqual(moves[0], self.player_avatar.position)
 
     def test_hunt_boosted_moves_once(self):
         self.bot.boosted = True  # reduces turn_delay
         board = self.build_board()
-        moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, self.board, 0)
+        moves = self.bot_movement_controller.crawler_hunt(self.bot, self.player_avatar, self.board)
         # When boosted, bot returns 2 moves
         self.assertEqual(len(moves), 2)
 
     def test_hunt_move_toward_player(self):
         board = self.build_board()
-        moves = self.bot_movement_controller.calc_next_moves(self.bot, self.player_avatar, self.board, 0)
+        moves = self.bot_movement_controller.crawler_hunt(self.bot, self.player_avatar, self.board)
 
         # Bot should have at least one move toward player
-        self.assertTrue(len(moves) >= 1)
+        self.assertGreaterEqual(len(moves), 1)
 
         # Map only the moves that actually change position
         ACTION_TO_VECTOR = {
