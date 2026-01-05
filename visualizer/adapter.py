@@ -4,15 +4,24 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from game.config import *
 from typing import Callable, Any
+from visualizer.bytesprites.scrapBS import ScrapBS
 from visualizer.bytesprites.tileBS import TileBS
 from visualizer.bytesprites.wallBS import WallBS
+from visualizer.bytesprites.ventBS import VentBS
+from visualizer.bytesprites.ventdoorBS import VentDoorBS
+from visualizer.bytesprites.generatorBS import GeneratorBS
+from visualizer.bytesprites.coinBS import CoinBS
 from visualizer.bytesprites.avatarBS import AvatarBS
+from visualizer.bytesprites.botBS import MovingBotBS
+from visualizer.bytesprites.boosterbotBS import BoosterBotBS
+from visualizer.bytesprites.doorBS import DoorBS
 from game.utils.vector import Vector
 from visualizer.utils.text import Text
 from visualizer.bytesprites.bytesprite import ByteSprite
 from visualizer.templates.menu_templates import Basic, MenuTemplate
 from visualizer.templates.playback_template import PlaybackTemplate, PlaybackButtons
 from visualizer.templates.game_frame import GameFrame
+
 
 class Adapter:
     """
@@ -91,14 +100,30 @@ class Adapter:
     from visualizer.bytesprites.tileBS import TileBS
 
     def populate_bytesprite_factories(self) -> dict[int, Callable[[pygame.Surface], ByteSprite]]:
-        """
-        Instantiate all bytesprites for each objectType and add them here using the value of ObjectType as the key
-        and the factory function as the value.
-        """
         return {
-            4: AvatarBS.create_bytesprite,
+            # ---- Static tiles ----
             7: TileBS.create_bytesprite,
             8: WallBS.create_bytesprite,
+            15: ScrapBS.create_bytesprite,
+            16: VentBS.create_bytesprite,
+            17: VentDoorBS.create_bytesprite,
+            18: GeneratorBS.create_bytesprite,
+            19: CoinBS.create_bytesprite,
+
+            # ---- Avatar ----
+            4: AvatarBS.create_bytesprite,
+
+            # ---- Moving bots ----
+            9: lambda screen: MovingBotBS.create_bytesprite(screen, "IanBot.png"),
+            10: lambda screen: MovingBotBS.create_bytesprite(screen, "JumperBot.png"),
+            11: lambda screen: MovingBotBS.create_bytesprite(screen, "DumbBot.png"),
+            12: lambda screen: MovingBotBS.create_bytesprite(screen, "CrawlerBot.png"),
+
+            # ---- Booster bot ----
+            13: BoosterBotBS.create_bytesprite,
+
+            # ---- Door ----
+            14: DoorBS.create_bytesprite,
         }
 
     def render(self) -> None:

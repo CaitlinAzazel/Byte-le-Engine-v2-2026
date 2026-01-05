@@ -6,15 +6,14 @@ from game.utils.vector import Vector
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
 
 
-class ScrapBS(ByteSpriteFactory):
+class DoorBS(ByteSpriteFactory):
     """
-    Static scrap / coin bytesprite using Scrap.png.
-    """
+    Door ByteSprite Factory
 
-    SCRAP_PATH = os.path.join(
-        os.getcwd(),
-        'visualizer/images/staticsprites/Scrap.png'
-    )
+    Sprite sheet row layout:
+    0 -> CLOSED
+    1 -> OPEN
+    """
 
     @staticmethod
     def update(
@@ -23,16 +22,23 @@ class ScrapBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
-        # Static sprite: always use first row
+
+        # Treat missing data as CLOSED
+        if data.get('open', False) or data.get('state') == 'open':
+            return spritesheets[1]
+
         return spritesheets[0]
 
     @staticmethod
     def create_bytesprite(screen: pyg.Surface) -> ByteSprite:
         return ByteSprite(
             screen,
-            ScrapBS.SCRAP_PATH,
-            1,                  # one row (static)
-            8,                  # object type (match Adapter)
-            ScrapBS.update,
-            colorkey=None       # use alpha transparency
+            os.path.join(
+                os.getcwd(),
+                'visualizer/images/spritesheets/Door.png'
+            ),
+            2,   # rows
+            4,   # frames per row (even if static)
+            DoorBS.update,
+            colorkey=pyg.Color(255, 0, 255)
         )
