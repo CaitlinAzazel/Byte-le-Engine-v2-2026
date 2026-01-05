@@ -1,4 +1,4 @@
-from logging import warning
+import warnings
 import random
 from typing import Optional
 from game.common.avatar import Avatar
@@ -95,7 +95,7 @@ class BotMovementController(Controller):
         )
 
         if not path or len(path) < 2:
-            warning(f'could not find a valid path')
+            warnings.warn(f'could not find a valid path')
             return []
 
         next_step: Vector = path[1]
@@ -211,7 +211,7 @@ class BotMovementController(Controller):
         moves = []
         if bot.is_stunned:
             return moves
-        if turn % bot.turn_delay != 0:
+        if bot.turn_delay != 0 and turn % bot.turn_delay != 0:
             return moves
         if isinstance(bot, SupportBot):
             return moves
