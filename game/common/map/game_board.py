@@ -1,17 +1,20 @@
 import ast
 import random
-from typing import Self
+from math import floor
+from typing import Self, Type
 
-from game.common.avatar import Avatar
 from game.common.enums import *
 from game.common.game_object import GameObject
 from game.common.map.game_object_container import GameObjectContainer
-from game.common.map.tile import Tile
 from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
-from game.common.stations.occupiable_station import OccupiableStation
-from game.common.stations.station import Station
+from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
+from game.fnaacm.stations.battery_spawner import BatterySpawner
+from game.fnaacm.stations.generator import Generator
+from game.fnaacm.map.battery_spawner_list import BatterySpawnerList
+from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.utils.vector import Vector
+from game.common.map.json_to_instance import json_to_instance
 
 
 class GameBoard(GameObject):
@@ -115,8 +118,15 @@ class GameBoard(GameObject):
             x x x x x   y = 6
     """
 
+    @staticmethod
+    def insert_location(locations: dict[Vector, list[GameObject]], position: Vector, game_object: GameObject):
+        if position in locations:
+            locations[position].append(game_object)
+        else:
+            locations[position] = [game_object]
+
     def __init__(self, seed: int | None = None, map_size: Vector = Vector(),
-                 locations: dict[Vector, list[GameObject]] | None = None, walled: bool = False):
+                 locations: dict[Vector, list[GameObject]] = {}, walled: bool = False):
 
         super().__init__()
         # game_map is initially going to be None. Since generation is slow, call generate_map() as needed
@@ -127,8 +137,11 @@ class GameBoard(GameObject):
         self.event_active: int | None = None
         self.map_size: Vector = map_size
         # when passing Vectors as a tuple, end the tuple of Vectors with a comma, so it is recognized as a tuple
-        self.locations: dict | None = locations
+        self.locations: dict = locations
         self.walled: bool = walled
+        self.generators: dict[Vector, Generator] = {}
+        self.battery_spawners: BatterySpawnerList = BatterySpawnerList()
+        self.scrap_spawners: ScrapSpawnerList = ScrapSpawnerList()
 
     @property
     def seed(self) -> int:
@@ -179,7 +192,7 @@ class GameBoard(GameObject):
         return self.__locations
 
     @locations.setter
-    def locations(self, locations: dict[Vector, list[GameObject]] | None) -> None:
+    def locations(self, locations: dict[Vector, list[GameObject]]) -> None:
         if self.game_map is not None:
             raise RuntimeError(f'{self.__class__.__name__} variables cannot be changed once generate_map is run.')
         if locations is not None and not isinstance(locations, dict):
@@ -215,8 +228,16 @@ class GameBoard(GameObject):
         # Update all Avatar positions if they are to be placed on the map
         for vec, objs in self.locations.items():
             for obj in objs:
-                if isinstance(obj, Avatar):
+                if hasattr(obj, 'position'):
                     obj.position = vec
+
+                # assume that none of the following will be added after __map_init
+                if isinstance(obj, Generator):
+                    self.generators[vec] = obj
+                elif isinstance(obj, BatterySpawner):
+                    self.battery_spawners.append(obj)
+                elif isinstance(obj, ScrapSpawner):
+                    self.scrap_spawners.append(obj)
 
         if self.walled:
             # Generate the walls
@@ -229,6 +250,7 @@ class GameBoard(GameObject):
 
         # convert locations dict to go_container
         output.update({vec: GameObjectContainer(objs) for vec, objs in self.locations.items()})
+
         return output
 
     def get(self, coords: Vector) -> GameObjectContainer | None:
@@ -252,7 +274,13 @@ class GameBoard(GameObject):
         :param game_obj:
         :return: True or False for a successful placement of the given object
         """
-        return self.get(coords).place(game_obj) if self.is_valid_coords(coords) else False
+        if not self.is_valid_coords(coords):
+            return False
+        if not self.get(coords).place(game_obj):
+            return False
+        if hasattr(game_obj, 'position'):
+            game_obj.position = coords
+        return True
 
     def get_objects_from(self, coords: Vector, object_type: ObjectType | None = None) -> list[GameObject]:
         """
@@ -283,12 +311,14 @@ class GameBoard(GameObject):
 
     def get_top(self, coords: Vector) -> GameObject | None:
         """
-        Returns the last object in the GameObjectContainer (i.e, the top-most object in the stack). Returns None if
-        invalid coordinates are given.
+        Returns the last object in the GameObjectContainer (i.e, the top-most object in the stack).
+        Returns None if invalid coordinates are given or there are no objects at that position.
         :param coords:
         :return: GameObject or None
         """
-        return self.game_map[coords].get_top() if coords in self.game_map else None
+        if not self.is_valid_coords(coords):
+            return None
+        return self.get(coords).get_top()
 
     def object_is_found_at(self, coords: Vector, object_type: ObjectType) -> bool:
         """
@@ -321,8 +351,23 @@ class GameBoard(GameObject):
         return self.is_valid_coords(coords) and (self.get(coords).get_top() is None or
                                                  isinstance(self.get(coords).get_top(), Occupiable))
 
+    def can_object_occupy(self, coords: Vector, game_object: GameObject) -> bool:
+        """
+        returns whether `game_object` can occupy the space at `coords`
+        """
+        if not self.is_occupiable(coords):
+            return False
+
+        occupiable = self.get_top(coords)
+        if occupiable is None:
+            return True
+
+        if not isinstance(occupiable, Occupiable):
+            return False
+        return occupiable.can_be_occupied_by(game_object)
+
     # Returns the Vector and a list of GameObject for whatever objects you are trying to get
-    # CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
+    # TODO: CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
     def get_objects(self, look_for: ObjectType) -> list[tuple[Vector, list[GameObject]]]:
         """
         Zips together the game map's keys and values. A nested for loop then iterates through the zipped lists, and
@@ -344,6 +389,19 @@ class GameBoard(GameObject):
 
         return results
 
+
+    def update_object_position(self, position: Vector, game_object: GameObject) -> None:
+        assert hasattr(game_object, 'position')
+
+        # remove the avatar from its previous location
+        self.remove(game_object.position, game_object.object_type)
+
+        # add the avatar to the top of the list of the coordinate
+        self.place(position, game_object)
+
+        # reassign the avatar's position
+        game_object.position = position
+
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
         temp: dict[Vector, GameObjectContainer] | None = {str(vec.to_json()): go_container.to_json() for
@@ -363,31 +421,13 @@ class GameBoard(GameObject):
     def generate_event(self, start: int, end: int) -> None:
         self.event_active = random.randint(start, end)
 
-    def __from_json_helper(self, data: dict) -> GameObject:
-        temp: ObjectType = ObjectType(data['object_type'])
-        match temp:
-            case ObjectType.TILE:
-                return Tile().from_json(data)
-            case ObjectType.WALL:
-                return Wall().from_json(data)
-            case ObjectType.OCCUPIABLE_STATION:
-                return OccupiableStation().from_json(data)
-            case ObjectType.STATION:
-                return Station().from_json(data)
-            case ObjectType.AVATAR:
-                return Avatar().from_json(data)
-            # If adding more ObjectTypes that can be placed on the game_board, specify here
-            case _:
-                raise ValueError(
-                    f'The object type of the object is not handled properly. The object type passed in is {temp}.')
-
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
         self.seed: int | None = data["seed"]
         self.map_size: Vector = Vector().from_json(data["map_size"])
 
         self.locations: dict[Vector, list[GameObject]] = {
-            Vector().from_json(k): [self.__from_json_helper(obj) for obj in v] for k, v in
+            Vector().from_json(k): [json_to_instance(obj) for obj in v] for k, v in
             zip(data["location_vectors"], data["location_objects"])} if data["location_vectors"] is not None else None
 
         self.walled: bool = data["walled"]

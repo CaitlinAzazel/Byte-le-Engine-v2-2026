@@ -153,7 +153,33 @@ class Avatar(GameObject):
         self.max_inventory_size: int = max_inventory_size
         self.inventory: list[Item | None] = [None] * max_inventory_size
         self.held_item: Item | None = self.inventory[0]
+        self.power: int = 0
         self.__held_index: int = 0
+        self.health: int = 3
+        self.__points: int = 0
+
+    @property
+    def points(self):
+        return self.__points
+
+    @points.setter
+    def points(self, value: int) -> None:
+        if value < 0:
+            raise ValueError(f'{self.__class__.__name__}.points must be nonnegative.')
+        self.__points = value
+
+    def give_points(self, amount: int) -> None:
+        self.points += amount
+
+    def add_point(self):
+        self.give_points(1)
+
+    def action(self):
+        self.add_point()
+
+    @property
+    def power(self) -> int:
+        return self.__power
 
     @property
     def held_item(self) -> Item | None:
@@ -175,6 +201,16 @@ class Avatar(GameObject):
     @property
     def max_inventory_size(self) -> int:
         return self.__max_inventory_size
+
+    @power.setter
+    def power(self, value: int) -> None:
+        if value is None or not isinstance(value, int):
+            raise TypeError(
+                f'{self.__class__.__name__}.score must be an int '
+                f'It is a(n) {value.__class__.__name__} and has the value of {value}')
+        if value < 0:
+            raise ValueError(f'{self.__class__.__name__}.power must be nonnegative; attempted to set it to {value}')
+        self.__power = value
 
     @held_item.setter
     def held_item(self, item: Item | None) -> None:
@@ -310,6 +346,9 @@ class Avatar(GameObject):
 
         # If the item can't be in the inventory, return it
         return item
+
+    def get_quantity_of_item_type(self, item_type: ObjectType) -> int:
+        return sum(map(lambda x: x.quantity if x is not None and x.object_type == item_type else 0, self.inventory))
 
     def to_json(self) -> dict:
         data: dict = super().to_json()

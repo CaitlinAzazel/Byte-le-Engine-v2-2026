@@ -1,3 +1,5 @@
+from game.common.avatar import Avatar
+from game.common.map.occupiable import Occupiable
 from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.common.enums import *
@@ -20,34 +22,26 @@ class MovementController(Controller):
     def __init__(self):
         super().__init__()
 
+
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard):
-        avatar_pos: Vector = Vector(client.avatar.position.x, client.avatar.position.y)
+        avatar = client.avatar
 
-        pos_mod: Vector
-
+        direction: Vector
         match action:
             case ActionType.MOVE_UP:
-                pos_mod = Vector(x=0, y=-1)
+                direction = Vector(x=0, y=-1)
             case ActionType.MOVE_DOWN:
-                pos_mod = Vector(x=0, y=1)
+                direction = Vector(x=0, y=1)
             case ActionType.MOVE_LEFT:
-                pos_mod = Vector(x=-1, y=0)
+                direction = Vector(x=-1, y=0)
             case ActionType.MOVE_RIGHT:
-                pos_mod = Vector(x=1, y=0)
+                direction = Vector(x=1, y=0)
             case _:  # default case
                 return
 
-        temp_vec: Vector = avatar_pos.add_to_vector(pos_mod)
+        destination: Vector = avatar.position + direction
 
-        # if the top of the given coordinates are not occupiable or are invalid, return to do nothing
-        if not world.is_occupiable(temp_vec):
+        if not world.can_object_occupy(destination, avatar):
             return
 
-        # remove the avatar from its previous location
-        world.remove(client.avatar.position, ObjectType.AVATAR)
-
-        # add the avatar to the top of the list of the coordinate
-        world.place(temp_vec, client.avatar)
-
-        # reassign the avatar's position
-        client.avatar.position = Vector(temp_vec.x, temp_vec.y)
+        world.update_object_position(destination, avatar)

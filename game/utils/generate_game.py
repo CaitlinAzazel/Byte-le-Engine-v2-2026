@@ -1,8 +1,10 @@
 import random
+
 from game.common.avatar import Avatar
 from game.utils.vector import Vector
 from game.config import *
 from game.utils.helpers import write_json_file
+from game.utils.ldtk_helpers import ldtk_to_locations
 from game.common.map.game_board import GameBoard
 
 
@@ -17,8 +19,10 @@ def generate(seed: int = random.randint(0, 1000000000)):
 
     print(f'Generating game map... seed: {seed}')
 
-    temp: GameBoard = GameBoard(seed, map_size=Vector(6, 6), locations={Vector(1, 1): [Avatar(),],
-                                                                        Vector(4, 4): [Avatar(),]}, walled=True)
+    # temp: GameBoard = GameBoard(seed, map_size=Vector(6, 6), locations={Vector(1, 1): [Avatar()],
+    #                                                                     Vector(4, 4): [Avatar(),]}, walled=True)
+    locations, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT)
+    temp: GameBoard = GameBoard(seed, map_size, locations, True)
     temp.generate_map()
     data: dict = {'game_board': temp.to_json()}
     # for x in range(1, MAX_TICKS + 1):
