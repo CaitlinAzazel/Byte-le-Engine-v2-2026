@@ -16,7 +16,6 @@ class DumbBot(Bot):
         return self.movement()
 
     @override
-    def __calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         route = self.player_seen_movement(player)
         execute_action = [route[0]]
         return execute_action
