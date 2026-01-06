@@ -102,28 +102,27 @@ class Adapter:
     def populate_bytesprite_factories(self) -> dict[int, Callable[[pygame.Surface], ByteSprite]]:
         return {
             # ---- Static tiles ----
-            7: TileBS.create_bytesprite,
-            8: WallBS.create_bytesprite,
-            15: ScrapBS.create_bytesprite,
-            16: VentBS.create_bytesprite,
-            17: VentDoorBS.create_bytesprite,
-            18: GeneratorBS.create_bytesprite,
-            19: CoinBS.create_bytesprite,
+            ObjectType.TILE.value: TileBS.create_bytesprite,
+            ObjectType.WALL.value: WallBS.create_bytesprite,
+            ObjectType.SCRAP_SPAWNER.value: ScrapBS.create_bytesprite,
+            ObjectType.VENT.value: VentBS.create_bytesprite,
+            ObjectType.GENERATOR.value: GeneratorBS.create_bytesprite,
+            ObjectType.COIN.value: CoinBS.create_bytesprite,
 
             # ---- Avatar ----
-            4: AvatarBS.create_bytesprite,
+            ObjectType.AVATAR.value: AvatarBS.create_bytesprite,
 
             # ---- Moving bots ----
-            9: lambda screen: MovingBotBS.create_bytesprite(screen, "IanBot.png"),
-            10: lambda screen: MovingBotBS.create_bytesprite(screen, "JumperBot.png"),
-            11: lambda screen: MovingBotBS.create_bytesprite(screen, "DumbBot.png"),
-            12: lambda screen: MovingBotBS.create_bytesprite(screen, "CrawlerBot.png"),
+            ObjectType.IAN_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "IanBot.png"),
+            ObjectType.JUMPER_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "JumperBot.png"),
+            ObjectType.DUMB_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "DumbBot.png"),
+            ObjectType.CRAWLER_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "CrawlerBot.png"),
 
             # ---- Booster bot ----
-            13: BoosterBotBS.create_bytesprite,
+            ObjectType.SUPPORT_BOT.value: BoosterBotBS.create_bytesprite,
 
             # ---- Door ----
-            14: DoorBS.create_bytesprite,
+            ObjectType.DOOR.value: DoorBS.create_bytesprite,
         }
 
     def render(self) -> None:

@@ -1,6 +1,7 @@
 import os
 import pygame as pyg
 
+from game.common.enums import ObjectType
 from visualizer.bytesprites.bytesprite import ByteSprite
 from game.utils.vector import Vector
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
@@ -23,7 +24,8 @@ class VentBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
-        # Static sprite: always use first row
+        if data['use_door_sprite']:
+            return spritesheets[1]
         return spritesheets[0]
 
     @staticmethod
@@ -32,7 +34,7 @@ class VentBS(ByteSpriteFactory):
             screen,
             VentBS.VENT_PATH,
             1,                  # one row
-            8,                  # object type (match Adapter)
+            ObjectType.VENT.value,                  # object type (match Adapter)
             VentBS.update,
             colorkey=None       # alpha transparency
         )

@@ -31,12 +31,12 @@ OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
     ObjectType.STATION: Station,
     ObjectType.VENT: Vent,
     ObjectType.WALL: Wall,
+    ObjectType.CRAWLER_BOT: CrawlerBot,
+    ObjectType.DUMB_BOT: DumbBot,
+    ObjectType.IAN_BOT: IANBot,
+    ObjectType.JUMPER_BOT: JumperBot,
+    ObjectType.SUPPORT_BOT: SupportBot
 }
-_BOT_TYPES: set[Type] = {CrawlerBot, DumbBot, IANBot, JumperBot, SupportBot}
-_BOT_CLASS_NAME_TO_CLASS: dict[str, Type]  = dict(zip(map(lambda t: t.__name__, _BOT_TYPES), _BOT_TYPES))
-
 def json_to_instance(data: dict) -> GameObject:
     obj_type = ObjectType(data['object_type'])
-    if obj_type == ObjectType.BOT:
-        return _BOT_CLASS_NAME_TO_CLASS[data['__class__']]().from_json(data)
     return OBJECT_TYPE_TO_CLASS[obj_type]().from_json(data)
