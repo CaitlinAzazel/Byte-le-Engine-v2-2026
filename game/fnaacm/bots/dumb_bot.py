@@ -13,7 +13,6 @@ class DumbBot(Bot):
         self.stun = False
 
     @override
-    def __calc_next_move_patrol(self, gameboard : GameBoard, player: Player) -> list[ActionType]:
         return self.movement()
 
     @override
