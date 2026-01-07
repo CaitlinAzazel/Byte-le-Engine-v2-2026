@@ -409,9 +409,7 @@ class GameBoard(GameObject):
         # you cannot move "between" a and b if a == b
         if a == b:
             return 1
-        if value > b :
-            return 1
-        return (value - a) / (b - a)
+        return abs((value - a) / (b - a))
 
     # https://forum.gamemaker.io/index.php?threads/how-to-find-every-square-a-line-passes-through.101130/
     @staticmethod
