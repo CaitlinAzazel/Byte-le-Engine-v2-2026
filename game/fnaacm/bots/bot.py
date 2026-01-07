@@ -47,8 +47,10 @@ class Bot(GameObject):
 
             # crawler can occupy vents, so it can see into them; other bots cannot
             # unless something like windows are added, this will work
-            if isinstance(game_object, Occupiable) and not game_object.can_be_occupied_by(self):
-                return False
+            if isinstance(game_object, Occupiable) and game_object.can_be_occupied_by(self):
+                continue
+
+            return False
 
         return True
 

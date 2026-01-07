@@ -16,11 +16,10 @@ from game.common.map.wall import Wall
 
 class TestDumbBot(unittest.TestCase):
     def setUp(self):
-
         self.locations: dict[Vector, list[GameObject]] = {}
         self.game_board = GameBoard(None, Vector(3, 3), self.locations, False)
         self.game_board.generate_map()
-        self.bot = DumbBot(self.game_board)
+        self.bot = DumbBot()
         self.refuge = Refuge(1,1)
         self.avatar = Avatar()
         self.vent = Vent()

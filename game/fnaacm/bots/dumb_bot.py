@@ -1,4 +1,5 @@
 import random
+from typing import override
 
 from game.fnaacm.bots.general_bot_commands import *
 from game.common.map.game_board import GameBoard
@@ -8,26 +9,10 @@ from game.fnaacm.bots.bot import Bot
 class DumbBot(Bot):
     def __init__(self):
         super().__init__()
-        self.vision = 1
+        self.vision_radius = 3
         self.boosted : bool = False
         self.stun = False
 
-    @override
-        return self.movement()
-
-    @override
-        route = self.player_seen_movement(player)
-        execute_action = [route[0]]
-        return execute_action
-
-    @override
-    def calc_next_move(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
-        """
-        returns actions that the bot should take to get to wherever it wants to go (typically player vector)
-        """
-        if self.can_see_player(gameboard, player):
-            return self.__calc_next_move_hunt(gameboard, player)
-        return self.__calc_next_move_patrol(gameboard, player)
     @override
     def _calc_next_move_hunt(self, gameboard : GameBoard, player : Player) -> list[ActionType]:
         return self.player_seen_movement(player)
