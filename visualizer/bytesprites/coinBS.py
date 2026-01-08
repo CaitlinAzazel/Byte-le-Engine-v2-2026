@@ -3,6 +3,7 @@ import pygame as pyg
 
 from visualizer.bytesprites.bytesprite import ByteSprite
 from game.utils.vector import Vector
+from game.common.enums import ObjectType
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
 
 
@@ -32,7 +33,7 @@ class CoinBS(ByteSpriteFactory):
             screen,
             CoinBS.COIN_PATH,
             1,                  # one row for static sprite
-            8,                  # object type (match Adapter)
+            ObjectType.COIN.value,                  # object type (match Adapter)
             CoinBS.update,
             colorkey=None       # use PNG alpha transparency
         )
