@@ -3,6 +3,7 @@ import math
 import sys
 import os
 import cv2
+from game.common.enums import ObjectType
 import game.config
 from typing import Callable
 from game.utils.vector import Vector
@@ -691,7 +692,7 @@ class ByteVisualiser:
                 temp_tile['object_type'])
             if factory_function is None:
                 raise ValueError(
-                    f'Must provide a bytesprite for each object type! Missing object_type: {temp_tile["object_type"]}')
+                    f'Must provide a bytesprite for each object type! Missing object_type: {ObjectType(temp_tile["object_type"])}')
 
             # Instantiate a new bytesprite on current layer
             self.bytesprite_map[y][x][z] = factory_function(self.screen)

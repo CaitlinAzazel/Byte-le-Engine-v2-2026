@@ -22,7 +22,7 @@ def generate(seed: int = random.randint(0, 1000000000)):
     # temp: GameBoard = GameBoard(seed, map_size=Vector(6, 6), locations={Vector(1, 1): [Avatar()],
     #                                                                     Vector(4, 4): [Avatar(),]}, walled=True)
     locations, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT)
-    temp: GameBoard = GameBoard(seed, map_size, locations, True)
+    temp: GameBoard = GameBoard(seed, map_size, locations, False)
     temp.generate_map()
     data: dict = {'game_board': temp.to_json()}
     # for x in range(1, MAX_TICKS + 1):

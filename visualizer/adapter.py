@@ -15,6 +15,7 @@ from visualizer.bytesprites.botBS import MovingBotBS
 from visualizer.bytesprites.boosterbotBS import BoosterBotBS
 from visualizer.bytesprites.doorBS import DoorBS
 from visualizer.bytesprites.safeSpotBS import SafeSpotBS
+from visualizer.bytesprites.batteryBS import BatteryBS
 from game.utils.vector import Vector
 from visualizer.utils.text import Text
 from visualizer.bytesprites.bytesprite import ByteSprite
@@ -108,7 +109,8 @@ class Adapter:
             ObjectType.VENT.value: VentBS.create_bytesprite,
             ObjectType.GENERATOR.value: GeneratorBS.create_bytesprite,
             ObjectType.COIN.value: CoinBS.create_bytesprite,
-            ObjectType.SAFE_SPOT.value: SafeSpotBS.create_bytesprite,
+            ObjectType.REFUGE.value: SafeSpotBS.create_bytesprite,
+            ObjectType.BATTERY.value: BatteryBS.create_bytesprite,
 
             # ---- Avatar ----
             ObjectType.AVATAR.value: AvatarBS.create_bytesprite,

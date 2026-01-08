@@ -1,6 +1,7 @@
 import os
 import pygame as pyg
 
+from game.common.enums import ObjectType
 from visualizer.bytesprites.bytesprite import ByteSprite
 from game.utils.vector import Vector
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
@@ -24,7 +25,7 @@ class BatteryBS(ByteSpriteFactory):
             screen,
             BatteryBS.BATTERY_PATH,  # positional argument
             2,                 # layer
-            8,                 # object type
+            ObjectType.BATTERY.value,                 # object type
             BatteryBS.update,     # update function
             colorkey=pyg.Color(0, 0, 0, 0)  # transparency
         )

@@ -33,7 +33,7 @@ class SafeSpotBS(ByteSpriteFactory):
             screen,
             SafeSpotBS.SAFESPOT_PATH,
             1,                          # one row (static)
-            ObjectType.SAFE_SPOT.value, # must match Adapter + logs
+            ObjectType.REFUGE.value, # must match Adapter + logs
             SafeSpotBS.update,
             colorkey=None               # use PNG alpha transparency
         )
