@@ -9,7 +9,11 @@ from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
 
 class VentBS(ByteSpriteFactory):
     """
-    Static vent bytesprite using Vent.png.
+    Vent bytesprite using Vent.png.
+
+    SpriteSheet layout:
+        Row 0 (top):     Vent
+        Row 1 (bottom):  Vent Door
     """
 
     VENT_PATH = os.path.join(
@@ -24,8 +28,11 @@ class VentBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
-        if data['use_door_sprite']:
+        # Use bottom row (vent door) when door is active
+        if data.get('use_door_sprite', False):
             return spritesheets[1]
+
+        # Default to top row (normal vent)
         return spritesheets[0]
 
     @staticmethod
@@ -33,8 +40,8 @@ class VentBS(ByteSpriteFactory):
         return ByteSprite(
             screen,
             VentBS.VENT_PATH,
-            1,                  # one row
-            ObjectType.VENT.value,                  # object type (match Adapter)
+            2,                          # TWO rows: vent + door
+            ObjectType.VENT.value,      # matches Adapter + game logs
             VentBS.update,
-            colorkey=None       # alpha transparency
+            colorkey=None               # use PNG alpha transparency
         )

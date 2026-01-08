@@ -8,13 +8,13 @@ from visualizer.bytesprites.scrapBS import ScrapBS
 from visualizer.bytesprites.tileBS import TileBS
 from visualizer.bytesprites.wallBS import WallBS
 from visualizer.bytesprites.ventBS import VentBS
-from visualizer.bytesprites.ventdoorBS import VentDoorBS
 from visualizer.bytesprites.generatorBS import GeneratorBS
 from visualizer.bytesprites.coinBS import CoinBS
 from visualizer.bytesprites.avatarBS import AvatarBS
 from visualizer.bytesprites.botBS import MovingBotBS
 from visualizer.bytesprites.boosterbotBS import BoosterBotBS
 from visualizer.bytesprites.doorBS import DoorBS
+from visualizer.bytesprites.safeSpotBS import SafeSpotBS
 from game.utils.vector import Vector
 from visualizer.utils.text import Text
 from visualizer.bytesprites.bytesprite import ByteSprite
@@ -108,6 +108,7 @@ class Adapter:
             ObjectType.VENT.value: VentBS.create_bytesprite,
             ObjectType.GENERATOR.value: GeneratorBS.create_bytesprite,
             ObjectType.COIN.value: CoinBS.create_bytesprite,
+            ObjectType.SAFE_SPOT.value: SafeSpotBS.create_bytesprite,
 
             # ---- Avatar ----
             ObjectType.AVATAR.value: AvatarBS.create_bytesprite,

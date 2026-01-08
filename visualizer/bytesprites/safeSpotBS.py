@@ -4,16 +4,17 @@ import pygame as pyg
 from visualizer.bytesprites.bytesprite import ByteSprite
 from game.utils.vector import Vector
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
+from game.common.enums import ObjectType
 
 
-class VentDoorBS(ByteSpriteFactory):
+class SafeSpotBS(ByteSpriteFactory):
     """
-    Static vent door bytesprite using VentDoor.png.
+    Static safe spot bytesprite using SafeSpot.png.
     """
 
-    VENTDOOR_PATH = os.path.join(
+    SAFESPOT_PATH = os.path.join(
         os.getcwd(),
-        'visualizer/images/staticsprites/VentDoor.png'
+        'visualizer/images/staticsprites/SafeSpot.png'
     )
 
     @staticmethod
@@ -30,9 +31,9 @@ class VentDoorBS(ByteSpriteFactory):
     def create_bytesprite(screen: pyg.Surface) -> ByteSprite:
         return ByteSprite(
             screen,
-            VentDoorBS.VENTDOOR_PATH,
-            1,                  # one row
-            8,                  # object type (match Adapter)
-            VentDoorBS.update,
-            colorkey=None       # use PNG alpha for transparency
+            SafeSpotBS.SAFESPOT_PATH,
+            1,                          # one row (static)
+            ObjectType.SAFE_SPOT.value, # must match Adapter + logs
+            SafeSpotBS.update,
+            colorkey=None               # use PNG alpha transparency
         )
