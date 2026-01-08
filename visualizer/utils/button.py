@@ -28,7 +28,6 @@ class ButtonColors:
         bg_color           :  #7851a9
         bg_color_hover     :  #9879bf
         bg_color_clicked   :  #604187
-
     In future projects, defaults for button colors should be changed according to style of game for ease of code
     """
 
@@ -178,7 +177,8 @@ class Button(Text):
         :param click_duration: Duration of click on button (milliseconds).
         :param position:
         """
-        super().__init__(screen, text, font_size, font_name, colors.fg_color, position)
+
+        super().__init__(screen, text, font_size, font_name=font_name, color=colors.fg_color, position=position)
         self.colors: ButtonColors = colors
         self.padding: int = padding
         self.border_radius: int = border_radius
@@ -274,7 +274,7 @@ class Button(Text):
     # Method that executes action parameter
     def execute(self, *args, **kwargs) -> Any:
         """
-        This will execute whatever is passed in. 
+        This will execute whatever is passed in.
         :param args:
         :param kwargs:
         :return:

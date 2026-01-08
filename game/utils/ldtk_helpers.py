@@ -97,6 +97,8 @@ def load_collisions(locations: dict[Vector, list[GameObject]], collision_layer: 
                 game_object = Wall()
             case LDtk.CollisionType.VENT:
                 game_object = Vent()
+            case LDtk.CollisionType.VENT_DOOR:
+                game_object = Vent(True)
             case LDtk.CollisionType.SAFE_POINT:
                 game_object = Refuge(position.x, position.y)
             case _:

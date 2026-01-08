@@ -13,12 +13,14 @@ class SpriteSheet:
     def __init__(self, filename):
         """Load the sheet."""
         try:
-            self.sheet = pygame.image.load(filename).convert()
+            # Use convert_alpha() to preserve transparency
+            self.sheet = pygame.image.load(filename).convert_alpha()
         except pygame.error as e:
             print(f"Unable to load spritesheet image: {filename}")
             raise SystemExit(e)
 
-    def image_at(self, rectangle: tuple[int, int, int, int], colorkey: pygame.Color | None = None) -> pygame.Surface:
+    def image_at(self, rectangle: tuple[int, int, int, int],
+                 colorkey: pygame.Color | None = None) -> pygame.Surface:
         """
         Load a specific image from a specific location .
         :param rectangle: A tuple of ints representing x,y,width,height
@@ -34,16 +36,20 @@ class SpriteSheet:
         """
         # Loads image from x, y, x+offset, y+offset.
         rect = pygame.Rect(rectangle)
-        image = pygame.Surface(rect.size).convert()
+
+        # Create a surface that supports per-pixel alpha
+        image = pygame.Surface(rect.size, pygame.SRCALPHA).convert_alpha()
         image.blit(self.sheet, (0, 0), rect)
+
         if colorkey is not None:
             if colorkey == -1:
                 colorkey = image.get_at((0, 0))
             image.set_colorkey(colorkey, pygame.RLEACCEL)
+
         return image
 
-    def images_at(self, rects: list[tuple[int, int, int, int]], colorkey: pygame.Color | None = None) -> (
-            list[pygame.Surface]):
+    def images_at(self, rects: list[tuple[int, int, int, int]],
+                  colorkey: pygame.Color | None = None) -> list[pygame.Surface]:
         """
         Load a bunch of images and return them as a list.
         :param rects: list of tuples containing the locations to load
@@ -57,8 +63,8 @@ class SpriteSheet:
         """
         return [self.image_at(rect, colorkey) for rect in rects]
 
-    def load_strip(self, rect: tuple[int, int, int, int], image_count: int, colorkey: pygame.Color | None = None) -> (
-        list[pygame.Surface]):
+    def load_strip(self, rect: tuple[int, int, int, int], image_count: int,
+                   colorkey: pygame.Color | None = None) -> list[pygame.Surface]:
         """
         Load a whole strip of images cut equally along the dimensions provided, and return them as a list.
         :param rect: A tuple of ints representing x,y,width,height.
@@ -73,6 +79,8 @@ class SpriteSheet:
             `docs <https://www.pygame.org/docs/ref/surface.html>`_
             for more details.
         """
-        tups: list[tuple[int, int, int, int]] = [(rect[0] + rect[2] * x, rect[1], rect[2], rect[3])
-                for x in range(image_count)]
+        tups: list[tuple[int, int, int, int]] = [
+            (rect[0] + rect[2] * x, rect[1], rect[2], rect[3])
+            for x in range(image_count)
+        ]
         return self.images_at(tups, colorkey)

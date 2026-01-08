@@ -71,6 +71,7 @@ class LDtk:
         WALL = 1
         VENT = 2
         SAFE_POINT = 3
+        VENT_DOOR = 4
     class EntityIdentifier:
         DOOR = 'door'
         GENERATOR = 'generator'
