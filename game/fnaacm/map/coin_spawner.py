@@ -70,7 +70,7 @@ class CoinSpawner(Occupiable):
             return
         if not self.__cooldown.activate():
             return
-        avatar.give_points(self.points)
+        avatar.give_score(self.points)
 
 class CoinSpawnerList(GameObjectList[CoinSpawner]):
     def __init__(self):

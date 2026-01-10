@@ -154,7 +154,7 @@ class MasterController(Controller):
             for move in moves:
                 self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
 
-        self.point_controller.handle_actions(ActionType.NONE, player, game_board)
+        self.point_controller.handle_actions(player.avatar, game_board)
 
         # checks event logic at the end of round
         # self.handle_events(clients)

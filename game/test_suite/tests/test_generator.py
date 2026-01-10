@@ -1,5 +1,4 @@
 
-from typing import Sequence
 import unittest
 
 from game.common.game_object import GameObject
@@ -53,9 +52,11 @@ class TestGenerator(unittest.TestCase):
         initial_scrap = self.cost - 1
         self.scrap.quantity = initial_scrap
         self.assertFalse(self.generator.active)
+        self.assertEqual(self.avatar.score, 0)
         self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
         self.assertEqual(self.scrap.quantity, initial_scrap)
         self.assertFalse(self.generator.active)
+        self.assertEqual(self.avatar.score, 0)
 
     def test_to_and_from_json(self):
         data: dict = self.generator.to_json()
@@ -76,3 +77,19 @@ class TestGenerator(unittest.TestCase):
         for door in self.doors:
             self.assertFalse(door.open)
 
+    def test_points_given_on_activation(self):
+        self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
+        self.assertEqual(self.avatar.score, self.generator.activation_point_bonus)
+
+    def test_points_given_exactly_once(self):
+        self.scrap.quantity = self.generator.cost * 2
+        self.assertFalse(self.generator.is_bonus_collected)
+        self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
+        self.assertTrue(self.generator.active)
+        self.assertTrue(self.generator.is_bonus_collected)
+        self.assertEqual(self.avatar.score, self.generator.activation_point_bonus)
+        self.generator.deactivate()
+        self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
+        self.assertTrue(self.generator.active)
+        self.assertTrue(self.generator.is_bonus_collected)
+        self.assertEqual(self.avatar.score, self.generator.activation_point_bonus)
