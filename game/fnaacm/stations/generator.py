@@ -26,13 +26,14 @@ class Generator(Station):
         self.__active: bool = False
         self.__cost: int = cost
         self.__point_bonus: int = point_bonus
+        self.__is_bonus_collected: bool = False
 
     def __eq__(self, value: object, /) -> bool:
         return isinstance(value, Generator) and \
             self.connected_doors == value.connected_doors and \
             self.active == value.active and \
             self.cost == value.cost and \
-            self.point_bonus == value.point_bonus
+            self.passive_point_bonus == value.passive_point_bonus
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance, all_doors: dict[str, Door]) -> Self:
@@ -62,6 +63,8 @@ class Generator(Station):
         super().from_json(data)
         self.__cost = data['cost']
         self.__active = data['active']
+        self.__point_bonus = data['point_bonus']
+        self.__is_bonus_collected = data['bonus_collected']
         self.connected_doors = [Door().from_json(d) for d in data['connected_doors']]
         return self
 
@@ -71,6 +74,8 @@ class Generator(Station):
         jason['cost'] = self.cost
         jason['active'] = self.active
         jason['connected_doors'] = [door.to_json() for door in self.connected_doors]
+        jason['point_bonus'] = self.passive_point_bonus
+        jason['bonus_collected'] = self.is_bonus_collected 
         return jason
 
     @override
@@ -86,7 +91,9 @@ class Generator(Station):
         if total_scrap < self.cost:
             return
         avatar.take(Scrap(quantity=self.cost))
-        # TODO: give them points
+        if not self.is_bonus_collected:
+            avatar.give_points(self.activation_point_bonus)
+            self.__is_bonus_collected = True
         self.__active = True
         self.__toggle_doors(True)
 
@@ -105,8 +112,16 @@ class Generator(Station):
         self.__cost = value
 
     @property
-    def point_bonus(self) -> int:
+    def passive_point_bonus(self) -> int:
         return self.__point_bonus
+
+    @property
+    def activation_point_bonus(self) -> int:
+        return self.passive_point_bonus * 5
+
+    @property
+    def is_bonus_collected(self) -> bool:
+        return self.__is_bonus_collected
 
     # allows generators to be turned OFF by attacks
     def deactivate(self):

@@ -358,6 +358,7 @@ class Avatar(GameObject):
         data['position'] = self.position.to_json() if self.position is not None else None
         data['inventory'] = self.inventory
         data['max_inventory_size'] = self.max_inventory_size
+        data['points'] = self.points
         return data
 
     def from_json(self, data: dict) -> Self:
@@ -367,5 +368,5 @@ class Avatar(GameObject):
         self.inventory: list[Item] = data['inventory']
         self.max_inventory_size: int = data['max_inventory_size']
         self.held_item: Item | None = self.inventory[data['held_index']]
-
+        self.points = data['points']
         return self
