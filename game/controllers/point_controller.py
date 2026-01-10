@@ -45,4 +45,4 @@ class PointController(Controller):
             return
 
         points = round(self.calculate_points(avatar, world) * self.calculate_multiplier(avatar, world))
-        avatar.give_points(points)
+        avatar.give_score(points)

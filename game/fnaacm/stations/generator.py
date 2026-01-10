@@ -92,7 +92,7 @@ class Generator(Station):
             return
         avatar.take(Scrap(quantity=self.cost))
         if not self.is_bonus_collected:
-            avatar.give_points(self.activation_point_bonus)
+            avatar.give_score(self.activation_point_bonus)
             self.__is_bonus_collected = True
         self.__active = True
         self.__toggle_doors(True)

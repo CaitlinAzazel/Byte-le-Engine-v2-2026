@@ -27,18 +27,18 @@ class TestPointController(unittest.TestCase):
         Refuge.reset_global_state()
 
     def test_points_given_every_turn(self):
-        self.assertEqual(self.avatar.points, 0)
+        self.assertEqual(self.avatar.score, 0)
         turns = 13
         for _ in range(turns):
             self.point_controller.handle_actions(self.avatar, self.game_board)
-        self.assertGreater(self.avatar.points, 0)
-        self.assertEqual(self.avatar.points, self.point_controller.base_points_per_turn * turns)
+        self.assertGreater(self.avatar.score, 0)
+        self.assertEqual(self.avatar.score, self.point_controller.base_points_per_turn * turns)
 
     def test_no_points_while_in_refuge(self):
         Refuge.global_occupied = True
-        self.assertEqual(self.avatar.points, 0)
+        self.assertEqual(self.avatar.score, 0)
         self.point_controller.handle_actions(self.avatar, self.game_board)
-        self.assertEqual(self.avatar.points, 0)
+        self.assertEqual(self.avatar.score, 0)
 
     def test_active_generator_point_bonus(self):
         self.generator1.activate()
@@ -46,7 +46,7 @@ class TestPointController(unittest.TestCase):
         for _ in range(turns):
             self.point_controller.handle_actions(self.avatar, self.game_board)
         expected_points_per_turn = self.generator1.passive_point_bonus + self.point_controller.base_points_per_turn
-        self.assertEqual(self.avatar.points, turns * expected_points_per_turn)
+        self.assertEqual(self.avatar.score, turns * expected_points_per_turn)
 
     def test_multiple_active_generators_point_bonus(self):
         self.generator1.activate()
@@ -55,14 +55,14 @@ class TestPointController(unittest.TestCase):
         for _ in range(turns):
             self.point_controller.handle_actions(self.avatar, self.game_board)
         expected_points_per_turn = self.generator1.passive_point_bonus + self.generator2.passive_point_bonus + self.point_controller.base_points_per_turn
-        self.assertEqual(self.avatar.points, turns * expected_points_per_turn)
+        self.assertEqual(self.avatar.score, turns * expected_points_per_turn)
 
     def test_inactive_generators_no_point_bonus(self):
         turns = 4
         for _ in range(turns):
             self.point_controller.handle_actions(self.avatar, self.game_board)
         expected_points_per_turn = self.point_controller.base_points_per_turn
-        self.assertEqual(self.avatar.points, turns * expected_points_per_turn)
+        self.assertEqual(self.avatar.score, turns * expected_points_per_turn)
 
     def test_vent_reduces_multiplier(self):
         self.game_board.place(self.avatar.position, Vent())
