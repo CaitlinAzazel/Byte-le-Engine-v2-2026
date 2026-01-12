@@ -156,23 +156,12 @@ class Avatar(GameObject):
         self.power: int = 0
         self.__held_index: int = 0
         self.health: int = 3
-        self.__points: int = 0
 
-    @property
-    def points(self):
-        return self.__points
-
-    @points.setter
-    def points(self, value: int) -> None:
-        if value < 0:
-            raise ValueError(f'{self.__class__.__name__}.points must be nonnegative.')
-        self.__points = value
-
-    def give_points(self, amount: int) -> None:
-        self.points += amount
+    def give_score(self, amount: int) -> None:
+        self.score += amount
 
     def add_point(self):
-        self.give_points(1)
+        self.give_score(1)
 
     def action(self):
         self.add_point()
@@ -367,5 +356,4 @@ class Avatar(GameObject):
         self.inventory: list[Item] = data['inventory']
         self.max_inventory_size: int = data['max_inventory_size']
         self.held_item: Item | None = self.inventory[data['held_index']]
-
         return self

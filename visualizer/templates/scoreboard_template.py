@@ -49,7 +49,7 @@ class ScoreboardTemplate(InfoTemplate):
         if 'clients' in turn_log:
             # Sum all client scores
             self.current_score = sum(
-                client['team_manager']['score'] if client.get('team_manager') else 0
+                client['avatar']['score'] if client.get('avatar') else 0
                 for client in turn_log['clients']
             )
         else:
