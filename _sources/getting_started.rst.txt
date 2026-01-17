@@ -73,7 +73,7 @@ To receive the code and to begin commanding your own team of mercenaries, please
 
 When on GitHub, press the green ``<> Code`` button to drop down the menu:
 
-.. image:: ./_static/images/clone_repo.png
+.. image:: /images/clone_repo.png
 
 We highly recommend cloning with GitHub Desktop or downloading the ZIP folder. Extra props if you can use the terminal!
 
@@ -83,7 +83,7 @@ We highly recommend cloning with GitHub Desktop or downloading the ZIP folder. E
     * Choose where you'd like it saved on your device
     * Click ``Clone`` and you're good to go!
 
-.. image:: ./_static/images/github_desktop.png
+.. image:: /images/github_desktop.png
 
 #. Download ZIP
     * Click ``Download ZIP`` and find it in your Downloads.
