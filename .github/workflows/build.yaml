@@ -1,10 +1,13 @@
-name: build-windows
+name: build
 
 on: [push]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
     - uses: actions/checkout@v5
     - name: Set up Python
@@ -17,8 +20,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Build
-      run: .\build.bat
+      run: |
+        if [$RUNNER_OS == 'Windows']
+        then
+          .\build.bat
+        else
+          ./build.sh
+        fi
     - name: Generate map
-      run: python .\launcher.pyz g
+      run: python launcher.pyz g
     - name: Run game
-      run: python .\launcher.pyz r
+      run: python launcher.pyz r
