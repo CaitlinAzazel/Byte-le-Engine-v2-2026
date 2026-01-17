@@ -19,14 +19,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Build
-      run: |
-        if [$RUNNER_OS == 'Windows']
-        then
-          .\build.bat
-        else
-          ./build.sh
-        fi
+    - name: Build (Windows)
+      if: runner.os == 'Windows'
+      run: .\build.bat
+    - name: Build (*nix)
+      if: runner.os != 'Windows'
+      run: ./build.sh
     - name: Generate map
       run: python launcher.pyz g
     - name: Run game
