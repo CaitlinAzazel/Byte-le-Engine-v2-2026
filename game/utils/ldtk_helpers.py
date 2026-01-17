@@ -95,10 +95,12 @@ def load_collisions(locations: dict[Vector, list[GameObject]], collision_layer: 
                 pass
             case LDtk.CollisionType.WALL:
                 game_object = Wall()
+            case LDtk.CollisionType.SHADOW:
+                game_object = Wall(use_shadow_sprite=True)
             case LDtk.CollisionType.VENT:
                 game_object = Vent()
             case LDtk.CollisionType.VENT_DOOR:
-                game_object = Vent(True)
+                game_object = Vent(use_door_sprite=True)
             case LDtk.CollisionType.SAFE_POINT:
                 game_object = Refuge(position.x, position.y)
             case _:
@@ -108,7 +110,7 @@ def load_collisions(locations: dict[Vector, list[GameObject]], collision_layer: 
             continue
         GameBoard.insert_location(locations, position, game_object)
 
-def ldtk_to_locations(path_to_ldtk_file: str, level_identifier: str = 'production') -> tuple[dict[Vector, list[GameObject]], Vector]:
+def ldtk_to_locations(path_to_ldtk_file: str, level_identifier: str = LDtk.LevelIdentifier.PRODUCTION) -> tuple[dict[Vector, list[GameObject]], Vector]:
     """
     :param level_identifier: case-insensitive identifier of the level to parse
     :return: a tuple containing a Locations dict as used in GameBoard and the size of the map
