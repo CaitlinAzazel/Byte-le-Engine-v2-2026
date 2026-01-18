@@ -24,7 +24,7 @@ class BoosterBotBS(ByteSpriteFactory):
     ) -> list[pyg.Surface]:
 
         # Treat missing data as OFF
-        if data.get('on', False) or data.get('state') == 'on':
+        if data.get('turnedOn', False) or data.get('state') == 'on':
             return spritesheets[0]
 
         return spritesheets[1]

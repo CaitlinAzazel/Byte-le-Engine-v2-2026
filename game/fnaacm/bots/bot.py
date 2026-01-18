@@ -1,8 +1,7 @@
+from typing import Self, override
 from game.common.avatar import Avatar
 from game.common.enums import ObjectType
 from game.common.game_object import GameObject
-# from game.common.map.game_object_container import GameObjectContainer
-from game.common.map.occupiable import Occupiable
 from game.utils.vector import Vector
 
 
@@ -10,6 +9,7 @@ from game.utils.vector import Vector
 class Bot(GameObject):
     DEFAULT_STUN_DURATION = 5
     DEFAULT_VISION_RADIUS = 1
+    SAVED_PRIMITIVE_FIELDS = {'boosted', 'is_stunned', 'stun_counter', 'has_attacked', 'can_see_player'}
 
     def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
         super().__init__()
@@ -43,7 +43,7 @@ class Bot(GameObject):
         return
 
     def can_act(self, turn: int) -> bool:
-        return turn % 2 == 0
+        return turn % 2 == 0 and not self.is_stunned
 
 
     def attack(self, target):
@@ -65,3 +65,27 @@ class Bot(GameObject):
         self.stun_counter = 0
 
         self.has_attacked = True
+
+    @override
+    def to_json(self) -> dict:
+        data = super().to_json()
+
+        for field in Bot.SAVED_PRIMITIVE_FIELDS:
+            assert hasattr(self, field)
+            data[field] = getattr(self, field)
+
+        data['position'] = self.position.to_json()
+
+        return data
+
+    @override
+    def from_json(self, data: dict) -> Self:
+        super().from_json(data)
+
+        for field in Bot.SAVED_PRIMITIVE_FIELDS:
+            assert hasattr(self, field)
+            setattr(self, field, data[field])
+
+        self.position = Vector().from_json(data['position'])
+
+        return self
