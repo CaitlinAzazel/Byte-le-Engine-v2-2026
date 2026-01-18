@@ -1,11 +1,11 @@
-import ast
 import math
 import sys
 import os
 import cv2
+import json
 from game.common.enums import ObjectType
 import game.config
-from typing import Callable
+from typing import Callable, overload
 from game.utils.vector import Vector
 from visualizer.adapter import Adapter
 from visualizer.bytesprites.bytesprite import ByteSprite
@@ -24,6 +24,15 @@ class ByteVisualiser:
     to visualise the game board using the 2-dimensional list of tiles and the occupied by and, optionally,
     the held_item attribute. It also calls the adapter class method to minimize the edits needed to this file.
     """
+
+    @staticmethod
+    def vec_dict_from_json_str(json_str: str) -> dict:
+        # our jsons use single quotes for some reason
+        return json.loads(json_str.replace('\'', '\"'))
+
+    @staticmethod
+    def hash_vector_from_dict(vec_dict: dict) -> int:
+        return vec_dict['x'] * 17 + vec_dict['y'] * 19
 
     def __init__(self, end_time: int = -1, skip_start: bool = False, playback_speed: float = 1.0,
                  fullscreen: bool = False, save_video: bool = False, loop_count: int = 1,
@@ -629,28 +638,27 @@ class ByteVisualiser:
          in enumerate(self.bytesprite_map) for x, tile
          in enumerate(row)]
 
-        game_map: [[dict]] = turn_data['game_board']['game_map']
-        for vec, go_container in game_map.items():
-            # get the vectors from the json (they were stored as strings, so ast.literal_eval is necessary)
-            vec: dict = ast.literal_eval(vec)
+        game_map: dict = turn_data['game_board']['game_map']
+        for vec_str, go_container in game_map.items():
+            # get the vectors from the json
+            vec: dict = self.vec_dict_from_json_str(vec_str)
 
             # get the sublist from the current game object container
-            objs: [dict] = go_container['sublist']
+            objs: list[dict] = go_container['sublist']
 
             # create bytesprites using the vector coordinates given
             # z is used for the current layer of making the bytesprite (i.e., if iteration = 5, currently on 5th layer)
-            [self.__create_bytesprite(x=vec['x'], y=vec['y'], z=z, temp_tile=obj) for z, obj in
-             enumerate(objs, start=1)]
+            for z, obj in enumerate(objs, start=1):
+                self.__create_bytesprite(x=vec['x'], y=vec['y'], z=z, temp_tile=obj)
             self.__clean_up_layers(x=vec['x'], y=vec['y'], z=len(objs) + 1)
-            self.__clean_up_map(turn_data['game_board']['game_map'])
+        self.__clean_up_map(turn_data['game_board']['game_map'].keys())
 
     def __clean_up_map(self, vecs: list[str]) -> None:
-        def process_and_hash_vec_string(vec: str) -> int:
-            vec_dict: dict[str, int] = ast.literal_eval(vec)
-            return vec_dict['x'] * 17 + vec_dict['y'] * 19
-
+        """
+        Removes all bytesprites at a given position if it is not used
+        """
         # using hashing to search by O(1) instead of O(n)
-        hashed_vecs: set[int] = [process_and_hash_vec_string(vec) for vec in vecs]
+        hashed_vecs: set[int] = {self.hash_vector_from_dict(self.vec_dict_from_json_str(vec)) for vec in vecs}
 
         def is_used(x: int, y: int) -> bool:
             """
@@ -659,8 +667,11 @@ class ByteVisualiser:
             return (x * 17 + y * 19) in hashed_vecs
 
         # clean up the layers on any coordinate as long as it was not used
-        [self.__clean_up_layers(x=x, y=y, z=1) for y, row in enumerate(self.bytesprite_map)
-         for x, _ in enumerate(row) if not is_used(x, y)]
+        for y, row in enumerate(self.bytesprite_map):
+            for x, _ in enumerate(row):
+                if is_used(x, y):
+                    continue
+                self.__clean_up_layers(x=x, y=y, z=1)
 
     def __add_needed_layers(self, x: int, y: int, z: int) -> None:
         """
