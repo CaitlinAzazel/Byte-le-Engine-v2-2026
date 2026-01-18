@@ -655,7 +655,7 @@ class ByteVisualiser:
 
     def __clean_up_map(self, vecs: list[str]) -> None:
         """
-        Removes all bytesprites at a given position if it is not used
+        Iterates over all positions in `bytesprite_map`, removing all bytesprites if it is not used
         """
         # using hashing to search by O(1) instead of O(n)
         hashed_vecs: set[int] = {self.hash_vector_from_dict(self.vec_dict_from_json_str(vec)) for vec in vecs}
