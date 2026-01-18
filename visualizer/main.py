@@ -510,7 +510,7 @@ class ByteVisualiser:
         map_size: dict = self.turn_logs['turn_0001']['game_board']['map_size']
 
         # bytesprite_factories[7] is indexing to access the Tile object type
-        self.bytesprite_map = [[[self.bytesprite_factories[7](self.screen), ]
+        self.bytesprite_map = [[[self.bytesprite_factories[ObjectType.TILE.value](self.screen), ]
                                 for _ in range(map_size['x'])]
                                for _ in range(map_size['y'])]
 

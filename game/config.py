@@ -72,6 +72,7 @@ class LDtk:
         VENT = 2
         SAFE_POINT = 3
         VENT_DOOR = 4
+        SHADOW = 5
     class EntityIdentifier:
         DOOR = 'door'
         GENERATOR = 'generator'
@@ -82,6 +83,9 @@ class LDtk:
     class LayerIdentifier:
         ENTITIES = 'entities'
         COLLISIONS = 'collisions'
+    class LevelIdentifier:
+        PRODUCTION = 'production'
+        TEST = 'test'
     class SpawnedEntityType:
         PLAYER = 'player'
         IAN = 'ian'

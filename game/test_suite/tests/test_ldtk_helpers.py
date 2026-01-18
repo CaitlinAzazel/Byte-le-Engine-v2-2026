@@ -2,7 +2,7 @@ import unittest
 
 from game.common.map.game_board import GameBoard
 from game.common.map.wall import Wall
-from game.config import PATH_TO_LDTK_PROJECT
+from game.config import PATH_TO_LDTK_PROJECT, LDtk
 from game.fnaacm.map.door import Door
 from game.fnaacm.map.vent import Vent
 from game.fnaacm.stations.scrap_spawner import ScrapSpawner
@@ -38,19 +38,19 @@ class TestLDtkHelpers(unittest.TestCase):
         self.expected_game_board.generate_map()
 
     def test_loads_ldtk_file(self):
-        locations, _ = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier='test')
+        locations, _ = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         self.assertGreater(len(locations.keys()), 0)
 
     def test_correct_map_size(self):
-        _, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier='Test')
+        _, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         self.assertEqual(map_size, EXPECTED_MAP_SIZE)
 
     def test_correct_entity_count(self):
-        locations, _ = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier='test')
+        locations, _ = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         self.assertEqual(sum(map(len, locations.values())), EXPECTED_TOTAL_INSTANCES)
 
     def test_correct_entity_field_values(self):
-        locations, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier='test')
+        locations, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         game_board = GameBoard(0, map_size, locations)
         game_board.generate_map()
         for position in self.expected_game_board.game_map.keys():

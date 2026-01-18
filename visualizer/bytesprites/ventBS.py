@@ -28,7 +28,7 @@ class VentBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
-        # Use bottom row (vent door) when door is active
+        # Use bottom row (vent door) if level designer wants this vent to look different
         if data.get('use_door_sprite', False):
             return spritesheets[1]
 
