@@ -68,13 +68,7 @@ class MasterController(Controller):
         self.interact_controller: InteractController = InteractController()
         self.bot_movement_controller: BotMovementController = BotMovementController()
         self.bot_vision_controller: BotVisionController = BotVisionController()
-        self.bots: list[Bot] = [
-            DumbBot(),
-            CrawlerBot(),
-            JumperBot(),
-            IANBot(),
-            SupportBot()
-        ]
+        self.bots: dict[ObjectType, Bot] = {}
         self.refuge_controller: RefugeController = RefugeController()
         self.point_controller: PointController = PointController()
 
@@ -106,6 +100,13 @@ class MasterController(Controller):
         if turn == 1:
             random.seed(world['game_board'].seed)
             # self.event_times = random.randrange(162, 172), random.randrange(329, 339)
+
+        # recreate the bots
+        gb: GameBoard = world['game_board']
+        for obj_type in {ObjectType.CRAWLER_BOT, ObjectType.DUMB_BOT, ObjectType.IAN_BOT, ObjectType.JUMPER_BOT, ObjectType.SUPPORT_BOT}:
+            bots = gb.get_objects(obj_type)
+            assert len(bots) > 0
+            self.bots[obj_type] = bots[0][1][0]
 
     # Receive a specific client and send them what they get per turn. Also obfuscates necessary objects.
     def client_turn_arguments(self, client: Player, turn):
@@ -147,7 +148,7 @@ class MasterController(Controller):
 
         # for each bot:
         #   if bot.can_act(self.turn), then bot.action()
-        for bot in self.bots:
+        for bot in self.bots.values():
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
             moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
             assert not moves is None, f'{bot.__class__}\'s next move was... None?'
