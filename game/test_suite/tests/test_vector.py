@@ -138,6 +138,12 @@ class TestVector(unittest.TestCase):
     def test_equally_close(self) -> None:
         self.assertFalse(Vector(-1, 0).is_closer_to(Vector(0, 1), Vector(1, 0)))
 
+    # TODO: test edge cases like
+    # WP
+    # BW
+    # W = wall
+    # P = player
+    # B = bot
     def test_overlapped_pos_correct_tiles(self):
         actual_positions = Vector.get_positions_overlapped_by_line(Vector(0, 0), Vector(1, 2))
         expected_positions = [

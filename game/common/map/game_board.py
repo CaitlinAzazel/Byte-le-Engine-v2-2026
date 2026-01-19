@@ -367,25 +367,25 @@ class GameBoard(GameObject):
         return occupiable.can_be_occupied_by(game_object)
 
     # Returns the Vector and a list of GameObject for whatever objects you are trying to get
-    # TODO: CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
-    def get_objects(self, look_for: ObjectType) -> list[tuple[Vector, list[GameObject]]]:
+    def get_objects(self, look_for: ObjectType) -> dict[Vector, list[GameObject]]:
         """
         Zips together the game map's keys and values. A nested for loop then iterates through the zipped lists, and
-        looks for any objects that have the same object type that was passed in. A list of tuples containing the
+        looks for any objects that have the same object type that was passed in. A dict of containing the
         coordinates and the objects found is returned. If the given object type isn't found on the map, then an empty
-        list is returned
+        dict is returned
         """
 
-        results: list[tuple[Vector, list[GameObject]]] = []
+        results: dict[Vector, list[GameObject]] = {}
 
         # Loops through the zipped list
         # DICTIONARY COMPREHENSION HERE PLEASE
+        # ^ No
         for vec, go_container in self.game_map.items():
             found: list[GameObject] = go_container.get_objects(look_for)  # add the matching object to the found list
 
             # add values to result if something was found
             if len(found) > 0:
-                results.append((vec, found))  # Add tuple pairings and objects found
+                results[vec] = found
 
         return results
 
