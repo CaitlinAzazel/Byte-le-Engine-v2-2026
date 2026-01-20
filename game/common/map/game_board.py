@@ -450,16 +450,30 @@ class GameBoard(GameObject):
         # the vector objects were stored as a dictionary in a string format
         # json.ast.literal_eval takes in the string, converts it to a dict, and uses that for the from_json()
 
-        self.game_map: dict[Vector, GameObjectContainer] = {
-            Vector().from_json(ast.literal_eval(k)): GameObjectContainer().from_json(v)
-            for k, v in data['game_map'].items()} if data['game_map'] is not None else None
+        # self.game_map: dict[Vector, GameObjectContainer] = {
+        #     Vector().from_json(ast.literal_eval(k)): GameObjectContainer().from_json(v)
+        #     for k, v in data['game_map'].items()} if data['game_map'] is not None else None
 
-        self.generators = {
-            Vector().from_json(json.loads(pos_json_str.replace('\'', '\"'))):
-            Generator().from_json(gen_json) 
-            for pos_json_str, gen_json in data['generators'].items()}
-        self.battery_spawners = BatterySpawnerList().from_json(data['battery_spawners'])
-        self.scrap_spawners = ScrapSpawnerList().from_json(data['scrap_spawners'])
-        self.coin_spawners = CoinSpawnerList().from_json(data['coin_spawners'])
+        if data['game_map'] is None:
+            self.game_map = None
+        else:
+            self.game_map = {}
+            self.generators.clear()
+            self.battery_spawners.clear()
+            self.scrap_spawners.clear()
+            self.coin_spawners.clear()
+            for k, v in data['game_map'].items():
+                vec = Vector().from_json(ast.literal_eval(k))
+                go_container = GameObjectContainer().from_json(v)
+                for go in go_container:
+                    if isinstance(go, Generator):
+                        self.generators[vec] = go
+                    elif isinstance(go, BatterySpawner):
+                        self.battery_spawners.append(go)
+                    elif isinstance(go, ScrapSpawner):
+                        self.scrap_spawners.append(go)
+                    elif isinstance(go, CoinSpawner):
+                        self.coin_spawners.append(go)
+                self.game_map[vec] = go_container
 
         return self
