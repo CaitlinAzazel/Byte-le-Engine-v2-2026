@@ -20,14 +20,14 @@ class Timer(GameObject):
     def to_json(self) -> dict:
         data = super().to_json()
         data['duration'] = self.__duration
-        data['counter'] = self.__turns_left
+        data['turns_left'] = self.__turns_left
         return data
 
     @override
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
         self.__duration = data['duration']
-        self.__turns_left = data['counter']
+        self.__turns_left = data['turns_left']
         return self
 
     @property

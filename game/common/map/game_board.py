@@ -1,5 +1,6 @@
 import ast
 import random
+import json
 from math import floor
 from typing import Self, Type
 
@@ -420,6 +421,14 @@ class GameBoard(GameObject):
                                     self.locations.values()] if self.locations is not None else None
         data["walled"] = self.walled
         data['event_active'] = self.event_active
+
+        data['generators'] = {str(pos.to_json()): generator.to_json() for (pos, generator) in self.generators.items()}
+        data['battery_spawners'] = self.battery_spawners.to_json()
+        data['scrap_spawners'] = self.scrap_spawners.to_json()
+        data['coin_spawners'] = self.coin_spawners.to_json()
+        # FIXME: the data in the above are accurate but the ones in game_map are not
+        # which prevents the visualizer from working properly
+
         return data
 
     def generate_event(self, start: int, end: int) -> None:
@@ -444,5 +453,13 @@ class GameBoard(GameObject):
         self.game_map: dict[Vector, GameObjectContainer] = {
             Vector().from_json(ast.literal_eval(k)): GameObjectContainer().from_json(v)
             for k, v in data['game_map'].items()} if data['game_map'] is not None else None
+
+        self.generators = {
+            Vector().from_json(json.loads(pos_json_str.replace('\'', '\"'))):
+            Generator().from_json(gen_json) 
+            for pos_json_str, gen_json in data['generators'].items()}
+        self.battery_spawners = BatterySpawnerList().from_json(data['battery_spawners'])
+        self.scrap_spawners = ScrapSpawnerList().from_json(data['scrap_spawners'])
+        self.coin_spawners = CoinSpawnerList().from_json(data['coin_spawners'])
 
         return self
