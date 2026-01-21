@@ -31,7 +31,7 @@ class TestLDtkHelpers(unittest.TestCase):
             Vector(1, 1): [door],
             Vector(1, 2): [BatterySpawner(turns_to_respawn=99, recharge_amount=2025)],
             Vector(1, 3): [ScrapSpawner(turns_to_respawn=99)],
-            Vector(1, 4): [CoinSpawner(turns_to_respawn=99, points=67)],
+            Vector(1, 4): [CoinSpawner(turns_to_respawn=99, point_value=67)],
             Vector(7, 7): [second_door]
         }
         self.expected_game_board = GameBoard(locations=locations, map_size=map_size)
