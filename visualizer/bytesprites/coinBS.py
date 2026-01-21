@@ -24,7 +24,8 @@ class CoinBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
-        # Static sprite: always use first row
+        if data['state'] != 'idle':
+            return spritesheets[1]
         return spritesheets[0]
 
     @staticmethod
@@ -32,7 +33,7 @@ class CoinBS(ByteSpriteFactory):
         return ByteSprite(
             screen,
             CoinBS.COIN_PATH,
-            1,                  # one row for static sprite
+            2,
             ObjectType.COIN.value,                  # object type (match Adapter)
             CoinBS.update,
             colorkey=None       # use PNG alpha transparency

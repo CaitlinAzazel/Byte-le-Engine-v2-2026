@@ -20,14 +20,6 @@ class Occupiable(GameObject):
         super().__init__()
         self.object_type: ObjectType = ObjectType.OCCUPIABLE
 
-    def to_json(self) -> dict:
-        data: dict = super().to_json()
-        return data
-
-    def from_json(self, data: dict) -> Self:
-        super().from_json(data)
-        return self
-
     @deprecated("If accessing, use `can_be_occupied_by` instead as it is more descriptive. If overriding, go ahead.")
     def can_occupy(self, game_object: GameObject) -> bool:
         return True

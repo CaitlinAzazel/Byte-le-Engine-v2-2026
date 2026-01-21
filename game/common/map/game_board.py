@@ -1,5 +1,6 @@
 import ast
 import random
+import json
 from math import floor
 from typing import Self, Type
 
@@ -8,6 +9,7 @@ from game.common.game_object import GameObject
 from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
+from game.fnaacm.map.coin_spawner import CoinSpawner, CoinSpawnerList
 from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
 from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
@@ -142,6 +144,7 @@ class GameBoard(GameObject):
         self.generators: dict[Vector, Generator] = {}
         self.battery_spawners: BatterySpawnerList = BatterySpawnerList()
         self.scrap_spawners: ScrapSpawnerList = ScrapSpawnerList()
+        self.coin_spawners: CoinSpawnerList = CoinSpawnerList()
 
     @property
     def seed(self) -> int:
@@ -238,6 +241,8 @@ class GameBoard(GameObject):
                     self.battery_spawners.append(obj)
                 elif isinstance(obj, ScrapSpawner):
                     self.scrap_spawners.append(obj)
+                elif isinstance(obj, CoinSpawner):
+                    self.coin_spawners.append(obj)
 
         if self.walled:
             # Generate the walls
@@ -416,6 +421,12 @@ class GameBoard(GameObject):
                                     self.locations.values()] if self.locations is not None else None
         data["walled"] = self.walled
         data['event_active'] = self.event_active
+
+        data['generators'] = {str(pos.to_json()): generator.to_json() for (pos, generator) in self.generators.items()}
+        data['battery_spawners'] = self.battery_spawners.to_json()
+        data['scrap_spawners'] = self.scrap_spawners.to_json()
+        data['coin_spawners'] = self.coin_spawners.to_json()
+
         return data
 
     def generate_event(self, start: int, end: int) -> None:
@@ -437,8 +448,30 @@ class GameBoard(GameObject):
         # the vector objects were stored as a dictionary in a string format
         # json.ast.literal_eval takes in the string, converts it to a dict, and uses that for the from_json()
 
-        self.game_map: dict[Vector, GameObjectContainer] = {
-            Vector().from_json(ast.literal_eval(k)): GameObjectContainer().from_json(v)
-            for k, v in data['game_map'].items()} if data['game_map'] is not None else None
+        # self.game_map: dict[Vector, GameObjectContainer] = {
+        #     Vector().from_json(ast.literal_eval(k)): GameObjectContainer().from_json(v)
+        #     for k, v in data['game_map'].items()} if data['game_map'] is not None else None
+
+        if data['game_map'] is None:
+            self.game_map = None
+        else:
+            self.game_map = {}
+            self.generators.clear()
+            self.battery_spawners.clear()
+            self.scrap_spawners.clear()
+            self.coin_spawners.clear()
+            for k, v in data['game_map'].items():
+                vec = Vector().from_json(ast.literal_eval(k))
+                go_container = GameObjectContainer().from_json(v)
+                for go in go_container:
+                    if isinstance(go, Generator):
+                        self.generators[vec] = go
+                    elif isinstance(go, BatterySpawner):
+                        self.battery_spawners.append(go)
+                    elif isinstance(go, ScrapSpawner):
+                        self.scrap_spawners.append(go)
+                    elif isinstance(go, CoinSpawner):
+                        self.coin_spawners.append(go)
+                self.game_map[vec] = go_container
 
         return self

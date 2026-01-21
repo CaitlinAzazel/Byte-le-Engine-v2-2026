@@ -4,11 +4,12 @@ from game.common.enums import ObjectType
 from game.common.items.item import Item
 from game.common.stations.station import Station
 from game.fnaacm.items.scrap import Scrap
+from game.fnaacm.ldtk_entity import LDtkEntity
 from game.fnaacm.map.door import Door
 from game.utils.ldtk_json import EntityInstance
 
 
-class Generator(Station):
+class Generator(Station, LDtkEntity):
     """
     Opens connected doors once fed scrap via interaction.
     Can also be forcibly disabled (e.g., from attacks).
@@ -35,6 +36,7 @@ class Generator(Station):
             self.cost == value.cost and \
             self.passive_point_bonus == value.passive_point_bonus
 
+    @override
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance, all_doors: dict[str, Door]) -> Self:
         cost: int = -1

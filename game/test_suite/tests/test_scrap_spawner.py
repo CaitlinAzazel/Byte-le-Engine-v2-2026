@@ -49,7 +49,7 @@ class TestScrapSpawner(unittest.TestCase):
 
     def test_cooldown_activates(self):
         self.scrap_spawner.handle_turn(self.avatar)
-        self.assertFalse(self.scrap_spawner.is_available())
+        self.assertFalse(self.scrap_spawner.is_available)
 
     def test_to_and_from_json(self):
         json = self.scrap_spawner.to_json()

@@ -31,6 +31,9 @@ class GameObjectList(GameObject, Generic[T]):
     def append(self, obj: T):
         self.__list.append(obj)
 
+    def clear(self):
+        self.__list.clear()
+
     def size(self) -> int:
         return len(self.__list)
 

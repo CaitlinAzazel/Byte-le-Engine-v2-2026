@@ -136,6 +136,8 @@ class MasterController(Controller):
             battery.tick()
         for scrap_spawner in game_board.scrap_spawners:
             scrap_spawner.tick()
+        for coin_spawner in game_board.coin_spawners:
+            coin_spawner.tick()
 
         for client in clients:
             for i in range(MAX_NUMBER_OF_ACTIONS_PER_TURN):
