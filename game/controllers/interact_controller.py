@@ -40,6 +40,14 @@ class InteractController(Controller):
         :return: None
         """
 
+        # "proximity-based" tile interactions
+        for battery_spawner in world.battery_spawners:
+            battery_spawner.handle_turn(client.avatar)
+        for scrap_spawner in world.scrap_spawners:
+            scrap_spawner.handle_turn(client.avatar)
+        for coin_spawner in world.coin_spawners:
+            coin_spawner.handle_turn(client.avatar)
+
         # match interaction type with x and y
         vector: Vector
         match action:
@@ -63,9 +71,3 @@ class InteractController(Controller):
 
         if stat is not None and isinstance(stat, Station):
             stat.take_action(client.avatar)
-
-        # "proximity-based" tile interactions
-        for battery_spawner in world.battery_spawners:
-            battery_spawner.handle_turn(client.avatar)
-        for scrap_spawner in world.scrap_spawners:
-            scrap_spawner.handle_turn(client.avatar)

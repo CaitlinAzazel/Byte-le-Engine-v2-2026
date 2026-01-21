@@ -13,6 +13,8 @@ class BatteryBS(ByteSpriteFactory):
 
     @staticmethod
     def update(data: dict, layer: int, pos: Vector, spritesheets: list[list[pyg.Surface]]) -> list[pyg.Surface]:
+        if data['state'] != 'idle':
+            return spritesheets[1]
         return spritesheets[0]
 
     @staticmethod
@@ -20,7 +22,7 @@ class BatteryBS(ByteSpriteFactory):
         return ByteSprite(
             screen,
             BatteryBS.BATTERY_PATH,
-            1,
+            2,
             ObjectType.BATTERY.value,
             BatteryBS.update,
             colorkey=pyg.Color(0,0,0,0)

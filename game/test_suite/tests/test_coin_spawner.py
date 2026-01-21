@@ -23,7 +23,7 @@ class TestCoinSpawner(unittest.TestCase):
         self.coin_spawner: CoinSpawner = CoinSpawner(
             position=position,
             turns_to_respawn=self.__coin_cooldown,
-            points=self.__coin_value
+            point_value=self.__coin_value
         )
 
     def test_battery_gives_battery(self):
