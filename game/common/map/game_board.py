@@ -426,8 +426,6 @@ class GameBoard(GameObject):
         data['battery_spawners'] = self.battery_spawners.to_json()
         data['scrap_spawners'] = self.scrap_spawners.to_json()
         data['coin_spawners'] = self.coin_spawners.to_json()
-        # FIXME: the data in the above are accurate but the ones in game_map are not
-        # which prevents the visualizer from working properly
 
         return data
 

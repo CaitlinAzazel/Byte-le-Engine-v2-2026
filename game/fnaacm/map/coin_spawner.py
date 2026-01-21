@@ -49,6 +49,7 @@ class CoinSpawner(Occupiable):
 
     @override
     def to_json(self) -> dict:
+        self.state = 'idle' if self.is_available else 'unavailable'
         data = super().to_json()
         data['timer'] = self.__timer.to_json()
         data['position'] = self.position.to_json()
@@ -69,7 +70,6 @@ class CoinSpawner(Occupiable):
 
     def tick(self) -> None:
         self.__timer.tick()
-        self.state = 'idle' if self.is_available else 'unavailable'
 
     def handle_turn(self, avatar: Avatar) -> None:
         if self.position != avatar.position:

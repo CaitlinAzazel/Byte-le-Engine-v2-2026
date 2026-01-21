@@ -2,7 +2,7 @@ from typing import Self, override
 from game.common.avatar import Avatar
 from game.common.enums import ObjectType
 from game.common.map.occupiable import Occupiable
-from game.fnaacm.cooldown import Cooldown
+from game.fnaacm.timer import Timer
 from game.utils.ldtk_json import EntityInstance
 from game.utils.vector import Vector
 
@@ -20,7 +20,7 @@ class BatterySpawner(Occupiable):
         self.object_type: ObjectType = ObjectType.BATTERY
         self.position: Vector = position
         self.__recharge_amount: int = recharge_amount
-        self.__cooldown = Cooldown(duration=turns_to_respawn)
+        self.__timer = Timer(duration=turns_to_respawn)
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
@@ -39,13 +39,14 @@ class BatterySpawner(Occupiable):
         return isinstance(value, self.__class__) and \
             self.position == value.position and \
             self.__recharge_amount == value.__recharge_amount and \
-            self.__cooldown == value.__cooldown 
+            self.__timer == value.__timer 
 
     @override
     def to_json(self) -> dict:
+        self.state = 'idle' if self.is_available else 'unavailable'
         data = super().to_json()
         data['recharge_amount'] = self.__recharge_amount
-        data['cooldown'] = self.__cooldown.to_json()
+        data['timer'] = self.__timer.to_json()
         data['position'] = self.position.to_json()
         return data
 
@@ -53,24 +54,24 @@ class BatterySpawner(Occupiable):
     def from_json(self, data: dict) -> Self:
         super().from_json(data)
         self.__recharge_amount = data['recharge_amount']
-        self.__cooldown = Cooldown().from_json(data['cooldown'])
+        self.__timer = Timer().from_json(data['timer'])
         self.position = Vector().from_json(data['position'])
         return self
 
     @property
     def is_available(self) -> bool:
-        return self.__cooldown.can_activate
+        return self.__timer.done
 
     @property
     def recharge_amount(self) -> int:
         return self.__recharge_amount
 
     def tick(self) -> None:
-        self.__cooldown.tick()
+        self.__timer.tick()
 
     def handle_turn(self, avatar: Avatar) -> None:
         if self.position != avatar.position:
             return
-        if not self.__cooldown.activate():
+        if not self.__timer.reset(force=False):
             return
         avatar.power += self.__recharge_amount
