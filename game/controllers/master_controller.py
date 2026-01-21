@@ -68,13 +68,7 @@ class MasterController(Controller):
         self.interact_controller: InteractController = InteractController()
         self.bot_movement_controller: BotMovementController = BotMovementController()
         self.bot_vision_controller: BotVisionController = BotVisionController()
-        self.bots: list[Bot] = [
-            DumbBot(),
-            CrawlerBot(),
-            JumperBot(),
-            IANBot(),
-            SupportBot()
-        ]
+        self.bots: dict[ObjectType, Bot] = {}
         self.refuge_controller: RefugeController = RefugeController()
         self.point_controller: PointController = PointController()
 
@@ -82,10 +76,11 @@ class MasterController(Controller):
     def give_clients_objects(self, clients: list[Player], world: dict):
         # starting_positions = [[3, 3], [3, 9]]   # would be done in generate game
         gb: GameBoard = world['game_board']
-        avatars: list[tuple[Vector, list[Avatar]]] = gb.get_objects(ObjectType.AVATAR)
-        for avatar, client in zip(avatars, clients):
-            avatar[1][0].position = avatar[0]
-            client.avatar = avatar[1][0]
+        avatars: dict[Vector, list[Avatar]] = gb.get_objects(ObjectType.AVATAR)
+        for (pos, avatars_at_pos), client in zip(avatars.items(), clients):
+            assert len(avatars_at_pos) == 1
+            avatars_at_pos[0].position = pos
+            client.avatar = avatars_at_pos[0]
 
     # Generator function. Given a key:value pair where the key is the identifier for the current world and the value is
     # the state of the world, returns the key that will give the appropriate world information
@@ -106,6 +101,15 @@ class MasterController(Controller):
         if turn == 1:
             random.seed(world['game_board'].seed)
             # self.event_times = random.randrange(162, 172), random.randrange(329, 339)
+
+        # cache references to every bot
+        gb: GameBoard = world['game_board']
+        for obj_type in BOT_OBJECT_TYPES:
+            if obj_type == ObjectType.BOT:
+                continue
+            # FIXME: just look at it
+            game_objects = list(gb.get_objects(obj_type).values())[0]
+            self.bots[obj_type] = game_objects[0]
 
     # Receive a specific client and send them what they get per turn. Also obfuscates necessary objects.
     def client_turn_arguments(self, client: Player, turn):
@@ -149,7 +153,7 @@ class MasterController(Controller):
 
         # for each bot:
         #   if bot.can_act(self.turn), then bot.action()
-        for bot in self.bots:
+        for bot in self.bots.values():
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
             moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
             assert not moves is None, f'{bot.__class__}\'s next move was... None?'

@@ -77,42 +77,42 @@ class TestGameBoard(unittest.TestCase):
 
     # test that get_objects works correctly with stations
     def test_get_objects_station(self):
-        stations: list[tuple[Vector, list[GameObject]]] = self.game_board.get_objects(ObjectType.STATION)
-        self.assertTrue(all(map(lambda station: isinstance(station[1][0], Station), stations)))
+        stations: dict[Vector, list[GameObject]] = self.game_board.get_objects(ObjectType.STATION)
+        self.assertTrue(all(map(lambda station: isinstance(station[0], Station), stations.values())))
         self.assertEqual(len(stations), 2)
 
     # test that get_objects works correctly with occupiable stations
     def test_get_objects_occupiable_station(self):
-        occupiable_stations: list[tuple[Vector, list[GameObject]]] = self.game_board.get_objects(
+        occupiable_stations: dict[Vector, list[GameObject]] = self.game_board.get_objects(
             ObjectType.OCCUPIABLE_STATION)
         self.assertTrue(
-            all(map(lambda occupiable_station: isinstance(occupiable_station[1][0], OccupiableStation),
-                    occupiable_stations)))
-        objects_stacked = [x[1] for x in occupiable_stations]
+            all(map(lambda occupiable_station: isinstance(occupiable_station[0], OccupiableStation),
+                    occupiable_stations.values())))
+        objects_stacked = [*occupiable_stations.values()]
         objects_unstacked = [x for xs in objects_stacked for x in xs]
         self.assertEqual(len(objects_unstacked), 5)
 
     def test_get_objects_occupiable_station_2(self):
-        occupiable_stations: list[tuple[Vector, list[GameObject]]] = self.game_board.get_objects(
+        occupiable_stations: dict[Vector, list[GameObject]] = self.game_board.get_objects(
             ObjectType.OCCUPIABLE_STATION)
 
         # checks if the list of GameObjects has 4 OccupiableStations in that list
-        self.assertTrue(any(map(lambda vec_list: len(vec_list[1]) == 4, occupiable_stations)))
+        self.assertTrue(any(map(lambda vec_list: len(vec_list) == 4, occupiable_stations.values())))
 
-        objects_stacked = [x[1] for x in occupiable_stations]
+        objects_stacked = [*occupiable_stations.values()]
         objects_unstacked = [x for xs in objects_stacked for x in xs]
         self.assertEqual(len(objects_unstacked), 5)
 
     # test that get_objects works correctly with avatar
     def test_get_objects_avatar(self):
-        avatars: list[tuple[Vector, list[GameObject]]] = self.game_board.get_objects(ObjectType.AVATAR)
-        self.assertTrue(all(map(lambda avatar: isinstance(avatar[1][0], Avatar), avatars)))
+        avatars: dict[Vector, list[GameObject]] = self.game_board.get_objects(ObjectType.AVATAR)
+        self.assertTrue(all(map(lambda avatar: isinstance(avatar[0], Avatar), avatars.values())))
         self.assertEqual(len(avatars), 1)
 
     # test that get_objects works correctly with walls
     def test_get_objects_wall(self):
-        walls: list[tuple[Vector, list[GameObject]]] = self.game_board.get_objects(ObjectType.WALL)
-        self.assertTrue(all(map(lambda wall: isinstance(wall[1][0], Wall), walls)))
+        walls: dict[Vector, list[GameObject]] = self.game_board.get_objects(ObjectType.WALL)
+        self.assertTrue(all(map(lambda wall: isinstance(wall[0], Wall), walls.values())))
         self.assertEqual(len(walls), 1)
 
     # testing a successful case of the place_on_top_of method
@@ -221,25 +221,18 @@ class TestGameBoard(unittest.TestCase):
 
     # test that all matching objects in the entire map are returned
     def test_get_objects(self):
-        result: list[tuple[Vector, list[GameObject]]] = self.game_board.get_objects(ObjectType.OCCUPIABLE_STATION)
-        [[self.assertEqual(x.object_type, ObjectType.OCCUPIABLE_STATION) for x in sublist[1]] for sublist in result]
+        result: dict[Vector, list[GameObject]] = self.game_board.get_objects(ObjectType.OCCUPIABLE_STATION)
+        [[self.assertEqual(x.object_type, ObjectType.OCCUPIABLE_STATION) for x in sublist] for sublist in result.values()]
 
-    # test that an ObjectType that's not on the map returns an empty list
+    # test that an ObjectType that's not on the map returns an empty dict
     def test_get_objects_fail(self):
-        result: list[tuple[Vector, list[GameObject]]] = self.game_board.get_objects(ObjectType.OCCUPIABLE)
-        self.assertEqual(result, [])
+        result: dict[Vector, list[GameObject]] = self.game_board.get_objects(ObjectType.OCCUPIABLE)
+        self.assertEqual(result, {})
 
     # ensure the avatar position is stored properly
     def test_avatar_pos_check(self):
         pos: Vector = self.avatar.position
         self.assertEqual(pos, Vector(0, 1))
-
-    # TODO: test edge cases like
-    # WP
-    # BW
-    # W = wall
-    # P = player
-    # B = bot
 
     def test_get_top_uninitialized_location(self):
         # should be a vector that is not a key in the locations dict, but is still valid

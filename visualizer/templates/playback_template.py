@@ -73,15 +73,16 @@ class PlaybackTemplate:
         ):
             self._resize_button(btn, BUTTON_SIZE)
 
-        self.prev_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(150, 350).as_tuple()
-        self.pause_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-150, 350).as_tuple()
-        self.next_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(100, 350).as_tuple()
-        self.start_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-200, 350).as_tuple()
-        self.save_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-100, 350).as_tuple()
-        self.end_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(100, 350).as_tuple()
-        self.normal_speed_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-50, 350).as_tuple()
-        self.fast_speed_button.rect.center = Vector(*self.screen.get_rect().center).add_y(350).as_tuple()
-        self.fastest_speed_button.rect.center = Vector(*self.screen.get_rect().center).add_x_y(50, 350).as_tuple()
+        screen_center = Vector(*self.screen.get_rect().center)
+        self.start_button.rect.center = screen_center.add_x_y(-200, 350).as_tuple()
+        self.end_button.rect.center = screen_center.add_x_y(-150, 350).as_tuple()
+        self.save_button.rect.center = screen_center.add_x_y(-100, 350).as_tuple()
+        self.pause_button.rect.center = screen_center.add_x_y(-50, 350).as_tuple()
+        self.prev_button.rect.center = screen_center.add_x_y(0, 350).as_tuple()
+        self.next_button.rect.center = screen_center.add_x_y(50, 350).as_tuple()
+        self.normal_speed_button.rect.center = screen_center.add_x_y(150, 350).as_tuple()
+        self.fast_speed_button.rect.center = screen_center.add_x_y(175, 350).as_tuple()
+        self.fastest_speed_button.rect.center = screen_center.add_x_y(200, 350).as_tuple()
 
 
     def _resize_button(self, button: Button, size: int = 25) -> None:

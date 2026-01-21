@@ -47,6 +47,15 @@ class ObjectType(Enum):
     JUMPER_BOT = auto()
     SUPPORT_BOT = auto()
 
+BOT_OBJECT_TYPES = {
+    ObjectType.BOT,
+    ObjectType.CRAWLER_BOT,
+    ObjectType.DUMB_BOT,
+    ObjectType.IAN_BOT,
+    ObjectType.JUMPER_BOT,
+    ObjectType.SUPPORT_BOT,
+}
+
 class ActionType(Enum):
     NONE = auto()
     MOVE_UP = auto()

@@ -1,7 +1,7 @@
 from typing import overload
 
 from game.common.avatar import Avatar
-from game.common.enums import ActionType, ObjectType
+from game.common.enums import BOT_OBJECT_TYPES, ActionType, ObjectType
 from game.common.map.game_board import GameBoard
 from game.common.map.occupiable import Occupiable
 from game.common.player import Player
@@ -9,12 +9,6 @@ from game.common.stations.refuge import Refuge
 from game.controllers.controller import Controller
 from game.controllers.movement_controller import MovementController
 from game.utils.vector import Vector
-
-
-# FIXME: update this with bot subclasses
-BOT_OBJECT_TYPES = {
-    ObjectType.BOT,
-}
 
 
 class RefugeController(Controller):
