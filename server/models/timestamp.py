@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Optional
 import sqlalchemy as sa
 
 
@@ -8,15 +9,17 @@ class TimeStamp(sa.types.TypeDecorator):
     """
     impl = sa.types.DateTime
 
-# if datetime is none, returns datetime. if timezone is none, returns local timezone.
-    def process_bind_param(self, value: datetime, dialect):
+    # ensures `value` is converted to UTC before stored in the database
+    def process_bind_param(self, value: Optional[datetime], dialect: sa.Dialect):
         if value is None:
             return datetime.utcnow()
+        if not value.tzinfo is None:
+            return value.astimezone(timezone.utc)
 
         return value
 
-# changes timezone to utc timezone
-    def process_result_value(self, value: datetime, dialect):
+    # ensures `value`'s timezone' is set to UTC when retrieved from the database
+    def process_result_value(self, value: Optional[datetime], dialect: sa.Dialect):
         if value is None:
             return value
         if value.tzinfo is None:

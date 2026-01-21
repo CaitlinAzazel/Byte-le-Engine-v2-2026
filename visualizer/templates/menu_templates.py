@@ -5,7 +5,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 from game.utils.vector import Vector
-from visualizer.utils.button import Button
+from visualizer.utils.button import Button, ButtonColors
 from visualizer.utils.text import Text
 
 """
@@ -35,7 +35,6 @@ class MenuTemplate:
 
         # the next two variables shouldn't be type hinted. The center is a tuple of two ints (i.e., tuple[int, int])
         self.start_button.rect.center = Vector(*self.screen.get_rect().center).add_y(100).as_tuple()
-
         self.results_button.rect.center = Vector(*self.screen.get_rect().center).add_y(100).as_tuple()
 
     def start_events(self, event: pygame.event) -> Any:
@@ -53,9 +52,17 @@ class MenuTemplate:
         Renders the Start button.
         :return: None
         """
-        self.start_button.render()
 
-    def load_results_screen(self, results: dict): ...
+        def start_render(self) -> None:
+            # Draw background image first
+            self.screen.blit(self.background, (0, 0))
+
+            # Draw buttons and title on top
+            super().start_render()
+            self.title.render()
+
+    def load_results_screen(self, results: dict):
+        ...
 
     def results_events(self, event: pygame.event) -> Any:
         """
@@ -84,49 +91,86 @@ class Basic(MenuTemplate):
 
     def __init__(self, screen: pygame.Surface, title: str):
         super().__init__(screen)
-        self.title: Text = Text(screen, title, 48)  # creates the title using the Text class; refer to text.py
-        self.title.rect.center = Vector(*self.screen.get_rect().center).add_y(-100).as_tuple()
+        self.title: Text = Text(screen, title, 48)
+        self.title.rect.center = Vector(*self.screen.get_rect().center).add_x_y(-100, -100).as_tuple()
 
-        self.winning_team_name: Text = Text(screen, '', 0)  # name is determined by endgame results
+        # Final score text (PvE game)
+        self.final_score_text: Text | None = None
+
+        # START MENU IMAGE
+        self.background = pygame.image.load(
+            os.path.join(os.getcwd(), "visualizer/images/staticsprites/StartMenu.png")
+        ).convert_alpha()
+        self.background = pygame.transform.smoothscale(self.background, self.screen.get_size())
+
+        menu_colors = ButtonColors(
+            fg_color="#ffffff",
+            fg_color_hover="#ffff00",
+            fg_color_clicked="#00ff00",
+            bg_color="#333399",
+            bg_color_hover="#6666cc",
+            bg_color_clicked="#111166"
+        )
+
+        self.start_button = Button(
+            screen=self.screen,
+            text="Start Game",
+            action=lambda: False,
+            font_size=24,
+            padding=12,
+            colors=menu_colors,
+            position=Vector(self.screen.get_width() // 2 - 500, self.screen.get_height() // 2 + 50)
+        )
+
+        self.results_button = Button(
+            screen=self.screen,
+            text="Exit",
+            action=lambda: False,
+            font_size=24,
+            padding=12,
+            colors=menu_colors,
+            position=Vector(self.screen.get_width() // 2 - 500, self.screen.get_height() // 2 + 120)
+        )
 
     def start_render(self) -> None:
         """
         This method calls the inherited method to render the start button. It also renders the title
         :return: None
         """
+        self.screen.blit(self.background, (0, 0))
+        self.start_button.render()
+        self.results_button.render()
         super().start_render()
-        self.title.render()
 
     def load_results_screen(self, results: dict) -> None:
         """
-        This method will update the self.winning_team_name variable based on the results dict given.
+        This method will update the final score displayed on the results screen.
         :param results:
         :return: None
         """
-        winning_teams = self.__get_winning_teams(results['players'])
-        self.winning_team_name = Text(self.screen, winning_teams, 36)
-        self.winning_team_name.rect.center = self.screen.get_rect().center
+        score = results.get('score', 0)
+
+        self.final_score_text = Text(
+            self.screen,
+            f"Final Score: {score}",
+            36,
+            color=(255, 0, 0)  # red text
+        )
+
+        # Same position as the old winning team text
+        self.final_score_text.rect.center = Vector(
+            *self.screen.get_rect().center
+        ).add_x(-425).as_tuple()
 
     def results_render(self) -> None:
         """
-        This renders the results screen by placing the title and winning team name(s) on the screen.
+        This renders the results screen by placing the title and final score on the screen.
         :return:
         """
         super().results_render()
-        self.title.render()
-        self.winning_team_name.render()
+        self.screen.blit(self.background, (0, 0))
 
-    def __get_winning_teams(self, players: list) -> str:
-        """
-        This method will get the winning team name(s) and return that string. If there is a tie, all teams that created
-        the tie will be included.
-        :param players:
-        :return: string with the winning team name(s)
-        """
-        m = max(map(lambda player: player['avatar']['score'], players))  # Gets the max score from all results
+        if self.final_score_text:
+            self.final_score_text.render()
 
-        # Compares each player in the given list to the max score
-        winners: list = [player['team_name'] for player in players if player['avatar']['score'] == m]
-
-        # Prints the winner(s) from the final results
-        return f'{"Winners" if len(winners) > 1 else "Winner"}: {", ".join(winners)}'
+        self.results_button.render()

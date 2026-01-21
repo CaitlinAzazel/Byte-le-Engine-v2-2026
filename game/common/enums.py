@@ -40,6 +40,12 @@ class ObjectType(Enum):
     REFUGE = auto()
     DOOR = auto()
     BOT = auto()
+    COIN = auto()
+    CRAWLER_BOT = auto()
+    DUMB_BOT = auto()
+    IAN_BOT = auto()
+    JUMPER_BOT = auto()
+    SUPPORT_BOT = auto()
 
 class ActionType(Enum):
     NONE = auto()

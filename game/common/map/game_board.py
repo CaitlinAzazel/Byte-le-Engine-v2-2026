@@ -3,30 +3,19 @@ import random
 from math import floor
 from typing import Self, Type
 
-from game.common.avatar import Avatar
 from game.common.enums import *
 from game.common.game_object import GameObject
 from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
-from game.common.stations.occupiable_station import OccupiableStation
-from game.common.stations.station import Station
 from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
 from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
 from game.fnaacm.map.battery_spawner_list import BatterySpawnerList
 from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.utils.vector import Vector
+from game.common.map.json_to_instance import json_to_instance
 
-OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
-    ObjectType.AVATAR: Avatar,
-    ObjectType.WALL: Wall,
-    ObjectType.STATION: Station,
-    ObjectType.OCCUPIABLE_STATION: OccupiableStation,
-}
-def json_to_instance(data: dict) -> GameObject:
-    obj_type = ObjectType(data['object_type'])
-    return OBJECT_TYPE_TO_CLASS[obj_type]().from_json(data)
 
 class GameBoard(GameObject):
     """
@@ -362,8 +351,23 @@ class GameBoard(GameObject):
         return self.is_valid_coords(coords) and (self.get(coords).get_top() is None or
                                                  isinstance(self.get(coords).get_top(), Occupiable))
 
+    def can_object_occupy(self, coords: Vector, game_object: GameObject) -> bool:
+        """
+        returns whether `game_object` can occupy the space at `coords`
+        """
+        if not self.is_occupiable(coords):
+            return False
+
+        occupiable = self.get_top(coords)
+        if occupiable is None:
+            return True
+
+        if not isinstance(occupiable, Occupiable):
+            return False
+        return occupiable.can_be_occupied_by(game_object)
+
     # Returns the Vector and a list of GameObject for whatever objects you are trying to get
-    # CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
+    # TODO: CHANGE RETURN TYPE TO BE A DICT NOT A LIST OF TUPLES
     def get_objects(self, look_for: ObjectType) -> list[tuple[Vector, list[GameObject]]]:
         """
         Zips together the game map's keys and values. A nested for loop then iterates through the zipped lists, and
@@ -385,111 +389,18 @@ class GameBoard(GameObject):
 
         return results
 
-    @staticmethod
-    def get_progress(a: float, b: float, value: float) -> float:
-        """
-        returns percentage "progress" of value from a to b
-        if value is "past" b then progress is 100%
-        """
-        # you cannot move "between" a and b if a == b
-        if a == b:
-            return 1
-        if value > b :
-            return 1
-        return (value - a) / (b - a)
 
-    # https://forum.gamemaker.io/index.php?threads/how-to-find-every-square-a-line-passes-through.101130/
-    @staticmethod
-    def get_positions_overlapped_by_line(line_start: Vector, line_end: Vector) -> list[Vector]:
-        overlapped_positions = []
-        # // get grid-relative coordinates
-        # var cx1 = x1 / cell_size;
-        # var cy1 = y1 / cell_size;
-        # var cx2 = x2 / cell_size;
-        # var cy2 = y2 / cell_size;
-        cx1 = line_start.x + 0.5
-        cy1 = line_start.y + 0.5
-        cx2 = line_end.x + 0.5
-        cy2 = line_end.y + 0.5
+    def update_object_position(self, position: Vector, game_object: GameObject) -> None:
+        assert hasattr(game_object, 'position')
 
-        # // setup the initial parameters
-        # var xdir = x2 > x1 ? 1 : -1;
-        xdir: int = 1 if cx2 > cx1 else -1
-        # var xcurrent = floor(cx1);
-        xcurrent: int = floor(cx1)
-        # var xnext = x2 > x1 ? xcurrent + 1 : xcurrent;
-        xnext: float = (xcurrent + 1) if cx2 > cx1 else (xcurrent)
-        # var xprogress = get_progress(cx1, cx2, xnext);
-        xprogress = GameBoard.get_progress(cx1, cx2, xnext)
+        # remove the avatar from its previous location
+        self.remove(game_object.position, game_object.object_type)
 
-        # var ydir = y2 > y1 ? 1 : -1;
-        ydir = 1 if cy2 > cy1 else -1
-        # var ycurrent = floor(cy1);
-        ycurrent = floor(cy1)
-        # var ynext = y2 > y1 ? ycurrent + 1 : ycurrent;
-        ynext = (ycurrent + 1) if cy2 > cy1 else (ycurrent)
-        # var yprogress = get_progress(cy1, cy2, ynext);
-        yprogress = GameBoard.get_progress(cy1, cy2, ynext)
-        #
-        # // if at this point x progress or y progress is 0
-        # // then the starting point is somewhere at a grid boundary
-        # // and the first cell to draw will be determined by the crawl
-        #
-        # // if neither progress is 0, the starting point is in the middle of a cell
-        # // and thus a cell containing the point should be drawn before the crawl
-        # if (xprogress != 0 && yprogress != 0)
-        #     draw_cell(xcurrent, ycurrent);
-        if (xprogress != 0 and yprogress != 0):
-            overlapped_positions.append(Vector(xcurrent, ycurrent))
-        #
-        # // the line-crawl loop
-        #
-        # // if the upcoming x progress is lower than the y progress
-        # // then it means the upcoming horizontal intersection between lines is closer
-        # // and thus the line should crawl horizontally in the next step
-        #
-        # // conversely, if the y progress is larger than the x progress
-        # // the line should crawl vertically in the next step
-        #
-        # // if x progress and y progress are the same
-        # // the line crawls diagonally, skipping both nearby cells
-        # while (xprogress < 1 || yprogress < 1) {
-        while (xprogress < 1 or yprogress < 1):
-            # var should_move_x = xprogress <= yprogress;
-            # var should_move_y = yprogress <= xprogress;
-            should_move_x = xprogress <= yprogress
-            should_move_y = yprogress <= xprogress
+        # add the avatar to the top of the list of the coordinate
+        self.place(position, game_object)
 
-            # if (should_move_x) {
-            # xcurrent += xdir;
-            # xnext += xdir;
-            # xprogress = get_progress(cx1, cx2, xnext);
-            # }
-            if should_move_x:
-                xcurrent += xdir
-                xnext += xdir
-                xprogress = GameBoard.get_progress(cx1, cx2, xnext)
-
-            # if (should_move_y) {
-            # ycurrent += ydir;
-            # ynext += ydir;
-            # yprogress = get_progress(cy1, cy2, ynext);
-            # }
-            if should_move_y:
-                ycurrent += ydir
-                ynext += ydir
-                yprogress = GameBoard.get_progress(cy1, cy2, ynext)
-
-            overlapped_positions.append(Vector(xcurrent, ycurrent))
-        # }
-
-        return overlapped_positions
-
-    @staticmethod
-    def get_positions_overlapped_by_line_sorted_by_distance(line_start: Vector, line_end: Vector) -> list[Vector]:
-        # lowkey made this for no reason
-        return sorted(GameBoard.get_positions_overlapped_by_line(line_start, line_end),
-                      key=lambda pos: (pos - line_start).magnitude_squared)
+        # reassign the avatar's position
+        game_object.position = position
 
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
