@@ -145,3 +145,6 @@ vID
 
 # visualizer output video
 out.mp4
+
+# performance profiles
+*.prof

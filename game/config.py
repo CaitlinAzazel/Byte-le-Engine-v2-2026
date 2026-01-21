@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from game.common.enums import *
 
@@ -19,13 +20,13 @@ MAX_NUMBER_OF_ACTIONS_PER_TURN = 2                  # max number of actions per 
 
 MIN_CLIENTS_START = None                            # minimum number of clients required to start running the game; should be None when SET_NUMBER_OF_CLIENTS is used
 MAX_CLIENTS_START = None                            # maximum number of clients required to start running the game; should be None when SET_NUMBER_OF_CLIENTS is used
-SET_NUMBER_OF_CLIENTS_START = 2                     # required number of clients to start running the game; should be None when MIN_CLIENTS or MAX_CLIENTS are used
+SET_NUMBER_OF_CLIENTS_START = 1                     # required number of clients to start running the game; should be None when MIN_CLIENTS or MAX_CLIENTS are used
 CLIENT_KEYWORD = "client"                           # string required to be in the name of every client file, not found otherwise
 CLIENT_DIRECTORY = "./"                             # location where client code will be found
 
 MIN_CLIENTS_CONTINUE = None                         # minimum number of clients required to continue running the game; should be None when SET_NUMBER_OF_CLIENTS is used
 MAX_CLIENTS_CONTINUE = None                         # maximum number of clients required to continue running the game; should be None when SET_NUMBER_OF_CLIENTS is used
-SET_NUMBER_OF_CLIENTS_CONTINUE = 2                  # required number of clients to continue running the game; should be None when MIN_CLIENTS or MAX_CLIENTS are used
+SET_NUMBER_OF_CLIENTS_CONTINUE = 1                  # required number of clients to continue running the game; should be None when MIN_CLIENTS or MAX_CLIENTS are used
 
 ALLOWED_MODULES = ["game.client.user_client",       # modules that clients are specifically allowed to access
                    "game.common.enums",
@@ -54,7 +55,15 @@ class Debug:                    # Keeps track of the current debug level of the 
 
 # Other Settings Here --------------------------------------------------------------------------------------------------
 
-LDTK_MAP_FILE_PATH = os.path.join(os.getcwd(), 'map.ldtk')
+
+parts = Path(__file__).parts
+# will break if this is not the root directory name :)
+# does not break, however, if the project root is nested in a directory of the same name :^)
+# will probably break if the project contains a directory with the same name for some reason 8^)
+root_idx = len(parts) - list(reversed(parts)).index('Byte-le-Engine-v2-2026') 
+PATH_TO_ROOT_DIR = Path(*parts[:root_idx])
+PATH_TO_LDTK_PROJECT = str(PATH_TO_ROOT_DIR / 'map.ldtk') # uber chopped but works
+
 # should mirror values in LDtk editor, but lowercase
 class LDtk:
     class CollisionType:
@@ -62,15 +71,21 @@ class LDtk:
         WALL = 1
         VENT = 2
         SAFE_POINT = 3
+        VENT_DOOR = 4
+        SHADOW = 5
     class EntityIdentifier:
         DOOR = 'door'
         GENERATOR = 'generator'
         BATTERY = 'battery'
-        SPAWN = 'spawn'
+        ENTITY_SPAWN = 'entityspawn'
         SCRAP = 'scrap'
+        COIN = 'coin'
     class LayerIdentifier:
         ENTITIES = 'entities'
         COLLISIONS = 'collisions'
+    class LevelIdentifier:
+        PRODUCTION = 'production'
+        TEST = 'test'
     class SpawnedEntityType:
         PLAYER = 'player'
         IAN = 'ian'

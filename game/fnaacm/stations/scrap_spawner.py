@@ -12,22 +12,27 @@ class ScrapSpawner(Occupiable):
     A tile that occasionally holds scrap (generator fuel).
     """
 
-    TURNS_TO_RESPAWN: int = 20
+    class LDtkFieldIdentifiers:
+        TURNS_TO_RESPAWN = 'turns_to_respawn'
 
-    def __init__(self, position: Vector = Vector(0,0)) -> None:
+    def __init__(self, position: Vector = Vector(0, 0), turns_to_respawn: int = 1) -> None:
         super().__init__()
         self.object_type: ObjectType = ObjectType.SCRAP_SPAWNER
         self.position: Vector = position
-        self.__cooldown: Cooldown = Cooldown(ScrapSpawner.TURNS_TO_RESPAWN)
+        self.__cooldown: Cooldown = Cooldown(turns_to_respawn)
 
     @classmethod
     def from_ldtk_entity(cls, entity: EntityInstance) -> Self:
         position: Vector = Vector(entity.grid[0], entity.grid[1])
-        return cls(position=position)
+        turns_to_respawn: int = 0
+        for field in entity.field_instances:
+            match field.identifier:
+                case ScrapSpawner.LDtkFieldIdentifiers.TURNS_TO_RESPAWN:
+                    turns_to_respawn = field.value
+        return cls(position=position, turns_to_respawn=turns_to_respawn)
 
     def __eq__(self, value: object, /) -> bool:
-        return \
-            isinstance(value, self.__class__) and \
+        return isinstance(value, self.__class__) and \
             self.position == value.position and \
             self.__cooldown == value.__cooldown 
 

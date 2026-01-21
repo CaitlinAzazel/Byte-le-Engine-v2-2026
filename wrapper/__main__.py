@@ -1,4 +1,5 @@
 import sys
+import warnings
 
 from server.client.client import Client
 from version import version
@@ -7,6 +8,8 @@ from game.utils.generate_game import generate
 import game.config
 import argparse
 from visualizer.main import ByteVisualiser
+
+warnings.simplefilter('ignore')
 
 if __name__ == '__main__':
     # Setup Primary Parser

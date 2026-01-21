@@ -75,8 +75,12 @@ def run_with_return_to_client(func: Callable) -> Callable:
         """
         try:
             return func(*args, **kwargs)
+        # keep the status code if e was an HTTPException
+        except HTTPException as e:
+            raise e
+        # otherwise default to 500 since the error WAS serverside
         except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=500, detail=str(e))
 
     return wrapper
 
@@ -118,7 +122,7 @@ def post_team(team: TeamBase, db: Session = Depends(get_db)):
     # Throw error when team name already exists
     try:
         return crud_team.create(team, db)
-    except IntegrityError:
+    except IntegrityError as err:
         raise Exception('Encountered an Integrity Error, most likely due to your team name matching a pre-existing '
                         'team name. Please choose a different name.')
 
@@ -150,7 +154,7 @@ def get_submission(submission_id: int, team_uuid: str, db: Session = Depends(get
     submission_list: list[Submission] | None = crud_submission.read_all_W_filter(
         db, submission_id=submission_id, team_uuid=team_uuid)
 
-    if submission_list is None:
+    if submission_list is None or len(submission_list) == 0:
         raise HTTPException(status_code=404, detail="Submission not found!")
 
     return submission_list[0]  # returns a single SubmissionSchema to give the submission data to the user
@@ -244,7 +248,7 @@ def get_tournaments(db: Session = Depends(get_db)):
     temp: list[Tournament] = crud_tournament.read_all(db)
 
     if len(temp) == 0:
-        raise Exception('No tournaments found.')
+        raise HTTPException(status_code=404, detail='No tournaments found.')
 
     return temp
 

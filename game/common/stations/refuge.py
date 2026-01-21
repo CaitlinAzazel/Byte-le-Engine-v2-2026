@@ -34,12 +34,15 @@ class Refuge(Occupiable):
                                         drastically change the state and operations of the entire game
     """
 
-    def __init__(self, x: int, y: int) -> None:
+    def __init__(self, x: int = 0, y: int = 0) -> None:
         super().__init__()
         self.vector = Vector(x, y)
         self.object_type: ObjectType = ObjectType.REFUGE
         Refuge.all_positions.add(self.vector)
 
+    def __eq__(self, value: object, /) -> bool:
+        return isinstance(value, Refuge) and \
+            self.vector == value.vector
 
     @staticmethod
     def reset_global_state():
@@ -50,7 +53,7 @@ class Refuge(Occupiable):
     @override
     def to_json(self) -> dict:
         json = super().to_json()
-        json['vector'] = self.vector
+        json['vector'] = self.vector.to_json()
         json['occupied'] = self.global_occupied
         json['turns_inside'] = self.global_turns_inside
         return json
@@ -60,6 +63,7 @@ class Refuge(Occupiable):
         super().from_json(data)
         self.global_occupied = data['occupied']
         self.global_turns_inside = data['turns_inside']
+        self.vector = Vector().from_json(data['vector'])
         return self
 
     @override
@@ -72,4 +76,7 @@ class Refuge(Occupiable):
 
     @position.setter
     def position(self, new_position: Vector) -> None:
+        if new_position != self.vector:
+            Refuge.all_positions.remove(self.vector) # there should never be 2 refuges on the same tile so this is fine
+            Refuge.all_positions.add(new_position)
         self.vector = new_position

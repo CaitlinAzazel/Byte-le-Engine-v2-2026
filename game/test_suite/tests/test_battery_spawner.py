@@ -20,7 +20,7 @@ class TestBatterySpawner(unittest.TestCase):
         self.__battery_recharge_amount: int = 4
         self.battery: BatterySpawner = BatterySpawner(
             position=position,
-            cooldown_duration=self.__battery_cooldown,
+            turns_to_respawn=self.__battery_cooldown,
             recharge_amount=self.__battery_recharge_amount
         )
 
