@@ -345,7 +345,7 @@ class Avatar(GameObject):
         data['held_item'] = self.held_item.to_json() if self.held_item is not None else None
         data['score'] = self.score
         data['position'] = self.position.to_json() if self.position is not None else None
-        data['inventory'] = self.inventory
+        data['inventory'] = [None if item is None else item.to_json() for item in self.inventory]
         data['max_inventory_size'] = self.max_inventory_size
         return data
 
@@ -353,7 +353,7 @@ class Avatar(GameObject):
         super().from_json(data)
         self.score: int = data['score']
         self.position: Vector | None = None if data['position'] is None else Vector().from_json(data['position'])
-        self.inventory: list[Item] = data['inventory']
+        self.inventory: list[Item] = [None if item_data is None else Item().from_json(item_data) for item_data in data['inventory']]
         self.max_inventory_size: int = data['max_inventory_size']
         self.held_item: Item | None = self.inventory[data['held_index']]
         return self
