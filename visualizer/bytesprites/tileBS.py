@@ -1,6 +1,7 @@
 import os
 import pygame as pyg
 
+from game.common.enums import ObjectType
 from visualizer.bytesprites.bytesprite import ByteSprite
 from game.utils.vector import Vector
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
@@ -32,7 +33,7 @@ class TileBS(ByteSpriteFactory):
             screen,
             TileBS.TILE_PATH,
             1,                  # one row for static tile
-            8,                  # object type (match Adapter)
+            ObjectType.TILE.value,                  # object type (match Adapter)
             TileBS.update,
             colorkey=None       # use PNG alpha for transparency
         )

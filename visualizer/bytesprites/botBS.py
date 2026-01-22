@@ -45,7 +45,8 @@ class MovingBotBS(ByteSpriteFactory):
     @staticmethod
     def create_bytesprite(
         screen: pyg.Surface,
-        spritesheet_name: str
+        spritesheet_name: str,
+        object_type: int
     ) -> ByteSprite:
         """
         spritesheet_name allows each bot to have its own image
@@ -57,8 +58,8 @@ class MovingBotBS(ByteSpriteFactory):
                 os.getcwd(),
                 f'visualizer/images/spritesheets/{spritesheet_name}'
             ),
-            4,   # rows
-            4,   # frames per row
+            4,
+            object_type,
             MovingBotBS.update,
             colorkey=pyg.Color(255, 0, 255)
         )
