@@ -15,3 +15,6 @@ def write_json_file(data, filename):
     """
     with open(filename, 'w') as f:
         json.dump(data, f, indent='\t')
+
+def clamp(value: int, minimum: int, maximum: int) -> int:
+    return min(maximum, max(minimum, value))

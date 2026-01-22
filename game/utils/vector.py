@@ -3,6 +3,8 @@ from game.common.game_object import GameObject
 from game.common.enums import ActionType, ObjectType
 from typing import Self, Tuple, Union, overload
 
+from game.utils.helpers import clamp
+
 
 class Vector(GameObject):
     """
@@ -96,6 +98,19 @@ class Vector(GameObject):
     @property
     def magnitude_squared(self) -> int:
         return self.x**2 + self.y**2
+
+    def clamp_xy(self, min: int, max: int) -> Self:
+        self.clamp_x(min, max)
+        self.clamp_y(min, max)
+        return self
+
+    def clamp_x(self, min: int, max: int) -> Self:
+        self.x = clamp(self.x, min, max)
+        return self
+
+    def clamp_y(self, min: int, max: int) -> Self:
+        self.y = clamp(self.y, min, max)
+        return self
 
     @staticmethod
     def from_xy_tuple(xy_tuple: Tuple[int, int]) -> 'Vector':
