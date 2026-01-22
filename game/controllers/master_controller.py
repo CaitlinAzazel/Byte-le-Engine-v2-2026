@@ -8,6 +8,7 @@ from game.common.player import Player
 import game.config as config   # this is for turns
 from game.common.stations.refuge import Refuge
 from game.controllers import refuge_controller
+from game.controllers.attack_controller import Attack_Controller
 from game.controllers.bot_movement_controller import BotMovementController
 from game.controllers.bot_vision_controller import BotVisionController
 from game.controllers.point_controller import PointController
@@ -68,6 +69,7 @@ class MasterController(Controller):
         self.interact_controller: InteractController = InteractController()
         self.bot_movement_controller: BotMovementController = BotMovementController()
         self.bot_vision_controller: BotVisionController = BotVisionController()
+        self.bot_attack_controller: Attack_Controller = Attack_Controller()
         self.bots: dict[ObjectType, Bot] = {}
         self.refuge_controller: RefugeController = RefugeController()
         self.point_controller: PointController = PointController()
@@ -149,16 +151,26 @@ class MasterController(Controller):
 
         # pve game so only one client
         player = clients[0]
+        assert player.avatar is not None
+
         self.refuge_controller.handle_actions(ActionType.NONE, player, game_board)
 
-        # for each bot:
-        #   if bot.can_act(self.turn), then bot.action()
         for bot in self.bots.values():
+            if not bot.can_act(turn):
+                continue
+
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
+
             moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
             assert not moves is None, f'{bot.__class__}\'s next move was... None?'
             for move in moves:
                 self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
+
+            attack = self.bot_attack_controller.calculate_attack_action(bot, player.avatar)
+            self.bot_attack_controller.handle_actions(attack, player, game_board, bot)
+
+            if not player.avatar.is_alive:
+                self.game_over = True
 
         self.point_controller.handle_actions(player.avatar, game_board)
 

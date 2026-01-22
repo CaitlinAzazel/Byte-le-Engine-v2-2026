@@ -1,4 +1,5 @@
 from game.common.enums import ActionType
+from game.constants import ATTACK_TO_DIRECTION, DIRECTION_TO_ATTACK
 from game.controllers.controller import Controller
 from game.common.player import Player
 from game.common.map.game_board import GameBoard
@@ -60,26 +61,19 @@ class Attack_Controller(Controller):
     def __init__(self):
         super().__init__()
 
+    def calculate_attack_action(self, bot: Bot, avatar: Avatar) -> ActionType:
+        assert avatar.position is not None
+        direction = (avatar.position - bot.position).clamp_xy(-1, 1)
+        return DIRECTION_TO_ATTACK[direction]
+
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot) -> None:
         bot.has_attacked = False
 
-        # Base direction map for all actions
-        direction_map = {
-            ActionType.ATTACK_UP: Vector(0, -1),
-            ActionType.ATTACK_DOWN: Vector(0, 1),
-            ActionType.ATTACK_LEFT: Vector(-1, 0),
-            ActionType.ATTACK_RIGHT: Vector(1, 0),
-            ActionType.ATTACK_TOP_LEFT: Vector(-1, -1),
-            ActionType.ATTACK_BOTTOM_LEFT: Vector(-1, 1),
-            ActionType.ATTACK_TOP_RIGHT: Vector(1, -1),
-            ActionType.ATTACK_BOTTOM_RIGHT: Vector(1, 1)
-        }
-
         # Invalid attack type
-        if action not in direction_map:
+        if action not in ATTACK_TO_DIRECTION:
             return
 
-        base_direction = direction_map[action]
+        base_direction = ATTACK_TO_DIRECTION[action]
         directions_to_check = [base_direction]
 
         # Boosted JumperBot special case
