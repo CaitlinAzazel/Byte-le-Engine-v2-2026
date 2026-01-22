@@ -209,7 +209,7 @@ class BotMovementController(Controller):
         :return: moves `bot` should take to get wherever it wants to go
         """
         moves = []
-        if not bot.can_act(turn):
+        if not bot.can_move(turn):
             return moves
         if isinstance(bot, SupportBot):
             return moves

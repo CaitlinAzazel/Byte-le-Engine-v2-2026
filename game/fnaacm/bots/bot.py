@@ -49,7 +49,7 @@ class Bot(GameObject):
     def stunned(self):
         self.stun_timer.tick()
 
-    def can_act(self, turn: int) -> bool:
+    def can_move(self, turn: int) -> bool:
         # turns are 1-indexed
         return (turn-1) % self.turn_delay == 0 and not self.is_stunned
 

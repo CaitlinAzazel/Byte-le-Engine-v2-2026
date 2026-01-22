@@ -132,6 +132,9 @@ class MasterController(Controller):
 
     # Perform the main logic that happens per turn
     def turn_logic(self, clients: list[Player], turn: int):
+        if self.game_over:
+            return
+
         game_board: GameBoard = self.current_world_data["game_board"]
 
         for battery in game_board.battery_spawners:
@@ -158,21 +161,20 @@ class MasterController(Controller):
         for bot in self.bots.values():
             bot.stunned()
 
-            if not bot.can_act(turn):
-                continue
-
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
 
-            moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
-            assert not moves is None, f'{bot.__class__}\'s next move was... None?'
-            for move in moves:
-                self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
+            if bot.can_move(turn):
+                moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
+                assert not moves is None, f'{bot.__class__}\'s next move was... None?'
+                for move in moves:
+                    self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
 
             attack = self.bot_attack_controller.calculate_attack_action(bot, player.avatar)
             self.bot_attack_controller.handle_actions(attack, player, game_board, bot)
 
             if not player.avatar.is_alive:
                 self.game_over = True
+                break
 
         self.point_controller.handle_actions(player.avatar, game_board)
 
