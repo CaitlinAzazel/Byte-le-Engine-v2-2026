@@ -110,10 +110,10 @@ class Adapter:
             ObjectType.AVATAR.value: AvatarBS.create_bytesprite,
 
             # ---- Moving bots ----
-            ObjectType.IAN_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "IanBot.png"),
-            ObjectType.JUMPER_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "JumperBot.png"),
-            ObjectType.DUMB_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "DumbBot.png"),
-            ObjectType.CRAWLER_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "CrawlerBot.png"),
+            ObjectType.IAN_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "IanBot.png", ObjectType.IAN_BOT.value),
+            ObjectType.JUMPER_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "JumperBot.png", ObjectType.JUMPER_BOT.value),
+            ObjectType.DUMB_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "DumbBot.png", ObjectType.DUMB_BOT.value),
+            ObjectType.CRAWLER_BOT.value: lambda screen: MovingBotBS.create_bytesprite(screen, "CrawlerBot.png", ObjectType.CRAWLER_BOT.value),
 
             # ---- Booster bot ----
             ObjectType.SUPPORT_BOT.value: BoosterBotBS.create_bytesprite,

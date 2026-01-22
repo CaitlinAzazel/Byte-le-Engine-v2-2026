@@ -1,3 +1,4 @@
+import json
 from math import floor, sqrt
 from game.common.game_object import GameObject
 from game.common.enums import ActionType, ObjectType
@@ -64,6 +65,16 @@ class Vector(GameObject):
         This method returns a tuple of the Vector object in the form of (x, y). This is to help with storing it easily
         or accessing it in an immutable structure.
     """
+
+    @staticmethod
+    def dict_from_json_str(json_str: str) -> dict:
+        # our jsons use single quotes for some reason
+        return json.loads(json_str.replace('\'', '\"'))
+
+    @classmethod
+    def from_json_str(cls, json_str: str) -> Self:
+        data = Vector.dict_from_json_str(json_str)
+        return cls(data['x'], data['y'])
 
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
