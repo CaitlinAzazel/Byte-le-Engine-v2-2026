@@ -156,6 +156,8 @@ class MasterController(Controller):
         self.refuge_controller.handle_actions(ActionType.NONE, player, game_board)
 
         for bot in self.bots.values():
+            bot.stunned()
+
             if not bot.can_act(turn):
                 continue
 
