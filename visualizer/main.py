@@ -26,6 +26,11 @@ class ByteVisualiser:
     """
 
     @staticmethod
+    def vec_from_dict(json_str: str) -> Vector:
+        data = ByteVisualiser.vec_dict_from_json_str(json_str)
+        return Vector(data['x'], data['y'])
+
+    @staticmethod
     def vec_dict_from_json_str(json_str: str) -> dict:
         # our jsons use single quotes for some reason
         return json.loads(json_str.replace('\'', '\"'))
@@ -550,8 +555,7 @@ class ByteVisualiser:
                     (self.turn_end != -1 and turn == self.turn_end):
                 return False
             self.recalc_animation(self.turn_logs[f'turn_{turn:04d}'])
-            self.adapter.recalc_animation(
-                self.turn_logs[f'turn_{turn:04d}'])
+            self.adapter.recalc_animation(self.turn_logs[f'turn_{turn:04d}'])
         else:
             # NEXT ANIMATION FRAME
             self.continue_animation()
@@ -658,18 +662,12 @@ class ByteVisualiser:
         Iterates over all positions in `bytesprite_map`, removing all bytesprites if it is not used
         """
         # using hashing to search by O(1) instead of O(n)
-        hashed_vecs: set[int] = {self.hash_vector_from_dict(self.vec_dict_from_json_str(vec)) for vec in vecs}
-
-        def is_used(x: int, y: int) -> bool:
-            """
-            Nested method to help make the logic more readable later.
-            """
-            return (x * 17 + y * 19) in hashed_vecs
+        used_vecs: set[Vector] = {ByteVisualiser.vec_from_dict(vec) for vec in vecs}
 
         # clean up the layers on any coordinate as long as it was not used
         for y, row in enumerate(self.bytesprite_map):
             for x, _ in enumerate(row):
-                if is_used(x, y):
+                if Vector(x, y) in used_vecs:
                     continue
                 self.__clean_up_layers(x=x, y=y, z=1)
 
