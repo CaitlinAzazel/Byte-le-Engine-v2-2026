@@ -25,20 +25,6 @@ class ByteVisualiser:
     the held_item attribute. It also calls the adapter class method to minimize the edits needed to this file.
     """
 
-    @staticmethod
-    def vec_from_dict(json_str: str) -> Vector:
-        data = ByteVisualiser.vec_dict_from_json_str(json_str)
-        return Vector(data['x'], data['y'])
-
-    @staticmethod
-    def vec_dict_from_json_str(json_str: str) -> dict:
-        # our jsons use single quotes for some reason
-        return json.loads(json_str.replace('\'', '\"'))
-
-    @staticmethod
-    def hash_vector_from_dict(vec_dict: dict) -> int:
-        return vec_dict['x'] * 17 + vec_dict['y'] * 19
-
     def __init__(self, end_time: int = -1, skip_start: bool = False, playback_speed: float = 1.0,
                  fullscreen: bool = False, save_video: bool = False, loop_count: int = 1,
                  turn_start: int = 0, turn_end: int = -1, log_dir: str | None = None):
@@ -57,7 +43,7 @@ class ByteVisualiser:
         pygame.init()
         self.logs = log_dir
         self.config: Config = Config()
-        self.turn_logs: dict[str:dict] = {}
+        self.turn_logs: dict[str, dict] = {}
         self.size: Vector = self.config.SCREEN_SIZE
         self.tile_size: int = self.config.TILE_SIZE
 
@@ -645,7 +631,7 @@ class ByteVisualiser:
         game_map: dict = turn_data['game_board']['game_map']
         for vec_str, go_container in game_map.items():
             # get the vectors from the json
-            vec: dict = self.vec_dict_from_json_str(vec_str)
+            vec: dict = Vector.dict_from_json_str(vec_str)
 
             # get the sublist from the current game object container
             objs: list[dict] = go_container['sublist']
@@ -662,7 +648,7 @@ class ByteVisualiser:
         Iterates over all positions in `bytesprite_map`, removing all bytesprites if it is not used
         """
         # using hashing to search by O(1) instead of O(n)
-        used_vecs: set[Vector] = {ByteVisualiser.vec_from_dict(vec) for vec in vecs}
+        used_vecs: set[Vector] = {Vector.from_json_str(vec) for vec in vecs}
 
         # clean up the layers on any coordinate as long as it was not used
         for y, row in enumerate(self.bytesprite_map):
