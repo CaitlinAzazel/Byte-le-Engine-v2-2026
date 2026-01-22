@@ -46,7 +46,7 @@ class Bot(GameObject):
         return turn % 2 == 0 and not self.is_stunned
 
 
-    def attack(self, target):
+    def attack(self, target: Avatar):
         """
         Perform an attack on the target Avatar.
         Tests expect:
@@ -57,8 +57,7 @@ class Bot(GameObject):
             return
 
         # Avatar defines receive_attack()
-        if hasattr(target, "receive_attack"):
-            target.receive_attack(self)
+        target.receive_attack()
 
         # Bot stunned after hitting the player
         self.is_stunned = True

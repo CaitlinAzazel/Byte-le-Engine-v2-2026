@@ -114,3 +114,16 @@ class TestAttackController(unittest.TestCase):
             Vector(1, 1): [gen2]
         })
 
+    def test_attack_does_damage(self):
+        board = self.build_board({
+            Vector(0, 0): [self.player_avatar],
+            Vector(1, 0): [self.attacking_bot],
+        })
+        old_health = self.player_avatar.health
+        self.attack_controller.handle_actions(
+            ActionType.ATTACK_LEFT,
+            self.target_player,
+            board,
+            self.attacking_bot,
+        )
+        self.assertLess(self.player_avatar.health, old_health)
