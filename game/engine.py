@@ -49,6 +49,8 @@ class Engine:
                 self.pre_tick()
                 self.tick()
                 self.post_tick()
+                if self.master_controller.game_over:
+                    break
                 if self.tick_number >= MAX_TICKS:
                     break
         except Exception as e:
@@ -263,9 +265,10 @@ class Engine:
         threading.Thread(target=write_json_file,
                          args=(data, os.path.join(LOGS_DIR, f'turn_{self.tick_number:04d}.json'))).start()
 
-        # Perform a game over check
-        if self.master_controller.game_over:
-            self.shutdown()
+        # NOTE : this does not break the actual loop in Engine.loop(), so i moved the check there since
+        # Engine.shutdown() still gets called in the finally clause
+        # if self.master_controller.game_over:
+        #     self.shutdown()
 
     # Attempts to safely handle an engine shutdown given any game state
     def shutdown(self, source=None):

@@ -73,3 +73,5 @@ class Timer(GameObject):
         self.__turns_left = duration
         return True
 
+    def force_done(self) -> None:
+        self.__turns_left = 0

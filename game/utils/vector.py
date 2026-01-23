@@ -1,7 +1,10 @@
+import json
 from math import floor, sqrt
 from game.common.game_object import GameObject
 from game.common.enums import ActionType, ObjectType
 from typing import Self, Tuple, Union, overload
+
+from game.utils.helpers import clamp
 
 
 class Vector(GameObject):
@@ -63,6 +66,16 @@ class Vector(GameObject):
         or accessing it in an immutable structure.
     """
 
+    @staticmethod
+    def dict_from_json_str(json_str: str) -> dict:
+        # our jsons use single quotes for some reason
+        return json.loads(json_str.replace('\'', '\"'))
+
+    @classmethod
+    def from_json_str(cls, json_str: str) -> Self:
+        data = Vector.dict_from_json_str(json_str)
+        return cls(data['x'], data['y'])
+
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
         self.object_type: ObjectType = ObjectType.VECTOR
@@ -96,6 +109,19 @@ class Vector(GameObject):
     @property
     def magnitude_squared(self) -> int:
         return self.x**2 + self.y**2
+
+    def clamp_xy(self, min: int, max: int) -> Self:
+        self.clamp_x(min, max)
+        self.clamp_y(min, max)
+        return self
+
+    def clamp_x(self, min: int, max: int) -> Self:
+        self.x = clamp(self.x, min, max)
+        return self
+
+    def clamp_y(self, min: int, max: int) -> Self:
+        self.y = clamp(self.y, min, max)
+        return self
 
     @staticmethod
     def from_xy_tuple(xy_tuple: Tuple[int, int]) -> 'Vector':
