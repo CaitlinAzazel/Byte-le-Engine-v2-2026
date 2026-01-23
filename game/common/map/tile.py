@@ -16,6 +16,7 @@ class Tile(Occupiable):
 
         When the GameBoard is generated, it's specified where certain objects need to go. However, not every space on
         the map may have something there. If that is the case, a Tile is used to ensure `None` values are avoided.
+        ^ this is just not true btw
 
         When something is meant to be placed on a Tile object, it will simply be appended to it.
 

@@ -166,6 +166,27 @@ class Avatar(GameObject):
     def action(self):
         self.add_point()
 
+    def receive_attack(self):
+        self.health -= 1
+
+    @property
+    def is_alive(self) -> bool:
+        return self.health > 0
+
+    @property
+    def health(self) -> int:
+        return self.__health
+
+    @health.setter
+    def health(self, value: int) -> None:
+        if value is None or not isinstance(value, int):
+            raise TypeError(
+                f'{self.__class__.__name__}.health must be an int '
+                f'It is a(n) {value.__class__.__name__} and has the value of {value}')
+        if value < 0:
+            raise ValueError(f'{self.__class__.__name__}.health must be nonnegative; attempted to set it to {value}')
+        self.__health = value
+
     @property
     def power(self) -> int:
         return self.__power
@@ -348,6 +369,8 @@ class Avatar(GameObject):
         data['inventory'] = [None if item is None else item.to_json() for item in self.inventory]
         data['max_inventory_size'] = self.max_inventory_size
         data['scrap'] = self.get_quantity_of_item_type(ObjectType.SCRAP)
+        data['health'] = self.health
+        data['power'] = self.power
         return data
 
     def from_json(self, data: dict) -> Self:
@@ -357,4 +380,6 @@ class Avatar(GameObject):
         self.inventory: list[Item] = [None if item_data is None else Item().from_json(item_data) for item_data in data['inventory']]
         self.max_inventory_size: int = data['max_inventory_size']
         self.held_item: Item | None = self.inventory[data['held_index']]
+        self.health = data['health']
+        self.power = data['power']
         return self
