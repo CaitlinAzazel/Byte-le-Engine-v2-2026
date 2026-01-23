@@ -347,6 +347,7 @@ class Avatar(GameObject):
         data['position'] = self.position.to_json() if self.position is not None else None
         data['inventory'] = [None if item is None else item.to_json() for item in self.inventory]
         data['max_inventory_size'] = self.max_inventory_size
+        data['scrap'] = self.get_quantity_of_item_type(ObjectType.SCRAP)
         return data
 
     def from_json(self, data: dict) -> Self:
