@@ -33,7 +33,29 @@ class ScoreboardTemplate(InfoTemplate):
             position=Vector(topleft.x + 400, topleft.y)
         )
 
+        # Batteries display
+        self.batteries: Text = Text(
+            screen,
+            text="Batteries: 0",
+            font_size=36,
+            font_name=font,
+            color=color,
+            position=Vector(topleft.x + 50, topleft.y + 50)
+        )
+
+        # Scrap display
+        self.scrap: Text = Text(
+            screen,
+            text="Scrap: 0",
+            font_size=36,
+            font_name=font,
+            color=color,
+            position=Vector(topleft.x + 300, topleft.y + 50)
+        )
+
         # Store current values for updates
+        self.current_batteries = 0
+        self.current_scrap = 0
         self.current_score = 0
         self.current_turn = 0
 
@@ -47,10 +69,22 @@ class ScoreboardTemplate(InfoTemplate):
 
         # Update score
         if 'clients' in turn_log:
-            # Sum all client scores
+            # Sum all client scores, total batteries, and total scrap
             self.current_score = sum(
                 client['avatar']['score'] if client.get('avatar') else 0
                 for client in turn_log['clients']
+            )
+
+            self.current_batteries = sum(
+                client['avatar'].get('batteries', 0)
+                for client in turn_log['clients']
+                if client.get('avatar')
+            )
+
+            self.current_scrap = sum(
+                client['avatar'].get('scrap', 0)
+                for client in turn_log['clients']
+                if client.get('avatar')
             )
         else:
             self.current_score = turn_log.get('score', 0)
@@ -61,10 +95,14 @@ class ScoreboardTemplate(InfoTemplate):
         # Update Text objects
         self.score.text = f"Score: {self.current_score}"
         self.turn.text = f"{self.current_turn} / {MAX_TICKS}"
+        self.batteries.text = f"Batteries: {self.current_batteries}"
+        self.scrap.text = f"Scrap: {self.current_scrap}"
 
     def render(self) -> None:
         """
-        Draw the score and turn counter on the screen.
+        Draw the score, scrap, batteries, and turn counter on the screen.
         """
         self.score.render()
         self.turn.render()
+        self.batteries.render()
+        self.scrap.render()
