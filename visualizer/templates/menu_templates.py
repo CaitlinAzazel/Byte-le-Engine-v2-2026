@@ -148,7 +148,7 @@ class Basic(MenuTemplate):
         :param results:
         :return: None
         """
-        score = results.get('score', 0)
+        score = results["players"][0]["avatar"]["score"]
 
         self.final_score_text = Text(
             self.screen,
