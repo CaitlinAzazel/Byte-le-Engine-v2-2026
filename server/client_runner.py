@@ -217,6 +217,9 @@ class ClientRunner:
             with open(os.path.join(end_path, f'client_{index_2}_{submission.submission_id}.py'), 'x') as f:
                 f.write(str(submission.file_txt, 'utf-8'))
 
+            # FIXME: hack to only write the first client
+            break
+
         # Determine what seed this run needs based on it's serial index
         seed_index = index // self.number_of_unique_games
 
@@ -239,7 +242,7 @@ class ClientRunner:
                 self.tournament.tournament_id,
                 self.index_to_seed_id[seed_index],
                 results)
-            assert results['reason'] is None, f'{results['reason']}\n{json.dumps(results, indent=4)}'
+            assert results.get('reason') is None, f'{results['reason']}\n{json.dumps(results, indent=4)}'
             for i, result in enumerate(results["players"]):
                 self.insert_submission_run_info(player_sub_ids[i], run_id, result["error"], i,
                                                 result["avatar"]["score"])
