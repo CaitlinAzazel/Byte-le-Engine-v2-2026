@@ -9,6 +9,7 @@ import subprocess
 import sys
 import threading
 import time
+from typing import Literal
 import schedule
 import traceback
 import time
@@ -97,9 +98,9 @@ class ClientRunner:
         self.seed_path: str = os.path.join(self.runner_temp_dir, 'seeds')
 
         # Number of times a client runs against the opponents
-        self.total_number_of_games_for_one_client: int = 0
+        self.total_number_of_games_per_client: int = 0
 
-        self.tournament: int | Tournament = -1
+        self.tournament: Tournament | Literal[-1] = -1
 
         # Based on the sleep time specified in ``server_config.py``, this will have the client runner run until the
         # ending date and time of the competition. This code doesn't need to be changed, but the values in
@@ -152,17 +153,20 @@ class ClientRunner:
         print('running')
         self.best_run_for_client = {}
         with DB() as db:
-            clients = crud_submission.get_latest_submission_for_each_team(db)
+            submissions = crud_submission.get_latest_submission_for_each_team(db)
 
-        # if less than 2 submissions are present, don't proceed
-        if len(clients) < 2:
-            print(f'not enough clients')
+        if len(submissions) < 1:
+            print(f'not enough submissions')
             return
-        print('More than 2')
+
         # get the games as a list of client tuples
         # submission_id_list = list(map(lambda x: x["submission_id"], clients))
-        games: list[tuple[Submission, Submission]] = self.return_team_parings(clients)
-        self.total_number_of_games_for_one_client = self.count_number_of_game_appearances(games)
+        # games: list[Submission] = self.return_team_parings(submissions)
+        # NOTE: normally these would be set inside `return_team_parings`
+        self.number_of_unique_games = 1
+        self.total_number_of_games = 1
+
+        self.total_number_of_games_per_client = 1 # self.count_number_of_game_appearances(games)
         self.tournament = self.insert_new_tournament()
 
         self.delete_turns()
@@ -179,7 +183,8 @@ class ClientRunner:
             self.index_to_seed_id[index] = random.randint(0, 1000000000)
 
         # then run them in parallel using their index as a unique identifier
-        [self.jobqueues[i % 6].put((self.internal_runner, games[i], i)) for i in range(self.total_number_of_games)]
+        assert self.total_number_of_games > 0
+        [self.jobqueues[i % 6].put((self.internal_runner, submissions[i], i)) for i in range(self.total_number_of_games)]
         threads: list[threading.Thread] = [
             threading.Thread(target=runner_utils.worker_main, args=(self.jobqueues[i],)) for i in range(6)]
         [t.start() for t in threads]
@@ -187,18 +192,19 @@ class ClientRunner:
         self.read_best_logs_and_insert()
         self.delete_runner_temp()
         self.update_tournament_finished()
-        logging.info(
-            f'Sleeping for {self.config.SLEEP_TIME_SECONDS_BETWEEN_RUNS} seconds')
         self.tournament = -1
         print('Job completed\n')
+        logging.info(
+            f'Sleeping for {self.config.SLEEP_TIME_SECONDS_BETWEEN_RUNS} seconds')
 
-    def internal_runner(self, submission_tuple, index) -> None:
+    def internal_runner(self, submission: Submission, index: int) -> None:
         """
 
         :param submission_tuple:
         :param index:
         :return:
         """
+        logging.info(f'internal runner started for submission {submission.submission_id}')
         score_for_each_submission: dict[int, int] = {}
         results = dict()
 
@@ -211,33 +217,32 @@ class ClientRunner:
         shutil.copy('launcher.pyz', end_path)
 
         # Write the clients into the folder
-        for index_2, submission in enumerate(submission_tuple):
+        # for index_2, submission in enumerate(submission_tuple):
             # runner will run -fn argument, which makes the file name the file name
             # So we can grab the submission_id out of the results later
-            with open(os.path.join(end_path, f'client_{index_2}_{submission.submission_id}.py'), 'x') as f:
-                f.write(str(submission.file_txt, 'utf-8'))
-
-            # FIXME: hack to only write the first client
-            break
+        with open(os.path.join(end_path, f'client_{index}_{submission.submission_id}.py'), 'x') as f:
+            f.write(str(submission.file_txt, 'utf-8'))
 
         # Determine what seed this run needs based on it's serial index
         seed_index = index // self.number_of_unique_games
 
-        logging.info(f'generating game map for run {index} for game ({submission_tuple[0].submission_id}, '
-                     f'{submission_tuple[1].submission_id}) using seed index {seed_index}')
+        logging.info(f'generating game map for run {index} for submission (id={submission.submission_id}), using seed index {seed_index}')
         run_runner(end_path, RunnerOptions.GENERATE, seed=self.index_to_seed_id[seed_index])
 
-        logging.info(f'running run {index} for game ({submission_tuple[0].submission_id}, '
-                     f'{submission_tuple[1].submission_id}) using seed index {seed_index}')
+        logging.info(f'running run {index} for game (id={submission.submission_id}), using seed index {seed_index}')
 
         try:
             res = run_runner(end_path, RunnerOptions.RUN)
 
-            if os.path.exists(os.path.join(end_path, 'logs', 'results.json')):
-                with open(os.path.join(end_path, 'logs', 'results.json'), 'r') as f:
+            results_filepath = os.path.join(end_path, 'logs', 'results.json')
+            if os.path.exists(results_filepath):
+                with open(results_filepath, 'r') as f:
                     results: dict = json.load(f)
+        except Exception as e:
+            logging.error(e)
         finally:
             player_sub_ids: list[int] = [int(x["file_name"].split("_")[-1]) for x in results['players']]
+            assert self.tournament != -1
             run_id: int = self.insert_run(
                 self.tournament.tournament_id,
                 self.index_to_seed_id[seed_index],
@@ -249,18 +254,20 @@ class ClientRunner:
                 score_for_each_submission[player_sub_ids[i]] = result["avatar"]["score"]
 
             # don't store logs with non-eligible teams
-            if any([not submission.team.team_type.eligible for submission in submission_tuple]):
+            # if any([not submission.team.team_type.eligible for submission in submission_tuple]):
+            #     return
+            if not submission.team.team_type.eligible:
                 return
 
             # Update information in best run dict
-            for submission in submission_tuple:
-                if (score_for_each_submission[submission.submission_id] >
-                        self.best_run_for_client.get(submission.submission_id, {'score': -2})['score']):
-                    self.best_run_for_client[submission.submission_id] = {}
-                    self.best_run_for_client[submission.submission_id]["log_path"] = os.path.join(end_path, 'logs')
-                    self.best_run_for_client[submission.submission_id]["run_id"] = run_id
-                    self.best_run_for_client[submission.submission_id]["score"] = score_for_each_submission[
-                        submission.submission_id]
+            # for submission in submission_tuple:
+            if (score_for_each_submission[submission.submission_id] >
+                    self.best_run_for_client.get(submission.submission_id, {'score': -2})['score']):
+                self.best_run_for_client[submission.submission_id] = {}
+                self.best_run_for_client[submission.submission_id]["log_path"] = os.path.join(end_path, 'logs')
+                self.best_run_for_client[submission.submission_id]["run_id"] = run_id
+                self.best_run_for_client[submission.submission_id]["score"] = score_for_each_submission[
+                    submission.submission_id]
 
     def get_version_number(self) -> str:
         """
@@ -282,7 +289,7 @@ class ClientRunner:
             return crud_tournament.create(db, TournamentBase(tournament_id=0,
                                                              start_run=datetime.now(UTC),
                                                              launcher_version=self.get_version_number(),
-                                                             runs_per_client=self.total_number_of_games_for_one_client,
+                                                             runs_per_client=self.total_number_of_games_per_client,
                                                              is_finished=False))
 
     def insert_run(self, tournament_id: int, seed_id: int, results: dict) -> int:
