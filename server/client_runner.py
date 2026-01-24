@@ -166,7 +166,7 @@ class ClientRunner:
         self.number_of_unique_games = len(submissions)
         self.total_number_of_games = self.number_of_unique_games * self.config.NUMBER_OF_GAMES_AGAINST_SAME_TEAM
 
-        self.total_number_of_games_per_client = 1 # self.count_number_of_game_appearances(games)
+        self.total_number_of_games_per_client = self.count_number_of_game_appearances(submissions)
         self.tournament = self.insert_new_tournament()
 
         self.delete_turns()
@@ -204,8 +204,6 @@ class ClientRunner:
         :return:
         """
         logging.info(f'internal runner started for submission {submission.submission_id}')
-        score_for_each_submission: dict[int, int] = {}
-        results = dict()
 
         # Run game
         # Create a folder for this client and seed
@@ -233,6 +231,8 @@ class ClientRunner:
 
         logging.info(f'running run {index} for game (id={submission.submission_id}), using seed index {seed_index}')
 
+        score_for_each_submission: dict[int, int] = {}
+        results = dict()
         try:
             res = run_runner(end_path, RunnerOptions.RUN)
 
@@ -425,16 +425,14 @@ class ClientRunner:
         self.total_number_of_games = len(repeated)
         return repeated
 
-    def count_number_of_game_appearances(self, games: list[tuple[Submission, Submission]]) -> int:
+    def count_number_of_game_appearances(self, games: list[Submission]) -> int:
         """
         Returns the number of games a client appears in.
         :param games:
         :return: the count of games a client appears in
         """
-        one_id: int = games[0][0].submission_id
-        count: int = sum([1 for game_tuple in games
-                          if game_tuple[0].submission_id == one_id
-                          or game_tuple[1].submission_id == one_id])
+        first_id: int = games[0].submission_id
+        count: int = sum([1 for game in games if game.submission_id == first_id])
         return count
 
     def update_tournament_finished(self) -> None:
