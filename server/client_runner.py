@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import itertools
 import json
 import logging
@@ -13,7 +14,7 @@ import traceback
 import time
 import random
 
-from datetime import datetime
+from datetime import datetime, UTC
 from queue import Queue
 from sqlalchemy.exc import IntegrityError
 
@@ -155,6 +156,7 @@ class ClientRunner:
 
         # if less than 2 submissions are present, don't proceed
         if len(clients) < 2:
+            print(f'not enough clients')
             return
         print('More than 2')
         # get the games as a list of client tuples
@@ -237,10 +239,11 @@ class ClientRunner:
                 self.tournament.tournament_id,
                 self.index_to_seed_id[seed_index],
                 results)
+            assert results['reason'] is None, f'{results['reason']}\n{json.dumps(results, indent=4)}'
             for i, result in enumerate(results["players"]):
                 self.insert_submission_run_info(player_sub_ids[i], run_id, result["error"], i,
-                                                result["team_manager"]["score"])
-                score_for_each_submission[player_sub_ids[i]] = result["team_manager"]["score"]
+                                                result["avatar"]["score"])
+                score_for_each_submission[player_sub_ids[i]] = result["avatar"]["score"]
 
             # don't store logs with non-eligible teams
             if any([not submission.team.team_type.eligible for submission in submission_tuple]):
@@ -271,9 +274,10 @@ class ClientRunner:
         Inserts a new Tournament in the database and returns it. Relates all the runs in this process together
         :return: a Tournament object
         """
+        print("inserting tournament")
         with DB() as db:
             return crud_tournament.create(db, TournamentBase(tournament_id=0,
-                                                             start_run=datetime.utcnow(),
+                                                             start_run=datetime.now(UTC),
                                                              launcher_version=self.get_version_number(),
                                                              runs_per_client=self.total_number_of_games_for_one_client,
                                                              is_finished=False))
@@ -286,10 +290,11 @@ class ClientRunner:
         :param results:
         :return: the newly inserted Run's id
         """
+        print("inserting run")
         with DB() as db:
             return crud_run.create(db, RunBase(run_id=0,
                                                tournament_id=tournament_id,
-                                               run_time=datetime.utcnow(),
+                                               run_time=datetime.now(UTC),
                                                seed=seed_id,
                                                results=json.dumps(results).encode("utf-8"))).run_id
 
