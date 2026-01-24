@@ -163,8 +163,8 @@ class ClientRunner:
         # submission_id_list = list(map(lambda x: x["submission_id"], clients))
         # games: list[Submission] = self.return_team_parings(submissions)
         # NOTE: normally these would be set inside `return_team_parings`
-        self.number_of_unique_games = 1
-        self.total_number_of_games = 1
+        self.number_of_unique_games = len(submissions)
+        self.total_number_of_games = self.number_of_unique_games * self.config.NUMBER_OF_GAMES_AGAINST_SAME_TEAM
 
         self.total_number_of_games_per_client = 1 # self.count_number_of_game_appearances(games)
         self.tournament = self.insert_new_tournament()
@@ -199,7 +199,6 @@ class ClientRunner:
 
     def internal_runner(self, submission: Submission, index: int) -> None:
         """
-
         :param submission_tuple:
         :param index:
         :return:
@@ -225,9 +224,12 @@ class ClientRunner:
 
         # Determine what seed this run needs based on it's serial index
         seed_index = index // self.number_of_unique_games
-
         logging.info(f'generating game map for run {index} for submission (id={submission.submission_id}), using seed index {seed_index}')
-        run_runner(end_path, RunnerOptions.GENERATE, seed=self.index_to_seed_id[seed_index])
+
+        seed = self.index_to_seed_id.get(seed_index)
+        assert seed is not None, f'cannot find seed for submission with id={submission.submission_id}, index={index}'
+
+        run_runner(end_path, RunnerOptions.GENERATE, seed=seed)
 
         logging.info(f'running run {index} for game (id={submission.submission_id}), using seed index {seed_index}')
 
@@ -245,7 +247,7 @@ class ClientRunner:
             assert self.tournament != -1
             run_id: int = self.insert_run(
                 self.tournament.tournament_id,
-                self.index_to_seed_id[seed_index],
+                seed,
                 results)
             assert results.get('reason') is None, f'{results['reason']}\n{json.dumps(results, indent=4)}'
             for i, result in enumerate(results["players"]):
