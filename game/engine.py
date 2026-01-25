@@ -70,11 +70,14 @@ class Engine:
         # Find and load clients in
         for filename in os.listdir(CLIENT_DIRECTORY):
             try:
-                filename = filename.replace('.py', '')
-
                 # Filter out files that do not contain CLIENT_KEYWORD in their filename (located in config)
                 if CLIENT_KEYWORD.upper() not in filename.upper():
                     continue
+
+                if not filename.endswith('.py'):
+                    continue
+
+                filename = filename.replace('.py', '')
 
                 # Filter out folders
                 if os.path.isdir(os.path.join(CLIENT_DIRECTORY, filename)):
@@ -146,10 +149,10 @@ class Engine:
             # Sort clients based on name, for the client runner
             self.clients.sort(key=lambda clnt: clnt.team_name, reverse=True)
             # Finally, request master controller to establish clients with basic objects
-            # if SET_NUMBER_OF_CLIENTS_START == 1:
-            #     self.master_controller.give_clients_objects(self.clients[0], self.world)
-            # else:
-            self.master_controller.give_clients_objects(self.clients, self.world)
+            if SET_NUMBER_OF_CLIENTS_START == 1:
+                self.master_controller.give_clients_objects(self.clients[:1], self.world)
+            else:
+                self.master_controller.give_clients_objects(self.clients, self.world)
 
     # Loads in the world
     def load(self):
@@ -179,10 +182,10 @@ class Engine:
         self.tick_number += 1
 
         # Send current world information to master controller for purposes
-        # if SET_NUMBER_OF_CLIENTS_START == 1:
-        #     self.master_controller.interpret_current_turn_data(self.clients[0], self.world, self.tick_number)
-        # else:
-        self.master_controller.interpret_current_turn_data(self.clients, self.world, self.tick_number)
+        if SET_NUMBER_OF_CLIENTS_START == 1:
+            self.master_controller.interpret_current_turn_data(self.clients[:1], self.world, self.tick_number)
+        else:
+            self.master_controller.interpret_current_turn_data(self.clients, self.world, self.tick_number)
 
     # Does actions like lets the player take their turn and asks master controller to perform game logic
     def tick(self):

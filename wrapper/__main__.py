@@ -91,7 +91,7 @@ if __name__ == '__main__':
     # Stats subgroup
 
     # ALL OF THESE NEED TO BE TESTED
-    stats = client_sub_group.add_parser('stats', aliases=['s'], help='View stats for your team')
+    stats = client_sub_group.add_parser('stats', aliases=['st'], help='View stats for your team')
 
     stats.add_argument('-runs_for_submission', action='store', type=int,
                        default=-1, dest='runs_for_submission',
@@ -106,11 +106,23 @@ if __name__ == '__main__':
     stats.add_argument('-get_details_for_submission', action='store', type=int, default=-1,
                        dest='get_submission_run_info', help='Get the details for a given submission')
 
-    client_parser.add_argument('-register', action='store_true', default=False, dest='register',
-                        help='Create a new team and return a vID')
+    register = client_sub_group.add_parser('register', aliases=['r',], help='Create a new team and return a vID')
 
-    client_parser.add_argument('-submit', action='store_true', default=False,
-                               dest='submit', help='Submit a client for grading')
+    register.add_argument('--name',
+                               help='team name',
+                               default=None)
+    register.add_argument('--uni',
+                               help='uni id',
+                               choices=(1, 2, 3, 4, 5,),
+                               default=None,
+                               type=int)
+    register.add_argument('--team_type',
+                               help='team type id',
+                               choices=(1, 2, 3,),
+                               default=None,
+                               type=int)
+
+    submit = client_sub_group.add_parser('submit', aliases=['s',], help='Submit a client for grading')
 
     # Parse Command .,mnb vc
     par_args = par.parse_args()
@@ -165,6 +177,12 @@ if __name__ == '__main__':
     # Boot up the server client
     elif action in ['client', 'c']:
         cl = Client(par_args)
+        if par_args.subparse in ['register', 'r',]:
+            cl.register(par_args.name, par_args.uni, par_args.team_type)
+        elif par_args.subparse in ['submit', 's',]:
+            cl.submit()
+        else:
+            cl.handle_client(par_args)
 
     # Print help if no arguments are passed
     if len(sys.argv) == 1:

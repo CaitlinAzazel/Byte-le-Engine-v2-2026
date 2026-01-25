@@ -63,11 +63,18 @@ class VisualizerRunner:
             print('No tournament is in the database.')
             return
 
-        if self.tournament_id != tournament.tournament_id and tournament.is_finished:
-            print("Getting new logs")
-            self.get_latest_log_files(tournament)
-            self.tournament_id = tournament.tournament_id
-            print(f'Tournament id: {self.tournament_id}')
+        if self.tournament_id == tournament.tournament_id:
+            print('Already visualized this tournament')
+            return
+
+        if not tournament.is_finished:
+            print(f'Tournament {tournament.tournament_id} is not finished yet')
+            return
+
+        print("Getting new logs")
+        self.get_latest_log_files(tournament)
+        self.tournament_id = tournament.tournament_id
+        print(f'Tournament id: {self.tournament_id}')
         self.visualizer_loop()
 
     # Refresh visual logs path between tournaments
@@ -96,9 +103,11 @@ class VisualizerRunner:
             os.mkdir(id_dir)
             logs_dir = os.path.join(id_dir, 'logs')
             os.mkdir(logs_dir)
+            logging.debug(f'writing turns')
             for turn in log:
                 with open(os.path.join(logs_dir, f'turn_{turn.turn_number:04d}.json'), "w") as fl:
                     fl.write(str(turn.turn_data, 'utf-8'))
+            logging.debug(f'writing results')
             with open(os.path.join(logs_dir, 'results.json'), 'x') as fl:
                 json.dump(json.loads(run.results.decode('utf-8')), fl)
 
