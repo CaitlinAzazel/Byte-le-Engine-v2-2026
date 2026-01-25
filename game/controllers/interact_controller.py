@@ -1,4 +1,6 @@
+from game.common.avatar import Avatar
 from game.common.enums import *
+from game.constants import INTERACT_TO_DIRECTION
 from game.controllers.controller import Controller
 from game.common.player import Player
 from game.common.stations.station import Station
@@ -31,6 +33,17 @@ class InteractController(Controller):
     def __init__(self):
         super().__init__()
 
+    def handle_implicit_interactions(self, avatar: Avatar, world: GameBoard) -> None:
+        """
+        handle things the player interacts with without needing an "INTERACT_*" action
+        """
+        for battery_spawner in world.battery_spawners:
+            battery_spawner.handle_turn(avatar)
+        for scrap_spawner in world.scrap_spawners:
+            scrap_spawner.handle_turn(avatar)
+        for coin_spawner in world.coin_spawners:
+            coin_spawner.handle_turn(avatar)
+
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard) -> None:
         """
         Given the ActionType for interacting in a direction, the Player's avatar will engage with the object.
@@ -39,30 +52,9 @@ class InteractController(Controller):
         :param world:
         :return: None
         """
-
-        # "proximity-based" tile interactions
-        for battery_spawner in world.battery_spawners:
-            battery_spawner.handle_turn(client.avatar)
-        for scrap_spawner in world.scrap_spawners:
-            scrap_spawner.handle_turn(client.avatar)
-        for coin_spawner in world.coin_spawners:
-            coin_spawner.handle_turn(client.avatar)
-
-        # match interaction type with x and y
-        vector: Vector
-        match action:
-            case ActionType.INTERACT_UP:
-                vector = Vector(x=0, y=-1)
-            case ActionType.INTERACT_DOWN:
-                vector = Vector(x=0, y=1)
-            case ActionType.INTERACT_LEFT:
-                vector = Vector(x=-1, y=0)
-            case ActionType.INTERACT_RIGHT:
-                vector = Vector(x=1, y=0)
-            case ActionType.INTERACT_CENTER:
-                vector = Vector(0, 0)
-            case _:
-                return
+        if action not in INTERACT_TO_DIRECTION:
+            return
+        vector = INTERACT_TO_DIRECTION[action]
             
         # find result in interaction
         vector.x += client.avatar.position.x
