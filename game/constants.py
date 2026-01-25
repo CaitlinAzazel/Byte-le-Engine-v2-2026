@@ -2,6 +2,17 @@ from game.common.enums import ActionType
 from game.utils.helpers import flip_dict
 from game.utils.vector import Vector
 
+"""
+NOTE: be very careful to not MODIFY the values of these objects
+
+for example:
+
+    direction = INTERACT_TO_DIRECTION[action]
+    # do NOT do the following; it changes the x and y values of the "constant" itself
+    direction.x += ...
+    direction.y += ...
+
+"""
 
 ATTACK_TO_DIRECTION = {
     ActionType.ATTACK_UP: Vector(0, -1),

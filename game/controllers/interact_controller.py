@@ -5,7 +5,6 @@ from game.controllers.controller import Controller
 from game.common.player import Player
 from game.common.stations.station import Station
 from game.common.map.game_board import GameBoard
-from game.utils.vector import Vector
 
 
 class InteractController(Controller):
@@ -54,12 +53,11 @@ class InteractController(Controller):
         """
         if action not in INTERACT_TO_DIRECTION:
             return
-        vector = INTERACT_TO_DIRECTION[action]
+        direction = INTERACT_TO_DIRECTION[action]
             
         # find result in interaction
-        vector.x += client.avatar.position.x
-        vector.y += client.avatar.position.y
-        stat: Station = world.get_top(vector)
+        target = client.avatar.position + direction
+        stat: Station = world.get_top(target)
 
         if stat is not None and isinstance(stat, Station):
             stat.take_action(client.avatar)
