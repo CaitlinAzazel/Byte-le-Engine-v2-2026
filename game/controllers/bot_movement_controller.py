@@ -17,8 +17,9 @@ from game.utils.vector import Vector
 
 
 class BotMovementController(Controller):
-    def __init__(self):
-        super().__init__()
+    """
+    calls different pathfinding logic for each bot and moves the bot around accordingly
+    """
 
     def random_horizontal_move(self) -> ActionType:
         return random.choice([ActionType.MOVE_RIGHT, ActionType.MOVE_LEFT,])

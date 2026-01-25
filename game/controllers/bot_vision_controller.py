@@ -10,14 +10,13 @@ from game.utils.vector import Vector
 
 
 class BotVisionController(Controller):
-    def __init__(self):
-        super().__init__()
+    """
+    responsible for updating `Bot.can_see_player` every turn
+    """
 
     def is_tile_open(self, bot: Bot, tile_data: GameObjectContainer) -> bool:
         """
         determines if a tile "blocks" this bot's line of sight or not
-
-        override in Bot subclasses if more complex behavior is needed
         """
         for game_object in tile_data:
             # "see through" other bots and players
@@ -53,14 +52,4 @@ class BotVisionController(Controller):
         return True
 
     def handle_actions(self, avatar: Avatar, bot: Bot, world : GameBoard ):
-        """
-        Noah's Note: Calculate the Bot's desired position which should return a list of movement actions,
-            and then validate and process each movement action
-
-        Import the Position of the Bot on the Gameboard
-        - Define movement vectors
-        - set destination variable and combine movement vectors with the current position vector
-        - validate that the bot can move into a space that is occupiable
-        - validate that two bots don't share the same space
-        """
         bot.can_see_player = self.can_see_avatar(avatar, bot, world)
