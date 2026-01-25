@@ -1,6 +1,18 @@
 from game.common.enums import ActionType
+from game.utils.helpers import flip_dict
 from game.utils.vector import Vector
 
+"""
+NOTE: be very careful to not MODIFY the values of these objects
+
+for example:
+
+    direction = INTERACT_TO_DIRECTION[action]
+    # do NOT do the following; it changes the x and y values of the "constant" itself
+    direction.x += ...
+    direction.y += ...
+
+"""
 
 ATTACK_TO_DIRECTION = {
     ActionType.ATTACK_UP: Vector(0, -1),
@@ -12,7 +24,7 @@ ATTACK_TO_DIRECTION = {
     ActionType.ATTACK_TOP_RIGHT: Vector(1, -1),
     ActionType.ATTACK_BOTTOM_RIGHT: Vector(1, 1),
 }
-DIRECTION_TO_ATTACK = {v: k for k, v in ATTACK_TO_DIRECTION.items()}
+DIRECTION_TO_ATTACK = flip_dict(ATTACK_TO_DIRECTION)
 
 MOVE_TO_DIRECTION = {
     ActionType.MOVE_UP: Vector(x=0, y=-1),
@@ -20,4 +32,13 @@ MOVE_TO_DIRECTION = {
     ActionType.MOVE_LEFT: Vector(x=-1, y=0),
     ActionType.MOVE_RIGHT: Vector(x=1, y=0),
 }
-DIRECTION_TO_MOVE = {v: k for k, v in MOVE_TO_DIRECTION.items()}
+DIRECTION_TO_MOVE = flip_dict(MOVE_TO_DIRECTION)
+
+INTERACT_TO_DIRECTION = {
+    ActionType.INTERACT_UP: Vector(x=0, y=-1),
+    ActionType.INTERACT_DOWN: Vector(x=0, y=1),
+    ActionType.INTERACT_LEFT: Vector(x=-1, y=0),
+    ActionType.INTERACT_RIGHT: Vector(x=1, y=0),
+    ActionType.INTERACT_CENTER: Vector(0, 0),
+}
+DIRECTION_TO_INTERACT = flip_dict(INTERACT_TO_DIRECTION)

@@ -151,6 +151,7 @@ class MasterController(Controller):
                     self.interact_controller.handle_actions(client.actions[i], client, game_board)
                 except IndexError:
                     pass
+            self.interact_controller.handle_implicit_interactions(client.avatar, game_board)
 
         # pve game so only one client
         player = clients[0]
