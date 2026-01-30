@@ -10,7 +10,7 @@ from game.fnaacm.timer import Timer
 class Bot(GameObject):
     DEFAULT_STUN_DURATION = 5
     DEFAULT_VISION_RADIUS = 1
-    SAVED_PRIMITIVE_FIELDS = {'boosted', 'has_attacked', 'can_see_player'}
+    SAVED_PRIMITIVE_FIELDS = {'boosted', 'has_attacked', 'can_see_player', 'direction'}
 
     def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
         super().__init__()
@@ -23,6 +23,7 @@ class Bot(GameObject):
         self.has_attacked: bool = False
         self.can_see_player: bool = False # to be updated by `BotVisionController`
         self.turn_delay: int = 1
+        self.direction: str = "" # to be updated by `BotMovementController`, used in visualizer
 
     def get_current_vision_radius(self) -> int:
         return self.boosted_vision_radius if self.boosted else self.vision_radius
