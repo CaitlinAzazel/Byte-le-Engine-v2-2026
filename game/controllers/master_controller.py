@@ -115,19 +115,14 @@ class MasterController(Controller):
 
     # Receive a specific client and send them what they get per turn. Also obfuscates necessary objects.
     def client_turn_arguments(self, client: Player, turn):
-        # turn_action: Action = Action()
-        # client.action: Action = turn_action
-        # ^if you want to use action as an object instead of an enum
-
-        turn_actions: list[ActionType] = []
-        client.actions = turn_actions
+        client.actions = []
 
         # Create deep copies of all objects sent to the player
         current_world = deepcopy(self.current_world_data["game_board"])    # what is current world and copy avatar
         copy_avatar = deepcopy(client.avatar)
         # Obfuscate data in objects that that player should not be able to see
         # Currently world data isn't obfuscated at all
-        args = (self.turn, turn_actions, current_world, copy_avatar)
+        args = (self.turn, current_world, copy_avatar)
         return args
 
     # Perform the main logic that happens per turn

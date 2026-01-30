@@ -190,7 +190,7 @@ class Engine:
     # Does actions like lets the player take their turn and asks master controller to perform game logic
     def tick(self):
         # Create list of threads to run client's code
-        threads = list()
+        threads: list[Thread[list[ActionType]]] = list()
         for client in self.clients:
             # Skip non-functional clients
             if not client.functional:

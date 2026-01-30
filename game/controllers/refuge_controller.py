@@ -34,6 +34,8 @@ class RefugeController(Controller):
             tile = game_board.get_top(eject_to)
             if tile is None and not game_board.is_valid_coords(eject_to):
                 continue
+            elif isinstance(tile, Refuge):
+                continue
             elif isinstance(tile, Occupiable) and not tile.can_be_occupied_by(avatar):
                 continue
 

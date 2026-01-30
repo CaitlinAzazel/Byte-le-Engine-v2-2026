@@ -26,6 +26,12 @@ ATTACK_TO_DIRECTION = {
 }
 DIRECTION_TO_ATTACK = flip_dict(ATTACK_TO_DIRECTION)
 
+MOVE_TO_DIRECTION_STR = {
+    ActionType.MOVE_UP: 'up',
+    ActionType.MOVE_DOWN: 'down',
+    ActionType.MOVE_LEFT: 'left',
+    ActionType.MOVE_RIGHT: 'right',
+}
 MOVE_TO_DIRECTION = {
     ActionType.MOVE_UP: Vector(x=0, y=-1),
     ActionType.MOVE_DOWN: Vector(x=0, y=1),

@@ -36,6 +36,13 @@ ALLOWED_MODULES = ["game.client.user_client",       # modules that clients are s
                    "pandas",
                    "itertools",
                    "functools",
+                   "random",
+                   "game.constants",
+                   "game.common.avatar",
+                   "game.common.map.game_board",
+                   "game.common.map.occupiable",
+                   "game.fnaacm.stations.generator",
+                   "game.utils.vector",
                    ]
 
 RESULTS_FILE_NAME = "results.json"                                  # Name and extension of results file

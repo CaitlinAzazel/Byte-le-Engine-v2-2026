@@ -7,7 +7,7 @@ class SupportBot(Bot):
     def __init__(self):
         super().__init__()
         self.object_type = ObjectType.SUPPORT_BOT
-        self.turnedOn = True
+        self.turnedOn = False
 
     @property
     def turned_on(self):

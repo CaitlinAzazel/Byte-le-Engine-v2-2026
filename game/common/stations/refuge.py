@@ -68,7 +68,11 @@ class Refuge(Occupiable):
 
     @override
     def can_occupy(self, game_object: GameObject) -> bool:
-        return game_object.object_type == ObjectType.AVATAR and Refuge.global_turns_outside >= Refuge.MIN_TURNS_OUTSIDE
+        if game_object.object_type != ObjectType.AVATAR:
+            return False
+        if not Refuge.global_occupied and Refuge.global_turns_outside < Refuge.MIN_TURNS_OUTSIDE:
+            return False
+        return True
 
     @property
     def position(self) -> Vector:
