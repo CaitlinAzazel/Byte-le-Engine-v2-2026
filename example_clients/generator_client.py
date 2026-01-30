@@ -31,14 +31,16 @@ class Client(UserClient):
         actions: list[ActionType] = []
         current: Vector = avatar.position
 
-        goal_object = ObjectType.REFUGE
+        goal_object = ObjectType.COIN
         held_scrap = avatar.get_quantity_of_item_type(ObjectType.SCRAP)
         if held_scrap > 0:
             goal_object = ObjectType.GENERATOR
+        else:
+            goal_object = ObjectType.SCRAP_SPAWNER
 
         goals = world.get_objects(goal_object).copy()
         if not goals:
-            return actions  # No coins, do nothing
+            return actions
 
         if goal_object == ObjectType.GENERATOR:
             temp = dict()
@@ -56,9 +58,8 @@ class Client(UserClient):
 
         goal = min(goals.keys(), key=current.distance)
         if goal != self.goal:
-            print(f'\tset goal {goal}')
+            # print(f'\tset goal {goal}')
             self.goal = goal
-
         move = self.step_toward(world, current, goal, avatar)
         if move:
             actions.append(move)
