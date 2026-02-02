@@ -74,16 +74,12 @@ class Bot(GameObject):
         self.has_attacked = True
 
     def in_vision_radius(self, pos: Vector) -> bool:
-        if self.boosted:
-            top_left = Vector(self.position.x - self.boosted_vision_radius,
-                              self.position.y - self.boosted_vision_radius)
-            bottom_right = Vector(self.position.x + self.boosted_vision_radius,
-                                  self.position.y + self.boosted_vision_radius)
-        else:
-            top_left = Vector(self.position.x - self.vision_radius, self.position.y - self.vision_radius)
-            bottom_right = Vector(self.position.x + self.vision_radius, self.position.y + self.vision_radius)
+        radius = self.get_current_vision_radius()
+        top_left = self.position - Vector(radius, radius)
+        bottom_right = self.position + Vector(radius, radius)
 
-        if top_left.x <= pos.x <= bottom_right.x and top_left.y <= pos.y <= bottom_right.y:
+        if top_left.x <= pos.x <= bottom_right.x and \
+            top_left.y <= pos.y <= bottom_right.y:
             return True
         return False
 
