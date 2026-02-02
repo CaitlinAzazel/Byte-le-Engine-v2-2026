@@ -16,11 +16,11 @@ class MyTestCase(unittest.TestCase):
         self.jumpBot = JumperBot()
         self.movementController = MovementController()
         self.botController = BotMovementController()
-        self.jumpBot.vector = Vector(3, 3)
-        self.avatar_start_pos = self.jumpBot.vector.add_y(1)
+        self.position = Vector(3, 3)
+        self.avatar_start_pos = self.position.add_y(1)
         self.avatar = Avatar(position=self.avatar_start_pos)
         self.locations: dict[Vector, list[GameObject]] = {
-            self.jumpBot.vector: [self.jumpBot],
+            self.position: [self.jumpBot],
             self.avatar_start_pos: [self.avatar],
         }
         self.game_board = GameBoard(0, Vector(5, 5), self.locations)
