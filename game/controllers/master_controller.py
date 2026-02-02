@@ -12,6 +12,7 @@ from game.controllers.attack_controller import Attack_Controller
 from game.controllers.bot_movement_controller import BotMovementController
 from game.controllers.bot_vision_controller import BotVisionController
 from game.controllers.point_controller import PointController
+from game.controllers.power_controller import PowerController
 from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.bot import Bot
 from game.fnaacm.bots.crawler_bot import CrawlerBot
@@ -73,6 +74,7 @@ class MasterController(Controller):
         self.bots: dict[ObjectType, Bot] = {}
         self.refuge_controller: RefugeController = RefugeController()
         self.point_controller: PointController = PointController()
+        self.power_controller: PowerController = PowerController()
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -172,6 +174,9 @@ class MasterController(Controller):
                 self.game_over = True
                 break
 
+        self.power_controller.handle_actions(ActionType.NONE, player, game_board)
+        if player.avatar.power <= 0:
+            self.game_over = True
         self.point_controller.handle_actions(player.avatar, game_board)
 
         # checks event logic at the end of round

@@ -8,7 +8,6 @@ from game.common.player import Player
 from game.controllers.interact_controller import InteractController
 from game.controllers.power_controller import PowerController
 from game.fnaacm.items.scrap import Scrap
-from game.fnaacm.stations import generator
 from game.fnaacm.stations.generator import Generator
 from game.utils.vector import Vector
 
@@ -59,8 +58,9 @@ class TestPowerController(unittest.TestCase):
             self.power_controller.handle_actions(ActionType.NONE, self.player, self.blank_game_board)
         self.assertEqual(self.avatar.power, 0)
 
-    # does power not get drained after (< frequency) turns have passed?
+    # does power not get drained "between" decay ticks?
     def test_power_does_not_drain(self):
+        self.power_controller.handle_actions(ActionType.NONE, self.player, self.blank_game_board)
         old_power = self.avatar.power
         for i in range(self.__decay_frequency - 1):
             self.power_controller.handle_actions(ActionType.NONE, self.player, self.blank_game_board)
