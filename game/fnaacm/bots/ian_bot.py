@@ -11,3 +11,5 @@ class IANBot(Bot):
         super().__init__(*args, **kwargs)
         self.object_type = ObjectType.IAN_BOT
         self.turn_delay = 2  # moves every 2 turns
+        self.vision_radius = 20
+        self.boosted_vision_radius = 30

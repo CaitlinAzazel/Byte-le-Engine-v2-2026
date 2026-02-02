@@ -9,7 +9,7 @@ from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
 
 class GeneratorBS(ByteSpriteFactory):
     """
-    Static Generator bytesprite using Generator.png.
+    Generator bytesprite using Generator.png.
     """
 
     GENERATOR_PATH = os.path.join(
@@ -24,7 +24,8 @@ class GeneratorBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
-        # Static sprite: always use first row
+        if data.get('active', False):
+            return spritesheets[1]
         return spritesheets[0]
 
     @staticmethod
@@ -32,7 +33,7 @@ class GeneratorBS(ByteSpriteFactory):
         return ByteSprite(
             screen,
             GeneratorBS.GENERATOR_PATH,
-            1,                  # one row for static sprite
+            2,
             ObjectType.GENERATOR.value,                  # object type (match Adapter)
             GeneratorBS.update,
             colorkey=None       # use PNG alpha transparency

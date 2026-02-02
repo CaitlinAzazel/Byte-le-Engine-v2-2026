@@ -14,6 +14,7 @@ from game.fnaacm.bots.ian_bot import IANBot
 from game.fnaacm.bots.jumper_bot import JumperBot
 from game.fnaacm.bots.support_bot import SupportBot
 from game.utils.vector import Vector
+from game.constants import *
 
 
 class BotMovementController(Controller):
@@ -246,19 +247,11 @@ class BotMovementController(Controller):
         - validate that the bot can move into a space that is occupiable
         - validate that two bots don't share the same space
         """
-        direction: Vector
-        match action:
-            case ActionType.MOVE_UP:
-                direction = Vector(x=0, y=-1)
-            case ActionType.MOVE_DOWN:
-                direction = Vector(x=0, y=1)
-            case ActionType.MOVE_LEFT:
-                direction = Vector(x=-1, y=0)
-            case ActionType.MOVE_RIGHT:
-                direction = Vector(x=1, y=0)
-            case _:  # default case
-                return
+        direction = MOVE_TO_DIRECTION.get(action)
+        if direction is None:
+            return
 
+        bot.direction = MOVE_TO_DIRECTION_STR.get(action, "")
         destination: Vector = bot.position + direction
 
         if not world.can_object_occupy(destination, bot):

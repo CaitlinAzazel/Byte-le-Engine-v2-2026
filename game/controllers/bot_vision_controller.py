@@ -35,9 +35,7 @@ class BotVisionController(Controller):
 
     def can_see_avatar(self, avatar: Avatar, bot: Bot, world: GameBoard) -> bool:
         assert avatar.position is not None
-        distance_to_player: int = bot.position.distance(avatar.position)
-        in_vision: bool = distance_to_player <= bot.get_current_vision_radius()
-        if not in_vision:
+        if not bot.in_vision_radius(avatar.position):
             return False
 
         positions_between = Vector.get_positions_overlapped_by_line(bot.position, avatar.position)
