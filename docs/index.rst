@@ -8,9 +8,9 @@ these area the edocs
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    getting_started
+   useful_commands
 
 Search Page
 ===========

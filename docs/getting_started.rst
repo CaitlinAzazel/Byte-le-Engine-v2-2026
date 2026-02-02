@@ -2,34 +2,42 @@
 Getting Started
 ===============
 
-hfold on wait a sceond. ..
-=========
+*RING* *RING* HELLO? HELLO HELLO?!
+==========================
 
-You may need to create a virtual environment before beginning, as it will create a new environment to install any needed
-packages. When in your project file, you can run the following commands if you are on Windows:
+*uuuh* I wanted to type up a message for you to help you get settled in on your first night.
 
-.. code-block:: console
-
-    python -m venv ./
-    ./Scripts/activate
-
-or if you are on Linux:
+It's good practice to set up a virtual environment to separate Byte-le's packages
+from any system-wide packages you might have installed.
+For more information on Python virtual environments, go `here <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/>`_.
+In your project directory, run the following commands in a command line:
 
 .. code-block:: console
 
-    python3 -m venv ./
-    source ./bin/activate
+    python -m venv .venv
 
-This will create a virtual environment for your project and activate, or use, it. Any other commands can be ran within
-this environment, including the next one.
+To activate your virtual environment, run **one** of the following commands depending on your shell:
 
-Please run the following command to install the necessary packages to run the game:
+.. code-block:: powershell
+   :caption: cmd/PowerShell
+
+    .\.venv\Scripts\activate
+
+.. code-block:: bash
+   :caption: bash/zsh
+
+    source .venv/bin/activate
+
+If these didn't work, find the appropriate command for your shell `here <https://docs.python.org/3/library/venv.html#how-venvs-work>`_.
+
+Once your virtual environment is activated, run the following command to install Byte-le's packages:
 
 .. code-block:: console
 
     pip install -r requirements.txt
 
 More useful commands are listed in :doc:`useful_commands`.
+
 
 Objective
 =========
