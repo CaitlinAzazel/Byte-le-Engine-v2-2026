@@ -2,7 +2,7 @@
 Getting Started
 ===============
 
-*RING* *RING* HELLO? HELLO HELLO?!
+*ring* *ring* HELLO? HELLO, HELLO?!
 ==========================
 
 *uuuh* I wanted to type up a message for you to help you get settled in on your first night.

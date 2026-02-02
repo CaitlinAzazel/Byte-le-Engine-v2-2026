@@ -10,7 +10,9 @@ these area the edocs
    :maxdepth: 2
 
    getting_started
+   HowToPlay
    useful_commands
+   the_server
 
 Search Page
 ===========

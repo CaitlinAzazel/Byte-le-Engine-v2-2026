@@ -78,8 +78,7 @@ the JSON format.
 Visualize
 ---------
 
-This will visualize the game you ran, allowing you to debug in a more user-friendly way! How wonderful.
-
+This displays each turn of the game you ran, allowing you to debug in a more user-friendly way! How wonderful.
 Visit :doc:`visualizer` to get a better understanding of how it works.
 
 Launcher Help
