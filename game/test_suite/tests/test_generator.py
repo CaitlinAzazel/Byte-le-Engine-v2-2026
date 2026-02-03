@@ -68,6 +68,8 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(len(self.generator.connected_doors), len(generator.connected_doors))
 
     def test_doors_open_on_activated(self):
+        for door in self.doors:
+            self.assertFalse(door.open)
         self.test_activates_on_interact()
         for door in self.doors:
             self.assertTrue(door.open)
