@@ -12,10 +12,9 @@ competitors to write efficient code. Good luck, and think hard!
 Client Commands
 ===============
 
-.. note::
+.. important::
    As commands are listed, some will have two versions to perform the same task. The first command will be typed in its entirety, and the second command will be a shortened version for ease of use.
 
-.. important::
    Only **ONE** line needs to be typed into the terminal, **NOT** both.
 
 Registering

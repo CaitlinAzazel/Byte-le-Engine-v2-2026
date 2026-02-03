@@ -145,6 +145,8 @@ class Avatar(GameObject):
                 ]
     """
 
+    MAX_POWER = 100
+
     def __init__(self, position: Vector | None = None, max_inventory_size: int = 10):
         super().__init__()
         self.object_type: ObjectType = ObjectType.AVATAR
@@ -153,12 +155,15 @@ class Avatar(GameObject):
         self.max_inventory_size: int = max_inventory_size
         self.inventory: list[Item | None] = [None] * max_inventory_size
         self.held_item: Item | None = self.inventory[0]
-        self.power: int = 100
+        self.power: int = MAX_POWER
         self.__held_index: int = 0
         self.health: int = 3
 
     def give_score(self, amount: int) -> None:
         self.score += amount
+
+    def give_power(self, amount: int) -> None:
+        self.power = min(Avatar.MAX_POWER, self.power + amount)
 
     def add_point(self):
         self.give_score(1)
@@ -220,6 +225,8 @@ class Avatar(GameObject):
                 f'It is a(n) {value.__class__.__name__} and has the value of {value}')
         if value < 0:
             raise ValueError(f'{self.__class__.__name__}.power must be nonnegative; attempted to set it to {value}')
+        if value > Avatar.MAX_POWER:
+            raise ValueError(f'{self.__class__.__name__}.power must be less than {Avatar.MAX_POWER}; attempted to set it to {value}')
         self.__power = value
 
     @held_item.setter
