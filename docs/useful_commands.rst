@@ -28,7 +28,7 @@ number corresponds to using the ``convert_enum_value.py`` script.
 .. code-block:: console
    :caption: Example inputs/outputs
 
-   python convert_enum.py object 1  # ObjectType.None
+   python convert_enum.py object 1  # ObjectType.NONE
    python convert_enum.py a 1       # ActionType.MOVE_UP
 
 Alternatively, you can use Python's `Interactive Mode <https://docs.python.org/3/tutorial/appendix.html#interactive-mode>`_:
