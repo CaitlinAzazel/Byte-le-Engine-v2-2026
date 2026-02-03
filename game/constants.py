@@ -13,10 +13,10 @@ ATTACK_TO_DIRECTION = {
     ActionType.ATTACK_TOP_RIGHT: Vector(1, -1, read_only=True),
     ActionType.ATTACK_BOTTOM_RIGHT: Vector(1, 1, read_only=True),
 }
+DIRECTION_TO_ATTACK = flip_dict(ATTACK_TO_DIRECTION)
 """
 expects Vectors whose components are clamped between -1 and 1
 """
-DIRECTION_TO_ATTACK = flip_dict(ATTACK_TO_DIRECTION)
 
 MOVE_TO_DIRECTION_STR = {
     ActionType.MOVE_UP: 'up',
@@ -30,10 +30,10 @@ MOVE_TO_DIRECTION = {
     ActionType.MOVE_LEFT: Vector(x=-1, y=0, read_only=True),
     ActionType.MOVE_RIGHT: Vector(x=1, y=0, read_only=True),
 }
+DIRECTION_TO_MOVE = flip_dict(MOVE_TO_DIRECTION)
 """
 expects Vectors whose components are clamped between -1 and 1
 """
-DIRECTION_TO_MOVE = flip_dict(MOVE_TO_DIRECTION)
 
 INTERACT_TO_DIRECTION = {
     ActionType.INTERACT_UP: Vector(x=0, y=-1, read_only=True),
@@ -42,7 +42,7 @@ INTERACT_TO_DIRECTION = {
     ActionType.INTERACT_RIGHT: Vector(x=1, y=0, read_only=True),
     ActionType.INTERACT_CENTER: Vector(0, 0, read_only=True),
 }
+DIRECTION_TO_INTERACT = flip_dict(INTERACT_TO_DIRECTION)
 """
 expects Vectors whose components are clamped between -1 and 1
 """
-DIRECTION_TO_INTERACT = flip_dict(INTERACT_TO_DIRECTION)
