@@ -122,14 +122,14 @@ More useful commands are listed in :doc:`useful_commands`.
 
 
 What Now?
----------------
+=============
 
 To learn how to get your lil' guy movin' around, read :doc:`controls`!
 
 To get your team registered and learn how to submit your code, read :doc:`the_server`!
 
 Submitting Issues
------------------
+================
 
 If you run into issues with the game, please submit an issue to the Discord server in the
 `#bug-reporting channel <https://discord.com/channels/697995889020633221/1357477016269492375>`_
