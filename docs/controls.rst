@@ -18,7 +18,7 @@ See :doc:`enums` for a list of all possible ``ActionType`` s.
 Walking Around And Touching Stuff
 ==============
 
-To collect coins, batteries, and scrap, all you have to do is walk on top of them. No interaction required.
+To collect coins, batteries, and scrap, all you have to do is walk onto them. No interaction required.
 
 Once you have a direction you want to move or interact, you can use ``convert_vector_to_move()`` or ``convert_vector_to_interact()`` to get a corresponding ``ActionType``. These functions (and other useful stuff) can be imported from ``game.constants``.
 

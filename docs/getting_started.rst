@@ -11,7 +11,7 @@ Getting Started
 Prerequisites
 ===================================
 
-- Python 3.13; Download it `here <https://www.python.org/downloads/release/python-31311/>`_.
+- Python 3.13; download it `here <https://www.python.org/downloads/release/python-31311/>`_.
 
 - A code editor with Python support; some recommendations:
     - VS Code/`VSCodium <https://vscodium.com/#install>`_ with the Python extension published by ms-python
@@ -103,14 +103,48 @@ To activate your virtual environment, run **one** of the following commands depe
 .. code-block:: powershell
    :caption: cmd/PowerShell
 
-    .\.venv\Scripts\activate
+   .\.venv\Scripts\activate
 
 .. code-block:: bash
    :caption: bash/zsh
 
-    source .venv/bin/activate
+   source .venv/bin/activate
 
-If you didn't see your shell or these didn't work, find the appropriate command for your shell `here <https://docs.python.org/3/library/venv.html#how-venvs-work>`_.
+If you don't see your shell or these don't work, find the appropriate command for your shell `here <https://docs.python.org/3/library/venv.html#how-venvs-work>`_.
+
+.. note::
+
+    If your virtual environment was activated, your shell might notice, adding "``(.venv)``" to the beginning of your prompt like so:
+
+    .. code-block:: console
+       :caption: cmd
+
+       (.venv) C:\path\to\Byte-le-2026-Client-Package\>
+
+    .. code-block:: console
+       :caption: PowerShell
+
+       (.venv) PS C:\path\to\Byte-le-2026-Client-Package\>
+
+    .. code-block:: console
+       :caption: bash
+
+       (.venv) /path/to/Byte-le-2026-Client-Package $
+
+    Alternatively, you can check your path to Python:
+
+    .. code-block:: console
+       :caption: cmd/PowerShell
+
+       where.exe python
+
+    .. code-block:: bash
+       :caption: POSIX
+
+       which python
+
+    If your virtual environment is activated, the output of these commands should include a path that looks something like ``/path/to/Byte-le-2026-Client-Package/.venv/bin/python``.
+
 
 Once your virtual environment is activated, run the following command to install Byte-le's packages:
 
@@ -134,3 +168,4 @@ Submitting Issues
 If you run into issues with the game, please submit an issue to the Discord server in the
 `#bug-reporting channel <https://discord.com/channels/697995889020633221/1357477016269492375>`_
 or call a developer over!
+
