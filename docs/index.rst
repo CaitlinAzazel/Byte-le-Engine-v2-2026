@@ -2,9 +2,9 @@
 welcome toe tthe docs !
 ===============================================
 
-these area the edocs
+these area the edocs (ᴗ ͜ʖ ᴗ)
 
-.. image:: https://cdn.discordapp.com/attachments/210826165798043648/1243227970563473478/exblackwater_-_1627372375158456320.gif?ex=696bae46&is=696a5cc6&hm=48ff6bc9749849ecde65fc5f6d4a62217127460b3cbd452e50c5bee38c01c712&
+.. image:: /images/StartMenu.png
 
 .. toctree::
    :maxdepth: 2
@@ -12,7 +12,10 @@ these area the edocs
    getting_started
    HowToPlay
    useful_commands
+   controls
+   helpers
    the_server
+   enums
 
 Search Page
 ===========

@@ -5,7 +5,12 @@ Getting Started
 *ring* *ring* HELLO? HELLO, HELLO?!
 ==========================
 
-*uuuh* I wanted to type up a message for you to help you get settled in on your first night.
+*uuuh* We wanted to type up a message for you to help you get settled in on your first night.
+
+Make sure you have a code editor with Python support! Some recommendations:
+
+- `VSCodium <https://vscodium.com/#install>`_ with the Python extension published by ms-python
+- `PyCharm <https://www.jetbrains.com/pycharm/download/>`_
 
 It's good practice to set up a virtual environment to separate Byte-le's packages
 from any system-wide packages you might have installed.
