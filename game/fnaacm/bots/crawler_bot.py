@@ -11,5 +11,5 @@ class CrawlerBot(Bot):
         super().__init__(*args, **kwargs)
         self.object_type = ObjectType.CRAWLER_BOT
         self.turn_delay = 4  # moves every 4 turns unboosted
-        self.vision_radius = 40
-        self.boosted_vision_radius = 40
+        self.vision_radius = 8
+        self.boosted_vision_radius = 12

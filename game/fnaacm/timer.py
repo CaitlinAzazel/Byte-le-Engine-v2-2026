@@ -1,11 +1,15 @@
 from typing import Self, override
 from game.common.game_object import GameObject
 
+
 class Timer(GameObject):
+    """
+    tracks a countdown
+
+    if a timer starts on tick X, it will be done on turn (X + duration)
+    """
+
     def __init__(self, duration: int = 1):
-        """
-        tracks a countdown
-        """
         super().__init__()
         self.duration = duration
         self.__turns_left = 0
@@ -73,3 +77,5 @@ class Timer(GameObject):
         self.__turns_left = duration
         return True
 
+    def force_done(self) -> None:
+        self.__turns_left = 0

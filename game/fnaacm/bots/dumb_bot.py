@@ -11,6 +11,7 @@ class DumbBot(Bot):
     def __init__(self):
         super().__init__()
         self.object_type = ObjectType.DUMB_BOT
-        self.vision = 1
+        self.vision_radius = 4
+        self.boosted_vision_radius = 10
         self.boosted : bool = False
         self.stun = False

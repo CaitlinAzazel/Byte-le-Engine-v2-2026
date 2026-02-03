@@ -1,10 +1,11 @@
 import threading
 import traceback
+from typing import Callable, Optional
 
 from game.common.enums import ActionType
 
 
-class Thread(threading.Thread):
+class Thread[R](threading.Thread):
     """
     `Thread Class Notes:`
         Threads are how the engine communicates with user clients. These Threads are built to catch errors. If an error
@@ -12,11 +13,11 @@ class Thread(threading.Thread):
 
         If multithreading is needed for whatever reason, this class would be used for that.
     """
-    def __init__(self, func, args):
+    def __init__(self, func: Callable[..., R], args):
         threading.Thread.__init__(self)
         self.args = args
         self.func = func
-        self.result: list[ActionType] = []
+        self.result: Optional[R] = None
         self.error = None
 
     def run(self):

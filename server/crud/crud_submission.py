@@ -130,7 +130,7 @@ def delete(db: Session, id: int, submission: SubmissionWTeam) -> None:
     db.commit()
 
 
-def get_latest_submission_for_each_team(db: Session) -> [Submission]:
+def get_latest_submission_for_each_team(db: Session) -> list[Submission]:
     return (db.query(Submission)
             .filter(Submission.submission_id.in_(
                     db.query(

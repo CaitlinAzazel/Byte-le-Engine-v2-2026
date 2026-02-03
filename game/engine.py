@@ -49,6 +49,8 @@ class Engine:
                 self.pre_tick()
                 self.tick()
                 self.post_tick()
+                if self.master_controller.game_over:
+                    break
                 if self.tick_number >= MAX_TICKS:
                     break
         except Exception as e:
@@ -68,11 +70,14 @@ class Engine:
         # Find and load clients in
         for filename in os.listdir(CLIENT_DIRECTORY):
             try:
-                filename = filename.replace('.py', '')
-
                 # Filter out files that do not contain CLIENT_KEYWORD in their filename (located in config)
                 if CLIENT_KEYWORD.upper() not in filename.upper():
                     continue
+
+                if not filename.endswith('.py'):
+                    continue
+
+                filename = filename.replace('.py', '')
 
                 # Filter out folders
                 if os.path.isdir(os.path.join(CLIENT_DIRECTORY, filename)):
@@ -144,10 +149,10 @@ class Engine:
             # Sort clients based on name, for the client runner
             self.clients.sort(key=lambda clnt: clnt.team_name, reverse=True)
             # Finally, request master controller to establish clients with basic objects
-            # if SET_NUMBER_OF_CLIENTS_START == 1:
-            #     self.master_controller.give_clients_objects(self.clients[0], self.world)
-            # else:
-            self.master_controller.give_clients_objects(self.clients, self.world)
+            if SET_NUMBER_OF_CLIENTS_START == 1:
+                self.master_controller.give_clients_objects(self.clients[:1], self.world)
+            else:
+                self.master_controller.give_clients_objects(self.clients, self.world)
 
     # Loads in the world
     def load(self):
@@ -177,15 +182,15 @@ class Engine:
         self.tick_number += 1
 
         # Send current world information to master controller for purposes
-        # if SET_NUMBER_OF_CLIENTS_START == 1:
-        #     self.master_controller.interpret_current_turn_data(self.clients[0], self.world, self.tick_number)
-        # else:
-        self.master_controller.interpret_current_turn_data(self.clients, self.world, self.tick_number)
+        if SET_NUMBER_OF_CLIENTS_START == 1:
+            self.master_controller.interpret_current_turn_data(self.clients[:1], self.world, self.tick_number)
+        else:
+            self.master_controller.interpret_current_turn_data(self.clients, self.world, self.tick_number)
 
     # Does actions like lets the player take their turn and asks master controller to perform game logic
     def tick(self):
         # Create list of threads to run client's code
-        threads = list()
+        threads: list[Thread[list[ActionType]]] = list()
         for client in self.clients:
             # Skip non-functional clients
             if not client.functional:
@@ -263,9 +268,10 @@ class Engine:
         threading.Thread(target=write_json_file,
                          args=(data, os.path.join(LOGS_DIR, f'turn_{self.tick_number:04d}.json'))).start()
 
-        # Perform a game over check
-        if self.master_controller.game_over:
-            self.shutdown()
+        # NOTE : this does not break the actual loop in Engine.loop(), so i moved the check there since
+        # Engine.shutdown() still gets called in the finally clause
+        # if self.master_controller.game_over:
+        #     self.shutdown()
 
     # Attempts to safely handle an engine shutdown given any game state
     def shutdown(self, source=None):

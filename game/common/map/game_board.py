@@ -353,8 +353,15 @@ class GameBoard(GameObject):
         return (0 <= coords.x < self.map_size.x) and (0 <= coords.y < self.map_size.y)
 
     def is_occupiable(self, coords: Vector) -> bool:
-        return self.is_valid_coords(coords) and (self.get(coords).get_top() is None or
-                                                 isinstance(self.get(coords).get_top(), Occupiable))
+        valid_coords = self.is_valid_coords(coords)
+        if not valid_coords:
+            return False
+        top = self.get(coords).get_top()
+        if top is None:
+            return True
+        if not isinstance(top, Occupiable):
+            return False
+        return True
 
     def can_object_occupy(self, coords: Vector, game_object: GameObject) -> bool:
         """

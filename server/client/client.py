@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from requests.models import HTTPError, Response
 from server.client.client_utils import ClientUtils, Result
 import json
@@ -21,22 +22,13 @@ class Client:
 
     def handle_client(self, args):
         try:
-            # The rest of the if statements will attempt to fulfill the desired command
-            if args.register:
-                self.register()
-                return
-
-            if args.submit:
-                self.submit()
-                return
-
             # If the subparse is None, don't attempt to do the rest of the code
             if args.subparse is None:
                 print("The server command needs more information. Try 'python launcher.pyz s -h' for help")
                 return
 
             # If the subparse doesn't contain an expected value, don't do anything
-            if args.subparse.lower() == 'stats' or args.subparse.lower() == 's':
+            if args.subparse.lower() == 'stats' or args.subparse.lower() == 'st':
                 if args.runs_for_submission != -1:
                     temp: Result = self.utils.get_runs_for_submission(args.runs_for_submission, self.vid)
                     if temp.is_err():
@@ -68,14 +60,14 @@ class Client:
         except HTTPError as e:
             print(f"Error: {json.loads(e.response._content)}")
 
-    def register(self):
+    def register(self, name: Optional[str] = None, uni_id: Optional[int] = None, team_type_id: Optional[int] = None):
         # Check if vID already exists and cancel out
         if os.path.isfile('vID'):
             print('You have already registered.')
             return
 
         # Ask for team name
-        team_name = input("Enter your team name: ")
+        team_name = name or input("Enter your team name: ")
 
         if team_name == '':
             print("Team name can't be empty.")
@@ -93,7 +85,7 @@ class Client:
         self.utils.print_table(unis)
 
         try:
-            uni_id = int(input())
+            uni_id = uni_id or int(input())
         except ValueError:
             print('Invalid integer!')
 
@@ -111,7 +103,7 @@ class Client:
         print("Select a team type (id)")
         self.utils.print_table(team_types)
 
-        team_type_id = int(input())
+        team_type_id = team_type_id or int(input())
 
         if team_type_id not in map(lambda x: x['team_type_id'], team_types):
             print("Not a valid team type")
@@ -157,6 +149,9 @@ class Client:
         for filename in os.listdir(CLIENT_DIRECTORY):
             if CLIENT_KEYWORD.upper() not in filename.upper():
                 # Filters out files that do not contain CLIENT_KEYWORD in their filename
+                continue
+
+            if not filename.endswith('.py'):
                 continue
 
             if os.path.isdir(os.path.join(CLIENT_DIRECTORY, filename)):

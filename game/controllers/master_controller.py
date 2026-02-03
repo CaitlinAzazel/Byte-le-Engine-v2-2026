@@ -8,9 +8,11 @@ from game.common.player import Player
 import game.config as config   # this is for turns
 from game.common.stations.refuge import Refuge
 from game.controllers import refuge_controller
+from game.controllers.attack_controller import Attack_Controller
 from game.controllers.bot_movement_controller import BotMovementController
 from game.controllers.bot_vision_controller import BotVisionController
 from game.controllers.point_controller import PointController
+from game.controllers.power_controller import PowerController
 from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.bot import Bot
 from game.fnaacm.bots.crawler_bot import CrawlerBot
@@ -68,9 +70,11 @@ class MasterController(Controller):
         self.interact_controller: InteractController = InteractController()
         self.bot_movement_controller: BotMovementController = BotMovementController()
         self.bot_vision_controller: BotVisionController = BotVisionController()
+        self.bot_attack_controller: Attack_Controller = Attack_Controller()
         self.bots: dict[ObjectType, Bot] = {}
         self.refuge_controller: RefugeController = RefugeController()
         self.point_controller: PointController = PointController()
+        self.power_controller: PowerController = PowerController()
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -113,23 +117,21 @@ class MasterController(Controller):
 
     # Receive a specific client and send them what they get per turn. Also obfuscates necessary objects.
     def client_turn_arguments(self, client: Player, turn):
-        # turn_action: Action = Action()
-        # client.action: Action = turn_action
-        # ^if you want to use action as an object instead of an enum
-
-        turn_actions: list[ActionType] = []
-        client.actions = turn_actions
+        client.actions = []
 
         # Create deep copies of all objects sent to the player
         current_world = deepcopy(self.current_world_data["game_board"])    # what is current world and copy avatar
         copy_avatar = deepcopy(client.avatar)
         # Obfuscate data in objects that that player should not be able to see
         # Currently world data isn't obfuscated at all
-        args = (self.turn, turn_actions, current_world, copy_avatar)
+        args = (self.turn, current_world, copy_avatar)
         return args
 
     # Perform the main logic that happens per turn
     def turn_logic(self, clients: list[Player], turn: int):
+        if self.game_over:
+            return
+
         game_board: GameBoard = self.current_world_data["game_board"]
 
         for battery in game_board.battery_spawners:
@@ -146,20 +148,35 @@ class MasterController(Controller):
                     self.interact_controller.handle_actions(client.actions[i], client, game_board)
                 except IndexError:
                     pass
+            self.interact_controller.handle_implicit_interactions(client.avatar, game_board)
 
         # pve game so only one client
         player = clients[0]
+        assert player.avatar is not None
+
         self.refuge_controller.handle_actions(ActionType.NONE, player, game_board)
 
-        # for each bot:
-        #   if bot.can_act(self.turn), then bot.action()
         for bot in self.bots.values():
-            self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
-            moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
-            assert not moves is None, f'{bot.__class__}\'s next move was... None?'
-            for move in moves:
-                self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
+            bot.stunned()
 
+            self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
+
+            if bot.can_move(turn):
+                moves = self.bot_movement_controller.calc_next_moves(bot, player.avatar, game_board, turn)
+                assert not moves is None, f'{bot.__class__}\'s next move was... None?'
+                for move in moves:
+                    self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
+
+            attack = self.bot_attack_controller.calculate_attack_action(bot, player.avatar)
+            self.bot_attack_controller.handle_actions(attack, player, game_board, bot)
+
+            if not player.avatar.is_alive:
+                self.game_over = True
+                break
+
+        self.power_controller.handle_actions(ActionType.NONE, player, game_board)
+        if player.avatar.power <= 0:
+            self.game_over = True
         self.point_controller.handle_actions(player.avatar, game_board)
 
         # checks event logic at the end of round
