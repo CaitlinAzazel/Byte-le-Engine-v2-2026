@@ -23,7 +23,7 @@ class BatteryBS(ByteSpriteFactory):
             screen,
             BatteryBS.BATTERY_PATH,
             2,
-            ObjectType.BATTERY.value,
+            ObjectType.BATTERY_SPAWNER.value,
             BatteryBS.update,
             colorkey=pyg.Color(0,0,0,0)
         )

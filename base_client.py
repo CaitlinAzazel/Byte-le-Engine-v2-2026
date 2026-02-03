@@ -25,7 +25,7 @@ class Client(UserClient):
             return []
 
         # Get all coins on the board
-        coins = world.get_objects(ObjectType.COIN)
+        coins = world.get_objects(ObjectType.COIN_SPAWNER)
         if not coins:
             return []  # No coins, do nothing
 

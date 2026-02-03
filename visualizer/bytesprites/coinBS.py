@@ -34,7 +34,7 @@ class CoinBS(ByteSpriteFactory):
             screen,
             CoinBS.COIN_PATH,
             2,
-            ObjectType.COIN.value,                  # object type (match Adapter)
+            ObjectType.COIN_SPAWNER.value,                  # object type (match Adapter)
             CoinBS.update,
             colorkey=None       # use PNG alpha transparency
         )

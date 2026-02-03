@@ -29,14 +29,14 @@ Things in the game. Note the difference between ``SCRAP`` and ``SCRAP_SPAWNER``.
 
 .. csv-table::
 
-   GENERATOR, A generator; fueled by ``SCRAP``
-   SCRAP, Scrap that you have collected
+   SCRAP_ITEM, Scrap that you have collected
    SCRAP_SPAWNER, A tile where you can collect ``SCRAP``
+   BATTERY_SPAWNER, A tile where you can collect batteries that restore power
+   COIN_SPAWNER, A tile where you can collect coins that give you points
+   GENERATOR, A generator; fueled by ``SCRAP``
    VENT, A vent
-   BATTERY, A tile where you can collect batteries that restore power
    REFUGE, A tile that bots cannot enter
    DOOR, A door; opened by generators
-   COIN, A tile where you can collect coins that give you points
    CRAWLER_BOT, **REDACTED**
    DUMB_BOT, **REDACTED**
    IAN_BOT, **REDACTED**

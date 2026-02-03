@@ -102,9 +102,9 @@ class Adapter:
             ObjectType.SCRAP_SPAWNER.value: ScrapBS.create_bytesprite,
             ObjectType.VENT.value: VentBS.create_bytesprite,
             ObjectType.GENERATOR.value: GeneratorBS.create_bytesprite,
-            ObjectType.COIN.value: CoinBS.create_bytesprite,
+            ObjectType.COIN_SPAWNER.value: CoinBS.create_bytesprite,
             ObjectType.REFUGE.value: SafeSpotBS.create_bytesprite,
-            ObjectType.BATTERY.value: BatteryBS.create_bytesprite,
+            ObjectType.BATTERY_SPAWNER.value: BatteryBS.create_bytesprite,
 
             # ---- Avatar ----
             ObjectType.AVATAR.value: AvatarBS.create_bytesprite,

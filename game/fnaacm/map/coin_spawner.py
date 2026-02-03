@@ -21,7 +21,7 @@ class CoinSpawner(Occupiable, LDtkEntity):
 
     def __init__(self, position: Vector = Vector(0,0), turns_to_respawn: int = 1, point_value: int = 1) -> None:
         super().__init__()
-        self.object_type: ObjectType = ObjectType.COIN
+        self.object_type: ObjectType = ObjectType.COIN_SPAWNER
         self.position: Vector = position
         self.point_value: int = point_value
         self.__timer = Timer(duration=turns_to_respawn)

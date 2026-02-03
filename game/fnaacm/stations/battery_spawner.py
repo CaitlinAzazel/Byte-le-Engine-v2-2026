@@ -19,7 +19,7 @@ class BatterySpawner(Occupiable, LDtkEntity):
 
     def __init__(self, position: Vector = Vector(0, 0), turns_to_respawn: int = 1, recharge_amount: int = 1, point_value: int = 1) -> None:
         super().__init__()
-        self.object_type: ObjectType = ObjectType.BATTERY
+        self.object_type: ObjectType = ObjectType.BATTERY_SPAWNER
         self.position: Vector = position
         self.point_value: int = point_value
         self.__recharge_amount: int = recharge_amount

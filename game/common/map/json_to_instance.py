@@ -21,8 +21,8 @@ from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 
 OBJECT_TYPE_TO_CLASS: dict[ObjectType, Type] = {
     ObjectType.AVATAR: Avatar,
-    ObjectType.BATTERY: BatterySpawner,
-    ObjectType.COIN: CoinSpawner,
+    ObjectType.BATTERY_SPAWNER: BatterySpawner,
+    ObjectType.COIN_SPAWNER: CoinSpawner,
     ObjectType.DOOR: Door,
     ObjectType.GENERATOR: Generator,
     ObjectType.OCCUPIABLE_STATION: OccupiableStation,
