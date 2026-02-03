@@ -37,11 +37,11 @@ Things in the game. Note the difference between ``SCRAP_ITEM`` and ``SCRAP_SPAWN
    VENT, A vent
    REFUGE, A tile that bots cannot enter
    DOOR, A door; opened by generators
-   CRAWLER_BOT, **REDACTED**
-   DUMB_BOT, **REDACTED**
-   IAN_BOT, **REDACTED**
-   JUMPER_BOT, **REDACTED**
-   SUPPORT_BOT, **REDACTED**
+   CRAWLER_BOT, ████████ █████
+   DUMB_BOT, ██ █████ ██████ ██ 
+   IAN_BOT, "█████, █████ ███ "
+   JUMPER_BOT, ████ ████ 
+   SUPPORT_BOT, ████████; █████ ███ 
 
 Reading Logs
 ------------
