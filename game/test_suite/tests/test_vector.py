@@ -1,4 +1,5 @@
 import unittest
+import pytest
 
 from game.utils.vector import Vector
 import game.test_suite.utils
@@ -174,3 +175,32 @@ class TestVector(unittest.TestCase):
             Vector(0, 0),
         ]
         self.assertListEqual(actual_positions, expected_positions)
+
+    def test_direction_to(self):
+        self.assertEqual(Vector(0, 0).direction_to(Vector(1, 1)), Vector(1, 1))
+        self.assertEqual(Vector(0, 0).direction_to(Vector(5, 5)), Vector(1, 1))
+        self.assertEqual(Vector(0, 0).direction_to(Vector(1000, 7)), Vector(1, 1))
+        self.assertEqual(Vector(0, 0).direction_to(Vector(1, 0)), Vector(1, 0))
+        self.assertEqual(Vector(0, 0).direction_to(Vector(10, 0)), Vector(1, 0))
+        self.assertEqual(Vector(0, 0).direction_to(Vector(0, -999)), Vector(0, -1))
+        self.assertEqual(Vector(0, 0).direction_to(Vector(-6, -7)), Vector(-1, -1))
+
+    def test_is_diagonal(self):
+        self.assertTrue(Vector(1, 1).is_diagonal)
+        self.assertTrue(Vector(-8, 1).is_diagonal)
+        self.assertTrue(Vector(1, -8).is_diagonal)
+        self.assertTrue(Vector(-8, -9).is_diagonal)
+
+        self.assertFalse(Vector(0, 0).is_diagonal)
+        self.assertFalse(Vector(1, 0).is_diagonal)
+        self.assertFalse(Vector(-1, 0).is_diagonal)
+        self.assertFalse(Vector(-999, 0).is_diagonal)
+        self.assertFalse(Vector(0, 10).is_diagonal)
+        self.assertFalse(Vector(0, -12309).is_diagonal)
+
+    def test_read_only(self):
+        vector = Vector(read_only=True)
+        with pytest.raises(RuntimeError, match='read-only'):
+            vector.x = 1
+        with pytest.raises(RuntimeError, match='read-only'):
+            vector.y = 1
