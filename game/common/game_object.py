@@ -30,7 +30,7 @@ class GameObject:
         data['state'] = self.state
 
         data['__class__'] = self.__class__.__name__
-        data['__id__'] = id(self)
+        # data['__id__'] = id(self)
 
         return data
 
