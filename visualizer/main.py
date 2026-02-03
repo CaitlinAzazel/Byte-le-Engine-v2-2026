@@ -578,14 +578,17 @@ class ByteVisualiser:
             # Prev button to go back a frame
             if PlaybackButtons.PREV_BUTTON in button_pressed:
                 turn = self.tick // self.config.NUMBER_OF_FRAMES_PER_TURN
-                self.tick = (turn - 1) * self.config.NUMBER_OF_FRAMES_PER_TURN
+                self.tick = max(0, turn - 1) * self.config.NUMBER_OF_FRAMES_PER_TURN
+                self.paused = True
             # Next button to go forward a frame
             if PlaybackButtons.NEXT_BUTTON in button_pressed:
                 turn = self.tick // self.config.NUMBER_OF_FRAMES_PER_TURN
                 self.tick = (turn + 1) * self.config.NUMBER_OF_FRAMES_PER_TURN
+                self.paused = True
             # Start button to restart visualizer
             if PlaybackButtons.START_BUTTON in button_pressed:
                 self.tick = 0
+                self.paused = True
             # End button to end visualizer
             if PlaybackButtons.END_BUTTON in button_pressed:
                 self.tick = self.config.NUMBER_OF_FRAMES_PER_TURN * (game.config.MAX_TICKS + 1)
