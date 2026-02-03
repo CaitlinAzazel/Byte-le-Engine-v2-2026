@@ -25,7 +25,7 @@ Things your character can do. For further details, see :doc:`controls`.
 ObjectType
 ==========
 
-Things in the game. Note the difference between ``SCRAP`` and ``SCRAP_SPAWNER``.
+Things in the game. Note the difference between ``SCRAP_ITEM`` and ``SCRAP_SPAWNER``.
 
 .. csv-table::
 
