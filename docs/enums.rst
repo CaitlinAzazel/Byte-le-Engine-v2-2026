@@ -2,12 +2,12 @@
 Enums
 =====
 
-Enums can represent a wide variety of things. Here is a list of different enums and what they represent.
+Enums can represent a wide variety of things. Here is a list of enums and what they represent.
 
 ActionType
-----------
+==========
 
-Things your character can do. For further details, see :doc:`actions`.
+Things your character can do. For further details, see :doc:`controls`.
 
 .. csv-table:: 
 
@@ -23,7 +23,7 @@ Things your character can do. For further details, see :doc:`actions`.
     INTERACT_CENTER, Interact with the tile you are standing on
 
 ObjectType
-----------
+==========
 
 Things in the game. Note the difference between ``SCRAP`` and ``SCRAP_SPAWNER``.
 
@@ -33,7 +33,7 @@ Things in the game. Note the difference between ``SCRAP`` and ``SCRAP_SPAWNER``.
    SCRAP, Scrap that you have collected
    SCRAP_SPAWNER, A tile where you can collect ``SCRAP``
    VENT, A vent
-   BATTERY, "A tile where you can collect batteries that restore power"
+   BATTERY, A tile where you can collect batteries that restore power
    REFUGE, A tile that bots cannot enter
    DOOR, A door; opened by generators
    COIN, A tile where you can collect coins that give you points
@@ -43,3 +43,25 @@ Things in the game. Note the difference between ``SCRAP`` and ``SCRAP_SPAWNER``.
    JUMPER_BOT, **REDACTED**
    SUPPORT_BOT, **REDACTED**
 
+Reading Logs
+------------
+If you are looking at an "object_type" in log files, it will be a number.
+If you want to know what that number corresponds to, run the following commands:
+
+.. code-block:: python
+
+   python
+   >>> from game.common.enums import *
+   >>> ObjectType(<number>) # should print something
+
+.. note::
+   We are using Python's **R**\ead **E**\valuate **P**\rint **L**\oop here.
+   As long as you keep entering valid Python, you're basically writing a temporary Python script in your shell.
+   So, if you wanted, you could even do
+   
+   .. code-block:: python
+
+      >>> for i in range(1, 10):
+      ...     ObjectType(i)
+
+   For more information, see https://docs.python.org/3/tutorial/appendix.html#interactive-mode

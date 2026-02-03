@@ -48,7 +48,13 @@ expects Vectors whose components are clamped between -1 and 1
 """
 
 def convert_vector_to_move(vector: Vector) -> ActionType | None:
+    """
+    returns None if vector is diagonal or zero
+    """
     return DIRECTION_TO_MOVE.get(vector.as_direction())
 
 def convert_vector_to_interact(vector: Vector) -> ActionType | None:
+    """
+    returns None if vector is diagonal
+    """
     return DIRECTION_TO_INTERACT.get(vector.as_direction())

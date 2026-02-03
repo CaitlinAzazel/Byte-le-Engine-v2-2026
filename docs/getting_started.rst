@@ -2,19 +2,96 @@
 Getting Started
 ===============
 
+
 *ring* *ring* HELLO? HELLO, HELLO?!
-==========================
+===================================
 
 *uuuh* We wanted to type up a message for you to help you get settled in on your first night.
 
-Make sure you have a code editor with Python support! Some recommendations:
+Prerequisites
+-------------
 
-- `VSCodium <https://vscodium.com/#install>`_ with the Python extension published by ms-python
-- `PyCharm <https://www.jetbrains.com/pycharm/download/>`_
+- Python 3.13; Download it `here <https://www.python.org/downloads/release/python-31311/>`_.
+
+- A code editor with Python support; some recommendations:
+    - VS Code/`VSCodium <https://vscodium.com/#install>`_ with the Python extension published by ms-python
+    - `PyCharm <https://www.jetbrains.com/pycharm/download/>`_
+
+
+The Client Package
+------------------
+
+To begin patrolling the dark, dank halls of QBB, you must download the contents of `this repository <https://github.com/acm-ndsu/Byte-le-2025-Client-Package>`_.
+You may do so in many ways... here are some:
+
+Using `Git <https://git-scm.com/install>`_'s built-in CLI
+$$$$$$$$$
+
+
+#. In the directory you want to download to, run the following command:
+
+.. code-block:: console
+
+    git clone https://github.com/<user>/Byte-le-Engine-2026-Client-Package.git
+
+Using `GitHub CLI <https://cli.github.com/>`_
+$$$$$$$$$$$
+
+#. In the directory you want to download to, run the following command:
+
+.. code-block:: console
+
+    gh repo clone <user>/Byte-le-2026-Client-Package
+
+.. container:: centered
+   :font-size: 48px
+
+   ^^^^^^ **CHANGE USER**
+
+Using `GitHub Desktop <https://desktop.github.com/download/>`_
+$$$$$$$$$
+
+#. Go to https://github.com/acm-ndsu/Byte-le-2025-Client-Package
+
+#. Press the ``<> Code`` button to drop down a menu:
+
+.. container:: centered
+
+    .. image:: /images/clone_repo.png
+        :width: 60%
+
+2. Press "Open with GitHub Desktop"
+    * Allow the website to open GitHub Desktop if you have it downloaded already
+    * Once in GitHub Desktop, the URL to the repository will be provided
+    * Choose where you'd like it saved on your device
+    * Click ``Clone`` and you're good to go!
+
+.. container:: centered
+
+    .. image:: /images/github_desktop.png
+        :width: 70%
+
+Download ZIP
+$$$$$$$$$$$$
+
+#. Go to https://github.com/acm-ndsu/Byte-le-2025-Client-Package
+
+#. Press the ``<> Code`` button to drop down a menu:
+
+.. container:: centered
+
+    .. image:: /images/clone_repo.png
+        :width: 60%
+
+#. Click ``Download ZIP`` and find it in your Downloads.
+#. Extract the files somewhere on your device.
+
+Installing Dependencies
+-----------------------
 
 It's good practice to set up a virtual environment to separate Byte-le's packages
-from any system-wide packages you might have installed.
-For more information on Python virtual environments, go `here <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/>`_.
+from any system-wide Python packages you might have installed.
+For more information on Python virtual environments, go `here <https://docs.python.org/3/library/venv.html>`_.
 In your project directory, run the following commands in a command line:
 
 .. code-block:: console
@@ -33,7 +110,7 @@ To activate your virtual environment, run **one** of the following commands depe
 
     source .venv/bin/activate
 
-If these didn't work, find the appropriate command for your shell `here <https://docs.python.org/3/library/venv.html#how-venvs-work>`_.
+If you didn't see your shell or these didn't work, find the appropriate command for your shell `here <https://docs.python.org/3/library/venv.html#how-venvs-work>`_.
 
 Once your virtual environment is activated, run the following command to install Byte-le's packages:
 
@@ -44,73 +121,12 @@ Once your virtual environment is activated, run the following command to install
 More useful commands are listed in :doc:`useful_commands`.
 
 
-Objective
-=========
-
-Your objective is to create the perfect team of three mercenaries to defeat your opponents within 350 turns and claim
-victory over the battle. Your team will consist of two generic soldiers and one leader. Each character has a special
-set of Moves. When executing their turn, they can choose one of these Moves to use. Some of these Moves may cost
-special points to use, which is gathered by using their Normal Move. Each character will also have their own
-stats, including their current health, max health, attack, speed, and defense.
-
-You can find more information on :doc:`characters`, as well as :doc:`stats` and :doc:`moves` in their respective pages.
-
-Tournament Structure
-====================
-
-Each pairing of teams will have one game against each other. The points gained from that game
-will be added to those teams' total points in the tournament.
-
-For more information on tournament structure and scoring, please visit :doc:`scoring`.
-
-Running the Game
-================
-
-
-Python Version
---------------
-
-Make sure to uninstall the Visual Studio Code version of Python if you have Visual Studio Code installed.
-You can do this by re-running the installer and unselecting the Python development kit then clicking update.
-
-:gold:`We require using Python version 3.12.` You can go to the
-`official Python website <https://www.python.org/downloads/release/python-3125/>`_ to download it.
-
-You can use any text editor or IDE for this competition, but we recommend Visual Studio Code.
-
-Getting the Code and your Team
-------------------------------
-
-To receive the code and to begin commanding your own team of mercenaries, please clone the repository
-`here <https://github.com/acm-ndsu/Byte-le-2025-Client-Package>`_.
-
-When on GitHub, press the green ``<> Code`` button to drop down the menu:
-
-.. image:: /images/clone_repo.png
-
-We highly recommend cloning with GitHub Desktop or downloading the ZIP folder. Extra props if you can use the terminal!
-
-#. Open with GitHub Desktop
-    * Allow the website to open GitHub Desktop if you have it downloaded already
-    * Once in GitHub Desktop, the URL to the repository will be provided
-    * Choose where you'd like it saved on your device
-    * Click ``Clone`` and you're good to go!
-
-.. image:: /images/github_desktop.png
-
-#. Download ZIP
-    * Click ``Download ZIP`` and find it in your Downloads.
-    * Extract the files and save it somewhere on your device.
-    * Use your IDE/text editor (Visual Studio Code is recommended) of choice and open the extracted folder downloaded.
-    * You're ready to code!
-
-
-Submitting Code
+What Now?
 ---------------
 
-To submit your code, command your team in either your ``base_client.py`` or ``base_client_2.py`` files. When you submit
-your code via the command specified in :doc:`server`, you can submit either of these files if you choose to.
+To learn how to get your lil' guy movin' around, read :doc:`controls`!
 
+To get your team registered and learn how to submit your code, read :doc:`the_server`!
 
 Submitting Issues
 -----------------

@@ -1,0 +1,7 @@
+* {
+	/* color: green; */
+}
+
+.pixel-art {
+	image-rendering: crisp-edges;
+}

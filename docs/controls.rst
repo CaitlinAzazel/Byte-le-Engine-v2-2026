@@ -1,5 +1,5 @@
 ========================
-Controlling your Character
+Controlling your Avatar
 ========================
 
 
@@ -37,6 +37,9 @@ Once you have a direction you want to move or interact, you can use ``convert_ve
    Additionally, you cannot convert a zero vector to a move because... well... you can figure that out.
 
    You can, however, convert a zero vector to an interact because you can interact with the tile you're standing on. :^)
+
+.. note::
+   Moving "up" is actually moving in a negative y direction. Strange.
 
 Activating Generators
 =====================

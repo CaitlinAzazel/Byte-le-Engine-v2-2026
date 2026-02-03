@@ -3,18 +3,6 @@ Useful Commands
 ===============
 
 
-Installing Packages
-====================
-
-There are required packages necessary for running the game. Run the following command to install them all:
-
-.. code-block:: console
-
-    pip install -r requirements.txt
-
-You can view the list of packages in the requirements.txt file.
-
-
 Pygame Installation
 ===================
 
