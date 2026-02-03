@@ -84,5 +84,5 @@ class BatterySpawner(Occupiable, LDtkEntity):
             return
         if not self.__timer.reset(force=False):
             return
-        avatar.power += self.__recharge_amount
+        avatar.give_power(self.__recharge_amount)
         avatar.give_score(self.point_value)

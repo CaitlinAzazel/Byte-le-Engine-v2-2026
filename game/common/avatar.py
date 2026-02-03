@@ -155,7 +155,7 @@ class Avatar(GameObject):
         self.max_inventory_size: int = max_inventory_size
         self.inventory: list[Item | None] = [None] * max_inventory_size
         self.held_item: Item | None = self.inventory[0]
-        self.power: int = MAX_POWER
+        self.power: int = Avatar.MAX_POWER
         self.__held_index: int = 0
         self.health: int = 3
 
