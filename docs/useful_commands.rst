@@ -13,6 +13,44 @@ If you have problems installing the pygame package, try running the following co
     pip install pygame --pre
 
 
+.. _enum-script:
+
+Interpreting Enum Values
+====================
+
+If you have an :ref:`object-type` or :ref:`action-type`\'s value, you can find out what that
+number corresponds to using the ``convert_enum_value.py`` script.
+
+.. code-block:: console
+
+   python convert_enum.py <o|object|a|action> <number>
+
+.. code-block:: console
+   :caption: Example inputs/outputs
+
+   python convert_enum.py object 1  # ObjectType.None
+   python convert_enum.py a 1       # ActionType.MOVE_UP
+
+Alternatively, you can use Python's `Interactive Mode <https://docs.python.org/3/tutorial/appendix.html#interactive-mode>`_:
+
+.. code-block:: python
+
+   python
+   >>> from game.common.enums import *
+   >>> ObjectType(<number>)
+
+.. note::
+   As long as you keep entering valid Python, you're basically writing a temporary Python script in your shell.
+   If you wanted, you could even do
+   
+   .. code-block:: python
+
+      >>> for i in range(1, 10):
+      ...     ObjectType(i)
+
+   This is a very powerful tool that can be used for much more than converting enums.
+   For more information, see https://docs.python.org/3/tutorial/appendix.html#interactive-mode.
+
 Generate, Run, Visualize
 ========================
 
@@ -49,12 +87,24 @@ You can also combine certain commands:
 
     python launcher.pyz gr
 
+.. important::
+   As commands are listed, some will have several versions that perform the same task. 
+
+   Only **ONE** line needs to be typed into the terminal, **NOT** all.
+
 Generate
 --------
 
 If you don't want to have a new, random seed, don't run this command. With the same seed and clients, the results will
 stay consistent.
 
+.. code-block:: console
+
+   python launcher.pyz g
+   python launcher.pyz gen
+   python launcher.pyz generate
+
+.. _run-command:
 
 Run
 ---
@@ -63,11 +113,22 @@ As the game is running, any print statements you have will print to your console
 debugging. There will also be logs generated in the ``logs`` folder, showing what information was stored each turn in
 the JSON format.
 
+.. code-block:: console
+
+   python launcher.pyz r
+   python launcher.pyz run
+
 Visualize
 ---------
 
 This displays each turn of the game you ran, allowing you to debug in a more user-friendly way! How wonderful.
-Visit :doc:`visualizer` to get a better understanding of how it works.
+Visit :doc:`visualizer` for more details.
+
+.. code-block:: console
+
+   python launcher.pyz v
+   python launcher.pyz vis
+   python launcher.pyz visualize
 
 Launcher Help
 -------------

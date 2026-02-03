@@ -4,6 +4,10 @@ Enums
 
 Enums can represent a wide variety of things. Here is a list of enums and what they represent.
 
+See :ref:`enum-script` for more on how to interpret enums as seen in log files.
+
+.. _action-type:
+
 ActionType
 ==========
 
@@ -21,6 +25,8 @@ Things your character can do. For further details, see :doc:`controls`.
     INTERACT_LEFT, Interact with the tile to your left
     INTERACT_RIGHT, Interact with the tile to your right
     INTERACT_CENTER, Interact with the tile you are standing on
+
+.. _object-type:
 
 ObjectType
 ==========
@@ -43,25 +49,3 @@ Things in the game. Note the difference between ``SCRAP_ITEM`` and ``SCRAP_SPAWN
    JUMPER_BOT, ████ ████ 
    SUPPORT_BOT, ████████; █████ ███ 
 
-Reading Logs
-------------
-If you are looking at an "object_type" in log files, it will be a number.
-If you want to know what that number corresponds to, run the following commands:
-
-.. code-block:: python
-
-   python
-   >>> from game.common.enums import *
-   >>> ObjectType(<number>) # should print something
-
-.. note::
-   We are using Python's **R**\ead **E**\valuate **P**\rint **L**\oop here.
-   As long as you keep entering valid Python, you're basically writing a temporary Python script in your shell.
-   So, if you wanted, you could even do
-   
-   .. code-block:: python
-
-      >>> for i in range(1, 10):
-      ...     ObjectType(i)
-
-   For more information, see https://docs.python.org/3/tutorial/appendix.html#interactive-mode

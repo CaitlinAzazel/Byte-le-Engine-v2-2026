@@ -57,7 +57,7 @@ $$$$$$$$$
 
 .. container:: centered
 
-    .. image:: /images/clone_repo.png
+    .. image:: /_static/images/clone_repo.png
         :width: 60%
 
 2. Press "Open with GitHub Desktop"
@@ -68,7 +68,7 @@ $$$$$$$$$
 
 .. container:: centered
 
-    .. image:: /images/github_desktop.png
+    .. image:: /_static/images/github_desktop.png
         :width: 70%
 
 Download ZIP
@@ -80,7 +80,7 @@ $$$$$$$$$$$$
 
 .. container:: centered
 
-    .. image:: /images/clone_repo.png
+    .. image:: /_static/images/clone_repo.png
         :width: 60%
 
 #. Click ``Download ZIP`` and find it in your Downloads.

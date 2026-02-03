@@ -4,7 +4,7 @@ welcome toe tthe docs !
 
 these area the edocs (ᴗ ͜ʖ ᴗ)
 
-.. image:: /images/StartMenu.png
+.. image:: /_static/images/StartMenu.png
 
 .. toctree::
    :maxdepth: 2
@@ -14,8 +14,10 @@ these area the edocs (ᴗ ͜ʖ ᴗ)
    useful_commands
    controls
    helpers
-   the_server
+   server
+   visualizer
    enums
+   debugging
 
 Search Page
 ===========
