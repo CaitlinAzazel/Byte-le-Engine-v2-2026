@@ -352,5 +352,8 @@ class Vector(GameObject):
     def distance(self, other_vector: 'Vector') -> int:
         return abs(self.x - other_vector.x) + abs(self.y - other_vector.y)
 
+    def as_direction(self) -> 'Vector':
+        return self.clamp_xy(-1, 1)
+
     def direction_to(self, other: 'Vector') -> 'Vector':
-        return (other - self).clamp_xy(-1, 1)
+        return (other - self).as_direction()
