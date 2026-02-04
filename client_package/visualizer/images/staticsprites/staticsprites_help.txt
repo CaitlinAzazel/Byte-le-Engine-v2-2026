@@ -1,0 +1,4 @@
+This file is for static sprite .png images, which are just static images that
+will not display animations.
+
+Images in this folder are used by sprites in the sprites folder.
