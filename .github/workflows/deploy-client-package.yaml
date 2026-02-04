@@ -14,7 +14,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
       with:
-        source-directory: client-package
+        source-directory: 'client-package'
         destination-github-username: 'acm-ndsu'
         destination-repository-name: 'Byte-le-2026-Client-Package'
         user-email: noah.magcalas@gmail.com
