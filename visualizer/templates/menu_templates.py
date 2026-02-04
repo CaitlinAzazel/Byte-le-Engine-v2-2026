@@ -139,7 +139,7 @@ class Basic(MenuTemplate):
         """
         self.screen.blit(self.background, (0, 0))
         self.start_button.render()
-        self.results_button.render()
+        #self.results_button.render()
         super().start_render()
 
     def load_results_screen(self, results: dict) -> None:
