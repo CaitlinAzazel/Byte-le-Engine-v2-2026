@@ -1,7 +1,9 @@
 name: deploy-client-package
 
 on:
-  push
+  push:
+    branches:
+      - 'main'
 
 jobs:
   deploy:
@@ -20,16 +22,12 @@ jobs:
     - name: Build client package
       run: ./client-build.sh
     - name: Push to client package repository
-      id: push_directory
-      uses: cpina/github-action-push-to-another-repository@target-branch
+      uses: cpina/github-action-push-to-another-repository@main
       env:
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
       with:
         source-directory: 'output'
         destination-github-username: 'acm-ndsu'
         destination-repository-name: 'Byte-le-2026-Client-Package'
         user-email: noah.magcalas@gmail.com
-        commit-message: See ORIGIN_COMMIT from $GITHUB_REF
         target-branch: main
-    - name: Test get variable exported by push-to-another-repository
-      run: echo $DESTINATION_CLONED_DIRECTORY
