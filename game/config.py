@@ -64,7 +64,6 @@ class Debug:                    # Keeps track of the current debug level of the 
 
 
 USE_PRECOMPILED_MAP = False # WARN: THIS MUST BE TRUE WHEN BUILDING FOR THE CLIENT PACKAGE 
-print(os.environ.get('RELEASE_BUILD'))
 MAP_DATA_FILEPATH = Path('game', 'map_data.py')
 
 PATH_TO_ROOT_DIR = Path()
