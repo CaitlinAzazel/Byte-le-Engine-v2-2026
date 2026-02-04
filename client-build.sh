@@ -2,7 +2,13 @@
 
 shopt -s extglob
 
-mkdir output
+export CLIENT_PACKAGE_BUILD=true
+
+mkdir -p output
+rm output/*
+
+echo "Activating venv..."
+source .venv/bin/activate
 
 echo "Compiling map data..."
 python compile_map_data.py
@@ -16,5 +22,12 @@ python -m zipapp wrapper -o output/launcher.pyz -c
 
 echo "Copying extra files..."
 cp -r client_package/* output/
+
+if ! [[ -v CI ]]; then
+	echo "Cleaning up..."
+	rm -r wrapper/game
+	rm -r wrapper/visualizer
+	rm -r wrapper/server
+fi
 
 echo "Build successful."
