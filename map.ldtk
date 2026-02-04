@@ -10,7 +10,7 @@
 	},
 	"iid": "7a6ff7c0-5e50-11f0-9d3b-290c9e8d0b0c",
 	"jsonVersion": "1.5.3",
-	"appBuildId": 489701,
+	"appBuildId": 473703,
 	"nextUid": 72,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -1160,7 +1160,7 @@
 									"id": "V_String",
 									"params": ["5826e950-d380-11f0-ab8e-87a2fbb069e0"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 1, "__tile": null, "defUid": 60, "realEditorValues": [] }
+								{ "__identifier": "point_bonus", "__type": "Int", "__value": 50, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							],
 							"__worldX": 32,
 							"__worldY": 256
@@ -1197,7 +1197,7 @@
 							"defUid": 1,
 							"px": [32,576],
 							"fieldInstances": [
-								{ "__identifier": "cost", "__type": "Int", "__value": 1, "__tile": null, "defUid": 2, "realEditorValues": [] },
+								{ "__identifier": "cost", "__type": "Int", "__value": 4, "__tile": null, "defUid": 2, "realEditorValues": [{ "id": "V_Int", "params": [4] }] },
 								{ "__identifier": "connected_doors", "__type": "Array<EntityRef>", "__value": [ {
 									"entityIid": "2a515c40-d380-11f0-ab8e-896fddce85e7",
 									"layerIid": "463b4b20-5e50-11f0-9d3b-8515a9a415f3",
@@ -1215,7 +1215,7 @@
 									"id": "V_String",
 									"params": ["293dc960-d380-11f0-ab8e-d1e1b17d57b4"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 1, "__tile": null, "defUid": 60, "realEditorValues": [] }
+								{ "__identifier": "point_bonus", "__type": "Int", "__value": 200, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [200] }] }
 							],
 							"__worldX": 32,
 							"__worldY": 576
@@ -1252,8 +1252,8 @@
 							"defUid": 55,
 							"px": [128,192],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 56, "realEditorValues": [null] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 61, "realEditorValues": [null] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							],
 							"__worldX": 128,
 							"__worldY": 192
@@ -1271,8 +1271,8 @@
 							"defUid": 11,
 							"px": [224,256],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 59, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 70, "realEditorValues": [] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 5, "__tile": null, "defUid": 59, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 5, "__tile": null, "defUid": 70, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }
 							],
 							"__worldX": 224,
 							"__worldY": 256
@@ -1322,8 +1322,8 @@
 							"defUid": 55,
 							"px": [160,544],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 56, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 61, "realEditorValues": [] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							],
 							"__worldX": 160,
 							"__worldY": 544
@@ -1341,8 +1341,8 @@
 							"defUid": 55,
 							"px": [384,64],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 56, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 61, "realEditorValues": [] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							],
 							"__worldX": 384,
 							"__worldY": 64
@@ -1456,8 +1456,8 @@
 							"defUid": 11,
 							"px": [544,128],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 59, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 70, "realEditorValues": [] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 5, "__tile": null, "defUid": 59, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 5, "__tile": null, "defUid": 70, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }
 							],
 							"__worldX": 544,
 							"__worldY": 128
@@ -1475,7 +1475,7 @@
 							"defUid": 1,
 							"px": [608,32],
 							"fieldInstances": [
-								{ "__identifier": "cost", "__type": "Int", "__value": 1, "__tile": null, "defUid": 2, "realEditorValues": [] },
+								{ "__identifier": "cost", "__type": "Int", "__value": 2, "__tile": null, "defUid": 2, "realEditorValues": [{ "id": "V_Int", "params": [2] }] },
 								{ "__identifier": "connected_doors", "__type": "Array<EntityRef>", "__value": [ {
 									"entityIid": "593d6260-d380-11f0-ab8e-a1f090ef1ad7",
 									"layerIid": "463b4b20-5e50-11f0-9d3b-8515a9a415f3",
@@ -1493,7 +1493,7 @@
 									"id": "V_String",
 									"params": ["595d1f60-d380-11f0-ab8e-b718695ea809"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 1, "__tile": null, "defUid": 60, "realEditorValues": [] }
+								{ "__identifier": "point_bonus", "__type": "Int", "__value": 100, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [100] }] }
 							],
 							"__worldX": 608,
 							"__worldY": 32
@@ -1530,9 +1530,9 @@
 							"defUid": 10,
 							"px": [1152,192],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 58, "realEditorValues": [] },
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 5, "__tile": null, "defUid": 58, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
 								{ "__identifier": "power_value", "__type": "Int", "__value": 10, "__tile": null, "defUid": 57, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 71, "realEditorValues": [] }
+								{ "__identifier": "point_value", "__type": "Int", "__value": 2, "__tile": null, "defUid": 71, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
 							],
 							"__worldX": 1152,
 							"__worldY": 192
@@ -1550,8 +1550,8 @@
 							"defUid": 55,
 							"px": [864,224],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 56, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 61, "realEditorValues": [] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							],
 							"__worldX": 864,
 							"__worldY": 224
@@ -1569,8 +1569,8 @@
 							"defUid": 55,
 							"px": [1056,576],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 56, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 61, "realEditorValues": [] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							],
 							"__worldX": 1056,
 							"__worldY": 576
@@ -1588,7 +1588,7 @@
 							"defUid": 1,
 							"px": [1152,576],
 							"fieldInstances": [
-								{ "__identifier": "cost", "__type": "Int", "__value": 1, "__tile": null, "defUid": 2, "realEditorValues": [] },
+								{ "__identifier": "cost", "__type": "Int", "__value": 3, "__tile": null, "defUid": 2, "realEditorValues": [{ "id": "V_Int", "params": [3] }] },
 								{ "__identifier": "connected_doors", "__type": "Array<EntityRef>", "__value": [ {
 									"entityIid": "476ab380-d380-11f0-ab8e-dfa20b3742dd",
 									"layerIid": "463b4b20-5e50-11f0-9d3b-8515a9a415f3",
@@ -1606,7 +1606,7 @@
 									"id": "V_String",
 									"params": ["46e3a930-d380-11f0-ab8e-3b3ae60fa6c9"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 1, "__tile": null, "defUid": 60, "realEditorValues": [] }
+								{ "__identifier": "point_bonus", "__type": "Int", "__value": 150, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [150] }] }
 							],
 							"__worldX": 1152,
 							"__worldY": 576
@@ -1643,8 +1643,8 @@
 							"defUid": 11,
 							"px": [704,544],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 59, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 70, "realEditorValues": [] }
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 5, "__tile": null, "defUid": 59, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 5, "__tile": null, "defUid": 70, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }
 							],
 							"__worldX": 704,
 							"__worldY": 544
@@ -1681,12 +1681,165 @@
 							"defUid": 10,
 							"px": [608,352],
 							"fieldInstances": [
-								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 1, "__tile": null, "defUid": 58, "realEditorValues": [] },
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 5, "__tile": null, "defUid": 58, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
 								{ "__identifier": "power_value", "__type": "Int", "__value": 10, "__tile": null, "defUid": 57, "realEditorValues": [] },
-								{ "__identifier": "point_value", "__type": "Int", "__value": 1, "__tile": null, "defUid": 71, "realEditorValues": [] }
+								{ "__identifier": "point_value", "__type": "Int", "__value": 2, "__tile": null, "defUid": 71, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
 							],
 							"__worldX": 608,
 							"__worldY": 352
+						},
+						{
+							"__identifier": "Coin",
+							"__grid": [4,10],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 96, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#D77643",
+							"iid": "e6edefe0-fa90-11f0-9ef5-15058a447f97",
+							"width": 32,
+							"height": 32,
+							"defUid": 55,
+							"px": [128,320],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+							],
+							"__worldX": 128,
+							"__worldY": 320
+						},
+						{
+							"__identifier": "Coin",
+							"__grid": [8,10],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 96, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#D77643",
+							"iid": "e974e8e0-fa90-11f0-9ef5-55a1448794c1",
+							"width": 32,
+							"height": 32,
+							"defUid": 55,
+							"px": [256,320],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+							],
+							"__worldX": 256,
+							"__worldY": 320
+						},
+						{
+							"__identifier": "Coin",
+							"__grid": [11,10],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 96, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#D77643",
+							"iid": "e9bfd490-fa90-11f0-9ef5-c52cdfca89a5",
+							"width": 32,
+							"height": 32,
+							"defUid": 55,
+							"px": [352,320],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+							],
+							"__worldX": 352,
+							"__worldY": 320
+						},
+						{
+							"__identifier": "Coin",
+							"__grid": [1,13],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 96, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#D77643",
+							"iid": "eafb3ac0-fa90-11f0-9ef5-fde27529e9d4",
+							"width": 32,
+							"height": 32,
+							"defUid": 55,
+							"px": [32,416],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+							],
+							"__worldX": 32,
+							"__worldY": 416
+						},
+						{
+							"__identifier": "Battery",
+							"__grid": [16,1],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 32, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#B55088",
+							"iid": "fc023530-fa90-11f0-9ef5-858ad37d52a8",
+							"width": 32,
+							"height": 32,
+							"defUid": 10,
+							"px": [512,32],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 5, "__tile": null, "defUid": 58, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
+								{ "__identifier": "power_value", "__type": "Int", "__value": 10, "__tile": null, "defUid": 57, "realEditorValues": [] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 2, "__tile": null, "defUid": 71, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
+							],
+							"__worldX": 512,
+							"__worldY": 32
+						},
+						{
+							"__identifier": "Scrap",
+							"__grid": [23,6],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 576, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#FFFFFF",
+							"iid": "052f9a80-fa90-11f0-9ef5-25fe2ab85a2d",
+							"width": 32,
+							"height": 32,
+							"defUid": 11,
+							"px": [736,192],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 5, "__tile": null, "defUid": 59, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 5, "__tile": null, "defUid": 70, "realEditorValues": [{ "id": "V_Int", "params": [5] }] }
+							],
+							"__worldX": 736,
+							"__worldY": 192
+						},
+						{
+							"__identifier": "Coin",
+							"__grid": [8,13],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 96, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#D77643",
+							"iid": "7545e8b0-fa90-11f0-9ef5-995a80bd78ea",
+							"width": 32,
+							"height": 32,
+							"defUid": 55,
+							"px": [256,416],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+							],
+							"__worldX": 256,
+							"__worldY": 416
+						},
+						{
+							"__identifier": "Coin",
+							"__grid": [19,3],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": { "tilesetUid": 42, "x": 96, "y": 0, "w": 32, "h": 32 },
+							"__smartColor": "#D77643",
+							"iid": "7c9c1d00-fa90-11f0-9ef5-0fe67fad9379",
+							"width": 32,
+							"height": 32,
+							"defUid": 55,
+							"px": [608,96],
+							"fieldInstances": [
+								{ "__identifier": "turns_to_respawn", "__type": "Int", "__value": 50, "__tile": null, "defUid": 56, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "point_value", "__type": "Int", "__value": 50, "__tile": null, "defUid": 61, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+							],
+							"__worldX": 608,
+							"__worldY": 96
 						}
 					]
 				},
