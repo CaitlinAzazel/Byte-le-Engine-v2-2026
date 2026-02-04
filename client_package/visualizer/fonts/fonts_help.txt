@@ -1,2 +1,0 @@
-This folder is where you can place any non-default fonts that you are using.
-You can then link them with the config file to use by the other templates.
