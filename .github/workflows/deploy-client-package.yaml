@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'client-package'
 
 jobs:
   deploy:
