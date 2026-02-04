@@ -1,6 +1,13 @@
 name: build
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'game/**'
+      - 'server/**'
+      - 'visualizer/**'
+      - 'wrapper/**'
+      - 'build.*'
 
 jobs:
   build:
