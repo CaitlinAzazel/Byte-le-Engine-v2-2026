@@ -3,6 +3,8 @@
 *.json
 *.pyz
 *.db
+map_data.py
+output/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

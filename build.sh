@@ -3,6 +3,7 @@
 shopt -s extglob
 
 test -e launcher.pyz && rm launcher.pyz
+python compile_map_data.py
 cp -r game wrapper/game/
 cp -r visualizer wrapper/visualizer/
 mkdir -p wrapper/server
@@ -11,3 +12,4 @@ python -m zipapp wrapper -o launcher.pyz -c
 rm -r wrapper/game
 rm -r wrapper/visualizer
 rm -r wrapper/server
+echo "Build successful."

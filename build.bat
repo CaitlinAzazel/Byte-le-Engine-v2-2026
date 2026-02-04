@@ -1,6 +1,7 @@
 @echo off
 del /q *.pyz
 
+python compile_map_data.py
 xcopy /s/e/i "game" "wrapper/game"
 xcopy /s/e/i "visualizer" "wrapper/visualizer"
 xcopy /s/e/i "server" "wrapper/server"

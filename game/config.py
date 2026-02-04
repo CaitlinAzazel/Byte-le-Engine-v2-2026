@@ -55,7 +55,7 @@ LOGS_FILE = os.path.join(LOGS_DIR, LOGS_FILE_NAME)
 
 GAME_MAP_FILE_NAME = "game_map.json"                                # Name and extension of game file that holds generated world
 GAME_MAP_DIR = os.path.join(os.getcwd(), "logs")                    # Location of game map file
-GAME_MAP_FILE = os.path.join(GAME_MAP_DIR, GAME_MAP_FILE_NAME)      # Filepath for game map file
+GAME_MAP_FILEPATH = os.path.join(GAME_MAP_DIR, GAME_MAP_FILE_NAME)      # Filepath for game map file
 
 class Debug:                    # Keeps track of the current debug level of the game
     level = DebugLevel.NONE
@@ -63,13 +63,20 @@ class Debug:                    # Keeps track of the current debug level of the 
 # Other Settings Here --------------------------------------------------------------------------------------------------
 
 
-parts = Path(__file__).parts
-# will break if this is not the root directory name :)
-# does not break, however, if the project root is nested in a directory of the same name :^)
-# will probably break if the project contains a directory with the same name for some reason 8^)
-root_idx = len(parts) - list(reversed(parts)).index('Byte-le-Engine-v2-2026') 
-PATH_TO_ROOT_DIR = Path(*parts[:root_idx])
-PATH_TO_LDTK_PROJECT = str(PATH_TO_ROOT_DIR / 'map.ldtk') # uber chopped but works
+USE_PRECOMPILED_MAP = os.getenv('CLIENT_PACKAGE_BUILD') or False
+MAP_DATA_FILEPATH = Path('game', 'map_data.py')
+
+PATH_TO_ROOT_DIR = Path()
+PATH_TO_LDTK_PROJECT = str()
+# this allows us to not ship the .ldtk file with the client package
+if not USE_PRECOMPILED_MAP:
+    parts = Path(__file__).parts
+    # will break if this is not the root directory name :)
+    # does not break, however, if the project root is nested in a directory of the same name :^)
+    # will probably break if the project contains a directory with the same name for some reason 8^)
+    root_idx = len(parts) - list(reversed(parts)).index('Byte-le-Engine-v2-2026') 
+    PATH_TO_ROOT_DIR = Path(*parts[:root_idx])
+    PATH_TO_LDTK_PROJECT = str(PATH_TO_ROOT_DIR / 'map.ldtk') # uber chopped but works
 
 # should mirror values in LDtk editor, but lowercase
 class LDtk:

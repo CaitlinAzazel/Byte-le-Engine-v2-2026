@@ -2,7 +2,7 @@ import ast
 import random
 import json
 from math import floor
-from typing import Self, Type
+from typing import Any, Self, Type
 
 from game.common.enums import *
 from game.common.game_object import GameObject
@@ -414,6 +414,16 @@ class GameBoard(GameObject):
 
         # reassign the avatar's position
         game_object.position = position
+
+    @staticmethod
+    def locations_to_json_dict(locations: dict[Vector, list[GameObject]]) -> dict[str, Any]:
+        return {str(position.to_json()): [go.to_json() for go in go_list]
+            for position, go_list in locations.items()}
+
+    @staticmethod
+    def locations_from_json_dict(json: dict) -> dict[Vector, list[GameObject]]:
+        return {Vector.from_json_str(position): [json_to_instance(go) for go in go_list]
+            for position, go_list in json.items()}
 
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
