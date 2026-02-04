@@ -5,10 +5,16 @@ shopt -s extglob
 export CLIENT_PACKAGE_BUILD=true
 
 mkdir -p output
-rm output/*
 
-echo "Activating venv..."
-source .venv/bin/activate
+# GitHub Actions always have CI set as an environment variable
+# this checks if CI is unset; we are running this locally
+if ! [[ -v CI ]]; then
+	echo "Cleaning old build..."
+	rm output/*
+
+	echo "Activating venv..."
+	source .venv/bin/activate
+fi
 
 echo "Compiling map data..."
 python compile_map_data.py
@@ -23,8 +29,6 @@ python -m zipapp wrapper -o output/launcher.pyz -c
 echo "Copying extra files..."
 cp -r client_package/* output/
 
-# GitHub Actions always have CI set as an environment variable
-# this checks if CI is unset; we are running this locally
 if ! [[ -v CI ]]; then
 	echo "Cleaning up..."
 	rm -r wrapper/game
