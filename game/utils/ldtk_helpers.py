@@ -1,4 +1,3 @@
-from typing import Self
 from game.common.avatar import Avatar
 from game.common.game_object import GameObject
 from game.common.map.game_board import GameBoard
@@ -17,17 +16,17 @@ from game.fnaacm.stations.generator import Generator
 from game.fnaacm.stations.scrap_spawner import ScrapSpawner
 from game.common.stations.refuge import Refuge
 from game.utils.helpers import read_json_file
-from game.utils.ldtk_json import EntityInstance, LayerInstance, Level, ldtk_json_from_dict 
+from game.utils.ldtk_json import EntityInstance, LayerInstance, LdtkJSON, Level, ldtk_json_from_dict 
 from game.utils.vector import Vector
 
 
+ENTITY_LOAD_PRIORITY: dict[str, int] = {
+    LDtk.EntityIdentifier.DOOR: -9999, # load doors at least before generators
+}
 """
 unspecified entities have a default priority of 0
 highest = first; lowest = last
 """
-ENTITY_LOAD_PRIORITY: dict[str, int] = {
-    LDtk.EntityIdentifier.DOOR: -9999, # load doors at least before generators
-}
 
 def get_entity_load_priority(entity: EntityInstance) -> int:
     return ENTITY_LOAD_PRIORITY.get(entity.identifier.lower(), 0)
@@ -110,20 +109,26 @@ def load_collisions(locations: dict[Vector, list[GameObject]], collision_layer: 
             continue
         GameBoard.insert_location(locations, position, game_object)
 
-def ldtk_to_locations(path_to_ldtk_file: str, level_identifier: str = LDtk.LevelIdentifier.PRODUCTION) -> tuple[dict[Vector, list[GameObject]], Vector]:
+def map_data_from_ldtk_file(path_to_ldtk_file: str, level_identifier: str = LDtk.LevelIdentifier.PRODUCTION):
+    json_data: dict = read_json_file(path_to_ldtk_file)
+    return map_data_from_ldtk_dict(json_data, level_identifier)
+
+def map_data_from_ldtk_dict(ldtk_dict: dict, level_identifier: str = LDtk.LevelIdentifier.PRODUCTION):
+    ldtk_json: LdtkJSON = LdtkJSON.from_dict(ldtk_dict)
+    return map_data_from_ldtk_json(ldtk_json, level_identifier)
+
+def map_data_from_ldtk_json(ldtk_json: LdtkJSON, level_identifier: str = LDtk.LevelIdentifier.PRODUCTION) -> tuple[dict[Vector, list[GameObject]], Vector]:
     """
     :param level_identifier: case-insensitive identifier of the level to parse
     :return: a tuple containing a Locations dict as used in GameBoard and the size of the map
     """
-    json_data = read_json_file(path_to_ldtk_file)
-    ldtk_json = ldtk_json_from_dict(json_data)
-    assert len(ldtk_json.levels) >= 1, f'LDtk file "{path_to_ldtk_file}" has no levels'
+    assert len(ldtk_json.levels) >= 1, f'no levels found'
     level: Level | None = None
     for l in ldtk_json.levels:
         if l.identifier.lower() == level_identifier.lower():
             level = l
             break
-    assert not (level is None), f'LDtk file ({path_to_ldtk_file}) does not contain a level with identifier "{level_identifier}"'
+    assert not (level is None), f'no level found with identifier "{level_identifier}"'
 
     layers = level.layer_instances
     if layers is None:
