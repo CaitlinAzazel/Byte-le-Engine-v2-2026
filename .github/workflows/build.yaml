@@ -8,6 +8,7 @@ on:
       - 'visualizer/**'
       - 'wrapper/**'
       - 'build.*'
+  pull_request: {}
 
 jobs:
   build:
