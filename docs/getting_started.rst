@@ -21,7 +21,7 @@ Prerequisites
 The Client Package
 ===================================
 
-To begin patrolling the dark, dank halls of QBB, you must download the contents of `this repository <https://github.com/acm-ndsu/Byte-le-2025-Client-Package>`_.
+To begin patrolling the dark, dank halls of QBB, you must download the contents of `this repository <https://github.com/acm-ndsu/Byte-le-2026-Client-Package>`_.
 You may do so in many ways... here are some:
 
 Using `Git <https://git-scm.com/install>`_'s built-in CLI
@@ -51,7 +51,7 @@ $$$$$$$$$$$
 Using `GitHub Desktop <https://desktop.github.com/download/>`_
 $$$$$$$$$
 
-#. Go to https://github.com/acm-ndsu/Byte-le-2025-Client-Package
+#. Go to https://github.com/acm-ndsu/Byte-le-2026-Client-Package
 
 #. Press the ``<> Code`` button to drop down a menu:
 
@@ -74,7 +74,7 @@ $$$$$$$$$
 Download ZIP
 $$$$$$$$$$$$
 
-#. Go to https://github.com/acm-ndsu/Byte-le-2025-Client-Package
+#. Go to https://github.com/acm-ndsu/Byte-le-2026-Client-Package
 
 #. Press the ``<> Code`` button to drop down a menu:
 
