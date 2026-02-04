@@ -1,0 +1,15 @@
+# Game and Visualization Packages
+tqdm~=4.67.1
+pygame~=2.6.1
+numpy~=2.2.6
+opencv-python~=4.12.0.88
+
+# Server Packages
+psycopg2-binary~=2.9.11
+SQLAlchemy~=2.0.45
+pydantic~=2.12.5
+fastapi[all]~=0.127.1
+schedule~=1.2.2
+requests~=2.32.5
+urllib3~=2.6.2
+pandas~=2.3.3

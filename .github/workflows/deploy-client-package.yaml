@@ -16,9 +16,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r client-package/requirements.txt
     - name: Build client package
-      run: sh ./client-build.sh
+      run: ./client-build.sh
     - name: Push to client package repository
       id: push_directory
       uses: cpina/github-action-push-to-another-repository@target-branch
