@@ -10,7 +10,7 @@ from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.map.coin_spawner import CoinSpawner
 from game.fnaacm.stations.generator import Generator
 from game.common.stations.refuge import Refuge
-from game.utils.ldtk_helpers import map_data_from_ldtk_dict, map_data_from_ldtk_file
+from game.utils.ldtk_helpers import map_data_from_ldtk_file
 from game.utils.vector import Vector
 
 
@@ -42,7 +42,7 @@ class TestLDtkHelpers(unittest.TestCase):
         self.expected_game_board.generate_map()
 
     def test_loads_ldtk_file(self):
-        locations, _ = map_data_from_ldtk_dict(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
+        locations, _ = map_data_from_ldtk_file(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         self.assertGreater(len(locations.keys()), 0)
 
     def test_correct_map_size(self):
