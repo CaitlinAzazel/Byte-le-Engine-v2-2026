@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r client-package/requirements.txt
+        pip install -r client_package/requirements.txt
     - name: Build client package
       run: ./client-build.sh
     - name: Push to client package repository
