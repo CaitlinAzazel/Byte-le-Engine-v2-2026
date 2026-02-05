@@ -81,17 +81,17 @@ class TestGenerator(unittest.TestCase):
 
     def test_points_given_on_activation(self):
         self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
-        self.assertEqual(self.avatar.score, self.generator.activation_point_bonus)
+        self.assertEqual(self.avatar.score, self.generator.activation_bonus)
 
     def test_points_given_exactly_once(self):
         self.scrap.quantity = self.generator.cost * 2
-        self.assertFalse(self.generator.is_bonus_collected)
+        self.assertFalse(self.generator.is_activation_bonus_collected)
         self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
         self.assertTrue(self.generator.active)
-        self.assertTrue(self.generator.is_bonus_collected)
-        self.assertEqual(self.avatar.score, self.generator.activation_point_bonus)
+        self.assertTrue(self.generator.is_activation_bonus_collected)
+        self.assertEqual(self.avatar.score, self.generator.activation_bonus)
         self.generator.deactivate()
         self.interact_controller.handle_actions(ActionType.INTERACT_CENTER, self.player, self.game_board)
         self.assertTrue(self.generator.active)
-        self.assertTrue(self.generator.is_bonus_collected)
-        self.assertEqual(self.avatar.score, self.generator.activation_point_bonus)
+        self.assertTrue(self.generator.is_activation_bonus_collected)
+        self.assertEqual(self.avatar.score, self.generator.activation_bonus)

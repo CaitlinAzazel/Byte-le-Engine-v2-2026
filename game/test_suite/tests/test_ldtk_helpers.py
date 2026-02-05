@@ -31,7 +31,7 @@ class TestLDtkHelpers(unittest.TestCase):
             Vector(0, 0): [Wall()],
             Vector(0, 1): [Vent()],
             Vector(0, 2): [Refuge(0, 2)],
-            Vector(1, 0): [Generator(cost=99, point_bonus=2025, doors=[door, second_door])],
+            Vector(1, 0): [Generator(cost=99, activation_bonus=2025, multiplier_bonus=6.7, doors=[door, second_door])],
             Vector(1, 1): [door],
             Vector(1, 2): [BatterySpawner(turns_to_respawn=99, recharge_amount=2025)],
             Vector(1, 3): [ScrapSpawner(turns_to_respawn=99)],
