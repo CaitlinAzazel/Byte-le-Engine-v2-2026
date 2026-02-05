@@ -31,7 +31,7 @@ class Client(UserClient):
         actions: list[ActionType] = []
         current: Vector = avatar.position
 
-        goal_object = ObjectType.COIN
+        goal_object = ObjectType.COIN_SPAWNER
         held_scrap = avatar.get_quantity_of_item_type(ObjectType.SCRAP)
         if held_scrap > 0:
             goal_object = ObjectType.GENERATOR

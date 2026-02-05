@@ -161,17 +161,17 @@ class Engine:
             raise FileNotFoundError('Log directory not found.')
 
         # Verify the game map exists
-        if not os.path.exists(GAME_MAP_FILE):
+        if not os.path.exists(GAME_MAP_FILEPATH):
             raise FileNotFoundError('Game map not found.')
 
         # Delete previous logs
         for filename in os.listdir(LOGS_DIR):
-            if os.path.join(LOGS_DIR, filename) == GAME_MAP_FILE:
+            if os.path.join(LOGS_DIR, filename) == GAME_MAP_FILEPATH:
                 continue
             os.remove(os.path.join(LOGS_DIR, filename))
 
         world = None
-        with open(GAME_MAP_FILE) as json_file:
+        with open(GAME_MAP_FILEPATH) as json_file:
             world = json.load(json_file)
             world['game_board'] = GameBoard().from_json(world['game_board'])
         self.world = world

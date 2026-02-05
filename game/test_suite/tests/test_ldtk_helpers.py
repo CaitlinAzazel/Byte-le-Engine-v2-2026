@@ -2,7 +2,7 @@ import unittest
 
 from game.common.map.game_board import GameBoard
 from game.common.map.wall import Wall
-from game.config import PATH_TO_LDTK_PROJECT, LDtk
+from game.config import PATH_TO_LDTK_PROJECT, USE_PRECOMPILED_MAP, LDtk
 from game.fnaacm.map.door import Door
 from game.fnaacm.map.vent import Vent
 from game.fnaacm.stations.scrap_spawner import ScrapSpawner
@@ -10,13 +10,17 @@ from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.map.coin_spawner import CoinSpawner
 from game.fnaacm.stations.generator import Generator
 from game.common.stations.refuge import Refuge
-from game.utils.ldtk_helpers import ldtk_to_locations
+from game.utils.ldtk_helpers import map_data_from_ldtk_file
 from game.utils.vector import Vector
 
 
 EXPECTED_MAP_SIZE = Vector(8, 8)
 EXPECTED_TOTAL_INSTANCES = 15
 TYPES_WITHOUT_DATA = {Wall, Vent}
+
+assert not USE_PRECOMPILED_MAP, \
+    f'PATH_TO_LDTK_PROJECT is incorrect when USE_PRECOMPILED_MAP is true, ' \
+    f'and USE_PRE_COMPILED_MAP should be false unless building for client package'
 
 class TestLDtkHelpers(unittest.TestCase):
     def setUp(self) -> None:
@@ -38,21 +42,22 @@ class TestLDtkHelpers(unittest.TestCase):
         self.expected_game_board.generate_map()
 
     def test_loads_ldtk_file(self):
-        locations, _ = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
+        locations, _ = map_data_from_ldtk_file(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         self.assertGreater(len(locations.keys()), 0)
 
     def test_correct_map_size(self):
-        _, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
+        _, map_size = map_data_from_ldtk_file(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         self.assertEqual(map_size, EXPECTED_MAP_SIZE)
 
     def test_correct_entity_count(self):
-        locations, _ = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
+        locations, _ = map_data_from_ldtk_file(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         self.assertEqual(sum(map(len, locations.values())), EXPECTED_TOTAL_INSTANCES)
 
     def test_correct_entity_field_values(self):
-        locations, map_size = ldtk_to_locations(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
+        locations, map_size = map_data_from_ldtk_file(PATH_TO_LDTK_PROJECT, level_identifier=LDtk.LevelIdentifier.TEST)
         game_board = GameBoard(0, map_size, locations)
         game_board.generate_map()
+        assert self.expected_game_board.game_map is not None
         for position in self.expected_game_board.game_map.keys():
             expected = self.expected_game_board.get_top(position)
             actual = game_board.get_top(position)

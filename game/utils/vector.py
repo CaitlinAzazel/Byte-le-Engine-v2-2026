@@ -76,11 +76,13 @@ class Vector(GameObject):
         data = Vector.dict_from_json_str(json_str)
         return cls(data['x'], data['y'])
 
-    def __init__(self, x: int = 0, y: int = 0):
+    def __init__(self, x: int = 0, y: int = 0, read_only: bool = False):
         super().__init__()
         self.object_type: ObjectType = ObjectType.VECTOR
+        self.__read_only = False
         self.x = x
         self.y = y
+        self.__read_only = read_only
 
     @property
     def x(self) -> int:
@@ -90,6 +92,8 @@ class Vector(GameObject):
     def x(self, x: int) -> None:
         if x is None or not isinstance(x, int):
             raise ValueError(f"The given x value, {x}, is not an integer.")
+        if self.__read_only:
+            raise RuntimeError(f"Cannot modify a read-only Vector")
         self.__x = x
 
     @property
@@ -100,6 +104,8 @@ class Vector(GameObject):
     def y(self, y: int) -> None:
         if y is None or not isinstance(y, int):
             raise ValueError(f"The given y value, {y}, is not an integer.")
+        if self.__read_only:
+            raise RuntimeError(f"Cannot modify a read-only Vector")
         self.__y = y
 
     @property
@@ -110,18 +116,18 @@ class Vector(GameObject):
     def magnitude_squared(self) -> int:
         return self.x**2 + self.y**2
 
-    def clamp_xy(self, min: int, max: int) -> Self:
-        self.clamp_x(min, max)
-        self.clamp_y(min, max)
-        return self
+    @property
+    def is_diagonal(self) -> bool:
+        return self.x != 0 and self.y != 0
 
-    def clamp_x(self, min: int, max: int) -> Self:
-        self.x = clamp(self.x, min, max)
-        return self
+    def clamp_xy(self, min: int, max: int) -> 'Vector':
+        return Vector(clamp(self.x, min, max), clamp(self.y, min, max))
 
-    def clamp_y(self, min: int, max: int) -> Self:
-        self.y = clamp(self.y, min, max)
-        return self
+    def clamp_x(self, min: int, max: int) -> 'Vector':
+        return Vector(clamp(self.x, min, max), self.y)
+
+    def clamp_y(self, min: int, max: int) -> 'Vector':
+        return Vector(self.x, clamp(self.y, min, max))
 
     @staticmethod
     def from_xy_tuple(xy_tuple: Tuple[int, int]) -> 'Vector':
@@ -345,3 +351,9 @@ class Vector(GameObject):
 
     def distance(self, other_vector: 'Vector') -> int:
         return abs(self.x - other_vector.x) + abs(self.y - other_vector.y)
+
+    def as_direction(self) -> 'Vector':
+        return self.clamp_xy(-1, 1)
+
+    def direction_to(self, other: 'Vector') -> 'Vector':
+        return (other - self).as_direction()

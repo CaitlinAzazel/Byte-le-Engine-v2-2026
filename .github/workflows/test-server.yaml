@@ -1,6 +1,10 @@
 name: test-server
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'server/**'
+  pull_request: {}
 
 jobs:
   test:

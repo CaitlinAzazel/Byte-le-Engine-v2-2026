@@ -2,7 +2,7 @@ import ast
 import random
 import json
 from math import floor
-from typing import Self, Type
+from typing import Any, Self, Type
 
 from game.common.enums import *
 from game.common.game_object import GameObject
@@ -10,6 +10,7 @@ from game.common.map.game_object_container import GameObjectContainer
 from game.common.map.wall import Wall
 from game.common.map.occupiable import Occupiable
 from game.fnaacm.map.coin_spawner import CoinSpawner, CoinSpawnerList
+from game.fnaacm.map.door import Door
 from game.fnaacm.map.scrap_spawner_list import ScrapSpawnerList
 from game.fnaacm.stations.battery_spawner import BatterySpawner
 from game.fnaacm.stations.generator import Generator
@@ -414,6 +415,16 @@ class GameBoard(GameObject):
         # reassign the avatar's position
         game_object.position = position
 
+    @staticmethod
+    def locations_to_json_dict(locations: dict[Vector, list[GameObject]]) -> dict[str, Any]:
+        return {str(position.to_json()): [go.to_json() for go in go_list]
+            for position, go_list in locations.items()}
+
+    @staticmethod
+    def locations_from_json_dict(json: dict) -> dict[Vector, list[GameObject]]:
+        return {Vector.from_json_str(position): [json_to_instance(go) for go in go_list]
+            for position, go_list in json.items()}
+
     def to_json(self) -> dict:
         data: dict[str, object] = super().to_json()
         temp: dict[Vector, GameObjectContainer] | None = {str(vec.to_json()): go_container.to_json() for
@@ -422,10 +433,14 @@ class GameBoard(GameObject):
         data['game_map'] = temp
         data["seed"] = self.seed
         data["map_size"] = self.map_size.to_json()
-        data["location_vectors"] = [vec.to_json() for vec in self.locations.keys()] if self.locations is not None \
-            else None
-        data["location_objects"] = [[obj.to_json() for obj in v] for v in
-                                    self.locations.values()] if self.locations is not None else None
+
+        # NOTE: the locations dict is only used in __map_init/generate_map anyway,
+        # so saving it here clutters the turn logs; uncomment as needed
+        # data["location_vectors"] = [vec.to_json() for vec in self.locations.keys()] if self.locations is not None \
+        #     else None
+        # data["location_objects"] = [[obj.to_json() for obj in v] for v in
+        #                             self.locations.values()] if self.locations is not None else None
+
         data["walled"] = self.walled
         data['event_active'] = self.event_active
 
@@ -444,9 +459,11 @@ class GameBoard(GameObject):
         self.seed: int | None = data["seed"]
         self.map_size: Vector = Vector().from_json(data["map_size"])
 
-        self.locations: dict[Vector, list[GameObject]] = {
-            Vector().from_json(k): [json_to_instance(obj) for obj in v] for k, v in
-            zip(data["location_vectors"], data["location_objects"])} if data["location_vectors"] is not None else None
+        # NOTE: the locations dict is only used in __map_init/generate_map anyway,
+        # so saving it here clutters the turn logs; uncomment as needed
+        # self.locations: dict[Vector, list[GameObject]] = {
+        #     Vector().from_json(k): [json_to_instance(obj) for obj in v] for k, v in
+        #     zip(data["location_vectors"], data["location_objects"])} if data["location_vectors"] is not None else None
 
         self.walled: bool = data["walled"]
         self.event_active: int = data['event_active']
@@ -467,8 +484,9 @@ class GameBoard(GameObject):
             self.battery_spawners.clear()
             self.scrap_spawners.clear()
             self.coin_spawners.clear()
+            doors: dict[str, Door] = dict()
             for k, v in data['game_map'].items():
-                vec = Vector().from_json(ast.literal_eval(k))
+                vec = Vector.from_json_str(k)                
                 go_container = GameObjectContainer().from_json(v)
                 for go in go_container:
                     if isinstance(go, Generator):
@@ -479,6 +497,12 @@ class GameBoard(GameObject):
                         self.scrap_spawners.append(go)
                     elif isinstance(go, CoinSpawner):
                         self.coin_spawners.append(go)
+                    elif isinstance(go, Door):
+                        doors[go.id] = go
                 self.game_map[vec] = go_container
+            for gen in self.generators.values():
+                for i, door in enumerate(gen.connected_doors):
+                    assert door.id in doors
+                    gen.connected_doors[i] = doors[door.id]
 
         return self

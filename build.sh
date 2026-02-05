@@ -11,3 +11,4 @@ python -m zipapp wrapper -o launcher.pyz -c
 rm -r wrapper/game
 rm -r wrapper/visualizer
 rm -r wrapper/server
+echo "Build successful."
