@@ -50,13 +50,14 @@ class PointController(Controller):
     def calculate_multiplier(self, avatar: Avatar, world: GameBoard, point_data: PointData | None = None) -> float:
         assert avatar.position is not None
         if Refuge.global_occupied:
-            point_data.multiplier_sources['in_refuge'] = 0.0
+            if point_data is not None:
+                point_data.multiplier_sources['in_refuge'] = 0.0
             return 0.0
 
         result = self.base_multiplier
 
         generator_bonuses = sum([generator.multiplier_bonus for generator in world.generators.values() if generator.active])
-        if point_data is not None:
+        if generator_bonuses > 0 and point_data is not None:
             point_data.multiplier_sources['generators'] = generator_bonuses
         result += generator_bonuses
 
