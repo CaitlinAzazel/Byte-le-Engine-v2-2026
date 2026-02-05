@@ -170,7 +170,7 @@ Changes made in 2023.
 
 ## [LDtk](https://ldtk.io/) Integration
 
-`game/utils/generate_game` now contains functions for parsing .ldtk project files.
+`game/utils/ldtk_helpers` now contains functions for parsing .ldtk project files.
 To use them, your LDtk project ***must***:
 
 * contain two layers:
@@ -220,14 +220,14 @@ match collision_type:
 
 Most of the heavy lifting is currently done by an
 [importer provided by LDtk](https://ldtk.io/files/quicktype/LdtkJson.py),
-so all we have to do is find what we need in the `LDtkJson` object returned by `ldtk_json_from_dict`. To do so, we first need to know a little bit about the structure of our .ldtk file. To keep things simple, just look at this diagram from [here](https://ldtk.io/docs/game-dev/json-overview/):
+so all we have to do is find what we need in the `LdtkJSON` object returned by `ldtk_json_from_dict` or `LdtkJSON.from_dict`. To do so, we first need to know a little bit about the structure of our .ldtk file. To keep things simple, just look at this diagram from [here](https://ldtk.io/docs/game-dev/json-overview/):
 
 ![LDtk json layout](https://ldtk.io/wp-content/uploads/2022/02/JSON-chart-pre-multiworlds.png)
 
 For more details about the .ldtk format, see [their docs](https://ldtk.io/docs/game-dev/json-overview/).
 
 For instance, if we want to access all the entities we placed in LDtk, we choose a level, find an entity layer, and then iterate over that layer's entities.
-Using the `LDtkJson`, that might look something like:
+Using the `LdtkJSON`, that might look something like:
 
 ```py
 ldtk_json = ldtk_json_from_dict(json_data)
@@ -264,7 +264,7 @@ class CustomEntity:
 
 ### Prioritized entity loading
 
-If you need to load certain types of entities before or after others, you can add an entry to `ENTITY_LOAD_PRIORITY` in `game/utils/generate_game`:
+If you need to load certain types of entities before or after others, you can add an entry to `ENTITY_LOAD_PRIORITY` in `game/utils/ldtk_helpers`:
 
 ```py
 """
@@ -351,3 +351,7 @@ Referenced Examples - https://github.com/topoftheyear/Byte-le-Game-Examples
 2022 - FarTech - https://github.com/HagenSR/byte_le_royale_2022
 
 2023 - Undercooked - https://github.com/amanda-f-ndsu/byte_le_royale_2023
+
+2024 - Quarry Rush - https://github.com/acm-ndsu/Byte-le-2024
+
+2025 - Commander Clash - https://github.com/acm-ndsu/Byte-le-2025
