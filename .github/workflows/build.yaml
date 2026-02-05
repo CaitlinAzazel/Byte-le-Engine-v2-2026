@@ -8,7 +8,15 @@ on:
       - 'visualizer/**'
       - 'wrapper/**'
       - 'build.*'
-  pull_request: {}
+      - 'map.ldtk'
+  pull_request:
+    paths:
+      - 'game/**'
+      - 'server/**'
+      - 'visualizer/**'
+      - 'wrapper/**'
+      - 'build.*'
+      - 'map.ldtk'
 
 jobs:
   build:
