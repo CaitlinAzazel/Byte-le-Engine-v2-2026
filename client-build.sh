@@ -1,20 +1,24 @@
 #!/bin/bash
 
 shopt -s extglob
+shopt -s dotglob
 
 export CLIENT_PACKAGE_BUILD=true
-
-mkdir -p output
 
 # GitHub Actions always have CI set as an environment variable
 # this checks if CI is unset; we are running this locally
 if ! [[ -v CI ]]; then
-	echo "Cleaning old build..."
-	rm output/*
+	if [[ -f output ]]; then
+		echo "Cleaning old build..."
+		rm output/*
+	fi
 
 	echo "Activating venv..."
 	source .venv/bin/activate
 fi
+
+mkdir -p output
+
 
 echo "Compiling map data..."
 python compile_map_data.py
