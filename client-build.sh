@@ -1,7 +1,6 @@
 #!/bin/bash
 
 shopt -s extglob
-shopt -s dotglob
 
 export CLIENT_PACKAGE_BUILD=true
 
@@ -23,7 +22,7 @@ echo "Compiling map data..."
 python compile_map_data.py
 
 echo "Copying extra files..."
-cp -r client_package/!(.venv*) output/
+cp -r client_package/* output/
 
 echo "Building launcher..."
 cp -r game wrapper/game/
