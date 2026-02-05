@@ -19,7 +19,6 @@ fi
 
 mkdir -p output
 
-
 echo "Compiling map data..."
 python compile_map_data.py
 
