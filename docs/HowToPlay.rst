@@ -17,7 +17,7 @@ Your goal is to score as many points as possible before being defeated by the bo
 * Activating **Generators** using Scrap gives you a flat, one-time bonus per generator
 * Turning on **Generators**  increases your base multiplier, if the generators turn off that goes away
 
-You lose the game if your character is caught enough times by a bot and if power hits 0.
+You lose the game if your character is caught enough times by a bot or if power hits 0.
 
 Resources
 =========
