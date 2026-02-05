@@ -1,8 +1,8 @@
+import os
 import random
 
 from game.common.game_object import GameObject
-from game.config import *
-from game.map_data import *
+from game.config import GAME_MAP_DIR, GAME_MAP_FILEPATH, PATH_TO_LDTK_PROJECT, USE_PRECOMPILED_MAP
 from game.utils.helpers import write_json_file
 from game.common.map.game_board import GameBoard
 from game.utils.ldtk_helpers import map_data_from_ldtk_file
@@ -23,6 +23,7 @@ def generate(seed: int = random.randint(0, 1000000000)):
     locations: dict[Vector, list[GameObject]]
     map_size: Vector
     if USE_PRECOMPILED_MAP:
+        from game.map_data import MAP_DICT, MAP_SIZE
         locations = GameBoard.locations_from_json_dict(MAP_DICT)
         map_size = Vector.new_from_json(MAP_SIZE)
     else:

@@ -26,8 +26,7 @@ echo "Copying extra files..."
 cp -r client_package/!(.venv*) output/
 
 echo "Building launcher..."
-mkdir -p wrapper/game
-cp -r game/!(map_data) wrapper/game/
+cp -r game wrapper/game/
 cp -r visualizer wrapper/visualizer/
 mkdir -p wrapper/server
 cp -r server/!(*_temp|logs) wrapper/server/

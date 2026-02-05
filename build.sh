@@ -3,7 +3,6 @@
 shopt -s extglob
 
 test -e launcher.pyz && rm launcher.pyz
-python compile_map_data.py
 cp -r game wrapper/game/
 cp -r visualizer wrapper/visualizer/
 mkdir -p wrapper/server
