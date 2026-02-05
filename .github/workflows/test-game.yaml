@@ -4,9 +4,6 @@ on:
   push:
     paths:
       - 'game/**'
-  pull_request:
-    paths:
-      - 'game/**'
 
 jobs:
   test:
