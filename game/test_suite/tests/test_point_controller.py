@@ -16,8 +16,8 @@ class TestPointController(unittest.TestCase):
     def setUp(self) -> None:
         self.point_controller = PointController()
         self.avatar: Avatar = Avatar()
-        self.generator1 = Generator(cost=0, activation_bonus=6)
-        self.generator2 = Generator(cost=0, activation_bonus=7)
+        self.generator1 = Generator(cost=0, activation_bonus=6, multiplier_bonus=0.6)
+        self.generator2 = Generator(cost=0, activation_bonus=7, multiplier_bonus=0.7)
         self.game_board: GameBoard = GameBoard(0, map_size=Vector(2, 2), locations={
             Vector(0, 0): [self.avatar],
             Vector(1, 0): [self.generator1],
@@ -45,7 +45,8 @@ class TestPointController(unittest.TestCase):
         turns = 9
         for _ in range(turns):
             self.point_controller.handle_actions(self.avatar, self.game_board)
-        expected_points_per_turn = self.generator1.multiplier_bonus + self.point_controller.base_points_per_turn
+        expected_multiplier = (self.point_controller.base_multiplier + self.generator1.multiplier_bonus)
+        expected_points_per_turn = self.point_controller.base_points_per_turn * expected_multiplier 
         self.assertEqual(self.avatar.score, turns * expected_points_per_turn)
 
     def test_multiple_active_generators_point_bonus(self):
@@ -54,7 +55,8 @@ class TestPointController(unittest.TestCase):
         turns = 10
         for _ in range(turns):
             self.point_controller.handle_actions(self.avatar, self.game_board)
-        expected_points_per_turn = self.generator1.multiplier_bonus + self.generator2.multiplier_bonus + self.point_controller.base_points_per_turn
+        expected_multiplier = self.point_controller.base_multiplier + self.generator1.multiplier_bonus + self.generator2.multiplier_bonus
+        expected_points_per_turn = self.point_controller.base_points_per_turn * expected_multiplier
         self.assertEqual(self.avatar.score, turns * expected_points_per_turn)
 
     def test_inactive_generators_no_point_bonus(self):
@@ -66,6 +68,6 @@ class TestPointController(unittest.TestCase):
 
     def test_vent_reduces_multiplier(self):
         self.game_board.place(self.avatar.position, Vent())
-        expected = self.point_controller.base_multiplier - 0.5
+        expected = self.point_controller.base_multiplier - PointController.VENT_POINT_MULTIPLIER_REDUCTION
         actual = self.point_controller.calculate_multiplier(self.avatar, self.game_board)
         self.assertEqual(expected, actual)
