@@ -85,6 +85,11 @@ class Bot(GameObject):
 
     @override
     def to_json(self) -> dict:
+        if self.has_attacked:
+            self.state = 'attacking'
+        elif self.is_stunned:
+            self.state = 'stunned'
+
         data = super().to_json()
 
         for field in Bot.SAVED_PRIMITIVE_FIELDS:
