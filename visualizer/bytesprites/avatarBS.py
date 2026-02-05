@@ -1,6 +1,7 @@
 import os
 import pygame as pyg
 
+from game.common.enums import ObjectType
 from visualizer.bytesprites.bytesprite import ByteSprite
 from game.utils.vector import Vector
 from visualizer.bytesprites.bytesprite_factory import ByteSpriteFactory
@@ -50,7 +51,7 @@ class AvatarBS(ByteSpriteFactory):
             screen,
             os.path.join(os.getcwd(), 'visualizer/images/spritesheets/Player.png'),
             5,
-            4,
+            ObjectType.AVATAR.value,
             AvatarBS.update,
             colorkey=pyg.Color(255, 0, 255)
         )
