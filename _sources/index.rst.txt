@@ -2,17 +2,22 @@
 welcome toe tthe docs !
 ===============================================
 
-these area the edocs.
+these area the edocs (ᴗ ͜ʖ ᴗ)
 
-thisa are a bacson letsuce tomttato :D
-
-.. image:: https://rotatingsandwiches.com/wp-content/uploads/2022/10/blt.gif
+.. image:: /_static/images/StartMenu.png
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    getting_started
+   HowToPlay
+   useful_commands
+   controls
+   helpers
+   server
+   visualizer
+   enums
+   debugging
 
 Search Page
 ===========

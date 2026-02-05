@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="How To Play" href="HowToPlay.html"><link rel="prev" title="welcome toe tthe docs !" href="index.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Controlling your Avatar" href="controls.html"><link rel="prev" title="How To Play" href="HowToPlay.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Getting Started - Byte-le Royale 2026 1.0.0 documentation</title>
+        <title>Useful Commands - Byte-le Royale 2026 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -192,9 +192,9 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HowToPlay.html">How To Play</a></li>
-<li class="toctree-l1"><a class="reference internal" href="useful_commands.html">Useful Commands</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Useful Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controls.html">Controlling your Avatar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server.html">The Server</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualizer.html">The Visualizer</a></li>
@@ -220,7 +220,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/getting_started.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/useful_commands.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -238,166 +238,139 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
-<section id="ring-ring-hello-hello-hello">
-<h2><em>ring</em> <em>ring</em> HELLO? HELLO, HELLO?!<a class="headerlink" href="#ring-ring-hello-hello-hello" title="Link to this heading">¶</a></h2>
-<p><em>uuuuh</em> We wanted to type up a message for you to help you get settled in on your first night.</p>
-</section>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
-<ul class="simple">
-<li><p>Python 3.13; download it <a class="reference external" href="https://www.python.org/downloads/release/python-31311/">here</a>.</p></li>
-<li><dl class="simple">
-<dt>A code editor with Python support; some recommendations:</dt><dd><ul>
-<li><p>VS Code/<a class="reference external" href="https://vscodium.com/#install">VSCodium</a> with the Python extension published by ms-python</p></li>
-<li><p><a class="reference external" href="https://www.jetbrains.com/pycharm/download/">PyCharm</a></p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</section>
-<section id="the-client-package">
-<h2>The Client Package<a class="headerlink" href="#the-client-package" title="Link to this heading">¶</a></h2>
-<p>To begin patrolling the dark, dank halls of QBB, you must download the contents of <a class="reference external" href="https://github.com/acm-ndsu/Byte-le-2026-Client-Package">this repository</a>.
-You may do so in many ways… here are some:</p>
-<section id="using-git-s-built-in-cli">
-<h3>Using <a class="reference external" href="https://git-scm.com/install">Git</a>’s built-in CLI<a class="headerlink" href="#using-git-s-built-in-cli" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>In the directory you want to download to, run the following command:</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/&lt;user&gt;/Byte-le-Engine-2026-Client-Package.git</span>
+          <section id="useful-commands">
+<h1>Useful Commands<a class="headerlink" href="#useful-commands" title="Link to this heading">¶</a></h1>
+<section id="pygame-installation">
+<h2>Pygame Installation<a class="headerlink" href="#pygame-installation" title="Link to this heading">¶</a></h2>
+<p>If you have problems installing the pygame package, try running the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install pygame --pre</span>
 </pre></div>
 </div>
 </section>
-<section id="using-github-cli">
-<h3>Using <a class="reference external" href="https://cli.github.com/">GitHub CLI</a><a class="headerlink" href="#using-github-cli" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>In the directory you want to download to, run the following command:</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">gh repo clone &lt;user&gt;/Byte-le-2026-Client-Package</span>
+<section id="interpreting-enum-values">
+<span id="enum-script"></span><h2>Interpreting Enum Values<a class="headerlink" href="#interpreting-enum-values" title="Link to this heading">¶</a></h2>
+<p>If you have an <a class="reference internal" href="enums.html#object-type"><span class="std std-ref">ObjectType</span></a> or <a class="reference internal" href="enums.html#action-type"><span class="std std-ref">ActionType</span></a>'s value, you can find out what that
+number corresponds to using the <code class="docutils literal notranslate"><span class="pre">convert_enum_value.py</span></code> script.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python convert_enum.py &lt;o|object|a|action&gt; &lt;number&gt;</span>
 </pre></div>
 </div>
-</section>
-<section id="using-github-desktop">
-<h3>Using <a class="reference external" href="https://desktop.github.com/download/">GitHub Desktop</a><a class="headerlink" href="#using-github-desktop" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>Go to <a class="reference external" href="https://github.com/acm-ndsu/Byte-le-2026-Client-Package">https://github.com/acm-ndsu/Byte-le-2026-Client-Package</a></p></li>
-<li><p>Press the <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span> <span class="pre">Code</span></code> button to drop down a menu:</p></li>
-</ol>
-<div class="centered docutils container">
-<a class="reference internal image-reference" href="_images/clone_repo.png"><img alt="_images/clone_repo.png" src="_images/clone_repo.png" style="width: 60%;" />
-</a>
-</div>
-<ol class="arabic simple" start="2">
-<li><dl class="simple">
-<dt>Press “Open with GitHub Desktop”</dt><dd><ul class="simple">
-<li><p>Allow the website to open GitHub Desktop if you have it downloaded already</p></li>
-<li><p>Once in GitHub Desktop, the URL to the repository will be provided</p></li>
-<li><p>Choose where you’d like it saved on your device</p></li>
-<li><p>Click <code class="docutils literal notranslate"><span class="pre">Clone</span></code> and you’re good to go!</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ol>
-<div class="centered docutils container">
-<a class="reference internal image-reference" href="_images/github_desktop.png"><img alt="_images/github_desktop.png" src="_images/github_desktop.png" style="width: 70%;" />
-</a>
-</div>
-</section>
-<section id="download-zip">
-<h3>Download ZIP<a class="headerlink" href="#download-zip" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>Go to <a class="reference external" href="https://github.com/acm-ndsu/Byte-le-2026-Client-Package">https://github.com/acm-ndsu/Byte-le-2026-Client-Package</a></p></li>
-<li><p>Press the <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span> <span class="pre">Code</span></code> button to drop down a menu:</p></li>
-</ol>
-<div class="centered docutils container">
-<a class="reference internal image-reference" href="_images/clone_repo.png"><img alt="_images/clone_repo.png" src="_images/clone_repo.png" style="width: 60%;" />
-</a>
-</div>
-<ol class="arabic simple">
-<li><p>Click <code class="docutils literal notranslate"><span class="pre">Download</span> <span class="pre">ZIP</span></code> and find it in your Downloads.</p></li>
-<li><p>Extract the files somewhere on your device.</p></li>
-</ol>
-</section>
-</section>
-<section id="installing-dependencies">
-<h2>Installing Dependencies<a class="headerlink" href="#installing-dependencies" title="Link to this heading">¶</a></h2>
-<p>It’s good practice to set up a virtual environment to separate Byte-le’s packages
-from any system-wide Python packages you might have installed.
-For more information on Python virtual environments, go <a class="reference external" href="https://docs.python.org/3/library/venv.html">here</a>.
-In your project directory, run the following commands in a command line:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv .venv</span>
-</pre></div>
-</div>
-<p>To activate your virtual environment, run <strong>one</strong> of the following commands depending on your shell:</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">cmd/PowerShell</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">activate</span>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Example inputs/outputs</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python convert_enum.py object 1  # ObjectType.NONE</span>
+<span class="go">python convert_enum.py a 1       # ActionType.MOVE_UP</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">bash/zsh</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<p>Alternatively, you can use Python’s <a class="reference external" href="https://docs.python.org/3/tutorial/appendix.html#interactive-mode">Interactive Mode</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">game.common.enums</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ObjectType</span><span class="p">(</span><span class="o">&lt;</span><span class="n">number</span><span class="o">&gt;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<p>If you don’t see your shell or these don’t work, find the appropriate command for your shell <a class="reference external" href="https://docs.python.org/3/library/venv.html#how-venvs-work">here</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If your virtual environment was activated, your shell might notice, adding “<code class="docutils literal notranslate"><span class="pre">(.venv)</span></code>” to the beginning of your prompt like so:</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">cmd</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="go">C:\path\to\Byte-le-2026-Client-Package\&gt;</span>
+<p>As long as you keep entering valid Python, you’re basically writing a temporary Python script in your shell.
+If you wanted, you could even do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">ObjectType</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>This is a very powerful tool that can be used for much more than converting enums.
+For more information, see <a class="reference external" href="https://docs.python.org/3/tutorial/appendix.html#interactive-mode">https://docs.python.org/3/tutorial/appendix.html#interactive-mode</a>.</p>
 </div>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">PowerShell</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="go">PS C:\path\to\Byte-le-2026-Client-Package\&gt;</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">bash</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="go">/path/to/Byte-le-2026-Client-Package $</span>
-</pre></div>
-</div>
-</div>
-<p>Alternatively, you can check your path to Python:</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">cmd/PowerShell</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">where.exe python</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">POSIX</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>python
-</pre></div>
-</div>
-</div>
-<p>If your virtual environment is activated, the output of these commands should include a path that looks something like <code class="docutils literal notranslate"><span class="pre">/path/to/Byte-le-2026-Client-Package/.venv/bin/python</span></code>.</p>
-</div>
-<p>Once your virtual environment is activated, run the following command to install Byte-le’s packages:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -r requirements.txt</span>
-</pre></div>
-</div>
-<p>More useful commands are listed in <a class="reference internal" href="useful_commands.html"><span class="doc">Useful Commands</span></a>.</p>
 </section>
-<section id="what-now">
-<h2>What Now?<a class="headerlink" href="#what-now" title="Link to this heading">¶</a></h2>
-<p>To learn how to get your lil’ guy movin’ around, read <a class="reference internal" href="controls.html"><span class="doc">Controlling your Avatar</span></a>!</p>
-<p>To get your team registered and learn how to submit your code, read <span class="xref std std-doc">the_server</span>!</p>
+<section id="generate-run-visualize">
+<h2>Generate, Run, Visualize<a class="headerlink" href="#generate-run-visualize" title="Link to this heading">¶</a></h2>
+<p>As you’re testing your code, it’s important to do these three actions.</p>
+<ul class="simple">
+<li><p><strong>Generate</strong> a new map and seed.</p></li>
+<li><p><strong>Run</strong> a game using your client and generated map.</p></li>
+<li><p><strong>Visualize</strong> what happened in the last ran game.</p></li>
+</ul>
+<p>To do so, use the provided “launcher”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">launcher</span><span class="o">.</span><span class="n">pyz</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;command&gt;</span></code> describes the action you want to perform:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Action</p></th>
+<th class="head"><p>&lt;command&gt;</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Generate</p></td>
+<td><p>g, gen, generate</p></td>
+</tr>
+<tr class="row-odd"><td><p>Run</p></td>
+<td><p>r, run</p></td>
+</tr>
+<tr class="row-even"><td><p>Visualize</p></td>
+<td><p>v, vis, visualize</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>You can also combine certain commands:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Do everything</span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python launcher.pyz grv</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Generate and run, but don’t visualize</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">python</span> <span class="n">launcher</span><span class="o">.</span><span class="n">pyz</span> <span class="n">gr</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>As commands are listed, some will have several versions that perform the same task.</p>
+<p>Only <strong>ONE</strong> line needs to be typed into the terminal, <strong>NOT</strong> all.</p>
+</div>
+<section id="generate">
+<h3>Generate<a class="headerlink" href="#generate" title="Link to this heading">¶</a></h3>
+<p>If you don’t want to have a new, random seed, don’t run this command. With the same seed and clients, the results will
+stay consistent.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python launcher.pyz g</span>
+<span class="go">python launcher.pyz gen</span>
+<span class="go">python launcher.pyz generate</span>
+</pre></div>
+</div>
 </section>
-<section id="submitting-issues">
-<h2>Submitting Issues<a class="headerlink" href="#submitting-issues" title="Link to this heading">¶</a></h2>
-<p>If you run into issues with the game, please submit an issue to the Discord server in the
-<a class="reference external" href="https://discord.com/channels/697995889020633221/1357477016269492375">#bug-reporting channel</a>
-or call a developer over!</p>
+<section id="run">
+<span id="run-command"></span><h3>Run<a class="headerlink" href="#run" title="Link to this heading">¶</a></h3>
+<p>As the game is running, any print statements you have will print to your console, which can be useful for
+debugging. There will also be logs generated in the <code class="docutils literal notranslate"><span class="pre">logs</span></code> folder, showing what information was stored each turn in
+the JSON format.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python launcher.pyz r</span>
+<span class="go">python launcher.pyz run</span>
+</pre></div>
+</div>
+</section>
+<section id="visualize">
+<h3>Visualize<a class="headerlink" href="#visualize" title="Link to this heading">¶</a></h3>
+<p>This displays each turn of the game you ran, allowing you to debug in a more user-friendly way! How wonderful.
+Visit <a class="reference internal" href="visualizer.html"><span class="doc">The Visualizer</span></a> for more details.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python launcher.pyz v</span>
+<span class="go">python launcher.pyz vis</span>
+<span class="go">python launcher.pyz visualize</span>
+</pre></div>
+</div>
+</section>
+<section id="launcher-help">
+<h3>Launcher Help<a class="headerlink" href="#launcher-help" title="Link to this heading">¶</a></h3>
+<p>To see every possible command combination, run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">launcher</span><span class="o">.</span><span class="n">pyz</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<p>Some commands have their own help messages, which can be displayed via</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">launcher</span><span class="o">.</span><span class="n">pyz</span> <span class="o">&lt;</span><span class="n">command</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -406,23 +379,23 @@ or call a developer over!</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="HowToPlay.html">
+          <a class="next-page" href="controls.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">How To Play</div>
+                <div class="title">Controlling your Avatar</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="HowToPlay.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">How To Play</div>
                 
               </div>
             </a>
@@ -456,19 +429,16 @@ or call a developer over!</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Getting Started</a><ul>
-<li><a class="reference internal" href="#ring-ring-hello-hello-hello"><em>ring</em> <em>ring</em> HELLO? HELLO, HELLO?!</a></li>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#the-client-package">The Client Package</a><ul>
-<li><a class="reference internal" href="#using-git-s-built-in-cli">Using Git’s built-in CLI</a></li>
-<li><a class="reference internal" href="#using-github-cli">Using GitHub CLI</a></li>
-<li><a class="reference internal" href="#using-github-desktop">Using GitHub Desktop</a></li>
-<li><a class="reference internal" href="#download-zip">Download ZIP</a></li>
+<li><a class="reference internal" href="#">Useful Commands</a><ul>
+<li><a class="reference internal" href="#pygame-installation">Pygame Installation</a></li>
+<li><a class="reference internal" href="#interpreting-enum-values">Interpreting Enum Values</a></li>
+<li><a class="reference internal" href="#generate-run-visualize">Generate, Run, Visualize</a><ul>
+<li><a class="reference internal" href="#generate">Generate</a></li>
+<li><a class="reference internal" href="#run">Run</a></li>
+<li><a class="reference internal" href="#visualize">Visualize</a></li>
+<li><a class="reference internal" href="#launcher-help">Launcher Help</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#installing-dependencies">Installing Dependencies</a></li>
-<li><a class="reference internal" href="#what-now">What Now?</a></li>
-<li><a class="reference internal" href="#submitting-issues">Submitting Issues</a></li>
 </ul>
 </li>
 </ul>

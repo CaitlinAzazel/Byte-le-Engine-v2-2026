@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="How To Play" href="HowToPlay.html"><link rel="prev" title="welcome toe tthe docs !" href="index.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Useful Commands" href="useful_commands.html"><link rel="prev" title="Getting Started" href="getting_started.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Getting Started - Byte-le Royale 2026 1.0.0 documentation</title>
+        <title>How To Play - Byte-le Royale 2026 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
@@ -192,8 +192,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HowToPlay.html">How To Play</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">How To Play</a></li>
 <li class="toctree-l1"><a class="reference internal" href="useful_commands.html">Useful Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="controls.html">Controlling your Avatar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server.html">The Server</a></li>
@@ -220,7 +220,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/getting_started.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/HowToPlay.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -238,166 +238,98 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
-<section id="ring-ring-hello-hello-hello">
-<h2><em>ring</em> <em>ring</em> HELLO? HELLO, HELLO?!<a class="headerlink" href="#ring-ring-hello-hello-hello" title="Link to this heading">¶</a></h2>
-<p><em>uuuuh</em> We wanted to type up a message for you to help you get settled in on your first night.</p>
-</section>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+          <section id="how-to-play">
+<h1>How To Play<a class="headerlink" href="#how-to-play" title="Link to this heading">¶</a></h1>
+<p>Byte-le Royale 2026 is a Player vs Environment (PvE) survival game. Your objective is to explore the map, collect
+resources, and survive while hostile bots attempt to stop you. Points are earned through collecting items and
+unlocking new areas.</p>
+<section id="winning-and-losing">
+<h2>Winning and Losing<a class="headerlink" href="#winning-and-losing" title="Link to this heading">¶</a></h2>
+<p>Your goal is to score as many points as possible before being defeated by the bots. Points are earned by:</p>
 <ul class="simple">
-<li><p>Python 3.13; download it <a class="reference external" href="https://www.python.org/downloads/release/python-31311/">here</a>.</p></li>
-<li><dl class="simple">
-<dt>A code editor with Python support; some recommendations:</dt><dd><ul>
-<li><p>VS Code/<a class="reference external" href="https://vscodium.com/#install">VSCodium</a> with the Python extension published by ms-python</p></li>
-<li><p><a class="reference external" href="https://www.jetbrains.com/pycharm/download/">PyCharm</a></p></li>
+<li><p>Collecting <strong>Coins</strong></p></li>
+<li><p>Collecting <strong>Batteries</strong></p></li>
+<li><p>Collecting <strong>Scrap</strong></p></li>
+<li><p>Activating <strong>Generators</strong> using Scrap gives you a flat, one-time bonus per generator</p></li>
+<li><p>Turning on <strong>Generators</strong>  increases your base multiplier, if the generators turn off that goes away</p></li>
 </ul>
-</dd>
-</dl>
-</li>
+<p>You lose the game if your character is caught enough times by a bot or if power hits 0.</p>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h2>
+<p>There are three main resources in the game:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Resource</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Coins</p></td>
+<td><p>Grant points when collected</p></td>
+</tr>
+<tr class="row-odd"><td><p>Batteries</p></td>
+<td><p>Grant points and power when collected</p></td>
+</tr>
+<tr class="row-even"><td><p>Scrap</p></td>
+<td><p>Used to activate generators and unlock new areas</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="exploration">
+<h2>Exploration<a class="headerlink" href="#exploration" title="Link to this heading">¶</a></h2>
+<p>The map contains multiple locked areas. These areas cannot be accessed until their connected generator has been
+activated using Scrap. Exploring new areas allows access to more resources and increases your point multiplier.</p>
+</section>
+<section id="generators">
+<h2>Generators<a class="headerlink" href="#generators" title="Link to this heading">¶</a></h2>
+<p>Generators are machines that must be powered using Scrap.</p>
+<p>When a generator is activated:</p>
+<ul class="simple">
+<li><p>A new section of the map becomes accessible</p></li>
+<li><p>Your point multiplier increases</p></li>
+<li><p>More resources become available to collect</p></li>
+</ul>
+<p>Generators require different amounts of Scrap depending on the area they unlock.</p>
+</section>
+<section id="point-multiplier">
+<h2>Point Multiplier<a class="headerlink" href="#point-multiplier" title="Link to this heading">¶</a></h2>
+<p>Your score is multiplied based on how many generators you have activated.</p>
+<p>The more generators you power:</p>
+<ul class="simple">
+<li><p>The faster your score increases</p></li>
+<li><p>The more dangerous the map becomes</p></li>
+<li><p>The more bots may appear</p></li>
+<li><p>The multiplier is halved when in vents and 0 when in refuges</p></li>
 </ul>
 </section>
-<section id="the-client-package">
-<h2>The Client Package<a class="headerlink" href="#the-client-package" title="Link to this heading">¶</a></h2>
-<p>To begin patrolling the dark, dank halls of QBB, you must download the contents of <a class="reference external" href="https://github.com/acm-ndsu/Byte-le-2026-Client-Package">this repository</a>.
-You may do so in many ways… here are some:</p>
-<section id="using-git-s-built-in-cli">
-<h3>Using <a class="reference external" href="https://git-scm.com/install">Git</a>’s built-in CLI<a class="headerlink" href="#using-git-s-built-in-cli" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>In the directory you want to download to, run the following command:</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/&lt;user&gt;/Byte-le-Engine-2026-Client-Package.git</span>
-</pre></div>
-</div>
-</section>
-<section id="using-github-cli">
-<h3>Using <a class="reference external" href="https://cli.github.com/">GitHub CLI</a><a class="headerlink" href="#using-github-cli" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>In the directory you want to download to, run the following command:</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">gh repo clone &lt;user&gt;/Byte-le-2026-Client-Package</span>
-</pre></div>
-</div>
-</section>
-<section id="using-github-desktop">
-<h3>Using <a class="reference external" href="https://desktop.github.com/download/">GitHub Desktop</a><a class="headerlink" href="#using-github-desktop" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>Go to <a class="reference external" href="https://github.com/acm-ndsu/Byte-le-2026-Client-Package">https://github.com/acm-ndsu/Byte-le-2026-Client-Package</a></p></li>
-<li><p>Press the <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span> <span class="pre">Code</span></code> button to drop down a menu:</p></li>
-</ol>
-<div class="centered docutils container">
-<a class="reference internal image-reference" href="_images/clone_repo.png"><img alt="_images/clone_repo.png" src="_images/clone_repo.png" style="width: 60%;" />
-</a>
-</div>
-<ol class="arabic simple" start="2">
-<li><dl class="simple">
-<dt>Press “Open with GitHub Desktop”</dt><dd><ul class="simple">
-<li><p>Allow the website to open GitHub Desktop if you have it downloaded already</p></li>
-<li><p>Once in GitHub Desktop, the URL to the repository will be provided</p></li>
-<li><p>Choose where you’d like it saved on your device</p></li>
-<li><p>Click <code class="docutils literal notranslate"><span class="pre">Clone</span></code> and you’re good to go!</p></li>
+<section id="survival-and-bots">
+<h2>Survival and Bots<a class="headerlink" href="#survival-and-bots" title="Link to this heading">¶</a></h2>
+<p>Hostile bots roam the map and attempt to catch the player.</p>
+<ul class="simple">
+<li><p>Bots patrol different areas of the map</p></li>
+<li><p>Some bots may chase the player if detected</p></li>
+<li><p>Getting caught by a bot ends the game</p></li>
 </ul>
-</dd>
-</dl>
-</li>
-</ol>
-<div class="centered docutils container">
-<a class="reference internal image-reference" href="_images/github_desktop.png"><img alt="_images/github_desktop.png" src="_images/github_desktop.png" style="width: 70%;" />
-</a>
-</div>
+<p>To survive:</p>
+<ul class="simple">
+<li><p>Keep moving</p></li>
+<li><p>Use the environment to avoid bots</p></li>
+<li><p>Unlock new areas to create escape routes</p></li>
+</ul>
 </section>
-<section id="download-zip">
-<h3>Download ZIP<a class="headerlink" href="#download-zip" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p>Go to <a class="reference external" href="https://github.com/acm-ndsu/Byte-le-2026-Client-Package">https://github.com/acm-ndsu/Byte-le-2026-Client-Package</a></p></li>
-<li><p>Press the <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span> <span class="pre">Code</span></code> button to drop down a menu:</p></li>
-</ol>
-<div class="centered docutils container">
-<a class="reference internal image-reference" href="_images/clone_repo.png"><img alt="_images/clone_repo.png" src="_images/clone_repo.png" style="width: 60%;" />
-</a>
-</div>
-<ol class="arabic simple">
-<li><p>Click <code class="docutils literal notranslate"><span class="pre">Download</span> <span class="pre">ZIP</span></code> and find it in your Downloads.</p></li>
-<li><p>Extract the files somewhere on your device.</p></li>
-</ol>
-</section>
-</section>
-<section id="installing-dependencies">
-<h2>Installing Dependencies<a class="headerlink" href="#installing-dependencies" title="Link to this heading">¶</a></h2>
-<p>It’s good practice to set up a virtual environment to separate Byte-le’s packages
-from any system-wide Python packages you might have installed.
-For more information on Python virtual environments, go <a class="reference external" href="https://docs.python.org/3/library/venv.html">here</a>.
-In your project directory, run the following commands in a command line:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m venv .venv</span>
-</pre></div>
-</div>
-<p>To activate your virtual environment, run <strong>one</strong> of the following commands depending on your shell:</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">cmd/PowerShell</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
-<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">activate</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">bash/zsh</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-</pre></div>
-</div>
-</div>
-<p>If you don’t see your shell or these don’t work, find the appropriate command for your shell <a class="reference external" href="https://docs.python.org/3/library/venv.html#how-venvs-work">here</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If your virtual environment was activated, your shell might notice, adding “<code class="docutils literal notranslate"><span class="pre">(.venv)</span></code>” to the beginning of your prompt like so:</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">cmd</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="go">C:\path\to\Byte-le-2026-Client-Package\&gt;</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">PowerShell</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="go">PS C:\path\to\Byte-le-2026-Client-Package\&gt;</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">bash</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="go">/path/to/Byte-le-2026-Client-Package $</span>
-</pre></div>
-</div>
-</div>
-<p>Alternatively, you can check your path to Python:</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">cmd/PowerShell</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">where.exe python</span>
-</pre></div>
-</div>
-</div>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">POSIX</span><a class="headerlink" href="#id9" title="Link to this code">¶</a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>python
-</pre></div>
-</div>
-</div>
-<p>If your virtual environment is activated, the output of these commands should include a path that looks something like <code class="docutils literal notranslate"><span class="pre">/path/to/Byte-le-2026-Client-Package/.venv/bin/python</span></code>.</p>
-</div>
-<p>Once your virtual environment is activated, run the following command to install Byte-le’s packages:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -r requirements.txt</span>
-</pre></div>
-</div>
-<p>More useful commands are listed in <a class="reference internal" href="useful_commands.html"><span class="doc">Useful Commands</span></a>.</p>
-</section>
-<section id="what-now">
-<h2>What Now?<a class="headerlink" href="#what-now" title="Link to this heading">¶</a></h2>
-<p>To learn how to get your lil’ guy movin’ around, read <a class="reference internal" href="controls.html"><span class="doc">Controlling your Avatar</span></a>!</p>
-<p>To get your team registered and learn how to submit your code, read <span class="xref std std-doc">the_server</span>!</p>
-</section>
-<section id="submitting-issues">
-<h2>Submitting Issues<a class="headerlink" href="#submitting-issues" title="Link to this heading">¶</a></h2>
-<p>If you run into issues with the game, please submit an issue to the Discord server in the
-<a class="reference external" href="https://discord.com/channels/697995889020633221/1357477016269492375">#bug-reporting channel</a>
-or call a developer over!</p>
+<section id="strategy-tips">
+<h2>Strategy Tips<a class="headerlink" href="#strategy-tips" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Prioritize collecting Scrap early to unlock generators</p></li>
+<li><p>Unlocking areas increases your multiplier and your escape options</p></li>
+<li><p>Do not hoard Scrap too long, as locked areas limit your movement</p></li>
+<li><p>Learn bot movement patterns to avoid being trapped</p></li>
+<li><p>Higher multipliers mean higher risk but higher reward</p></li>
+</ul>
 </section>
 </section>
 
@@ -406,23 +338,23 @@ or call a developer over!</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="HowToPlay.html">
+          <a class="next-page" href="useful_commands.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">How To Play</div>
+                <div class="title">Useful Commands</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="getting_started.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">Getting Started</div>
                 
               </div>
             </a>
@@ -456,19 +388,14 @@ or call a developer over!</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Getting Started</a><ul>
-<li><a class="reference internal" href="#ring-ring-hello-hello-hello"><em>ring</em> <em>ring</em> HELLO? HELLO, HELLO?!</a></li>
-<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li><a class="reference internal" href="#the-client-package">The Client Package</a><ul>
-<li><a class="reference internal" href="#using-git-s-built-in-cli">Using Git’s built-in CLI</a></li>
-<li><a class="reference internal" href="#using-github-cli">Using GitHub CLI</a></li>
-<li><a class="reference internal" href="#using-github-desktop">Using GitHub Desktop</a></li>
-<li><a class="reference internal" href="#download-zip">Download ZIP</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#installing-dependencies">Installing Dependencies</a></li>
-<li><a class="reference internal" href="#what-now">What Now?</a></li>
-<li><a class="reference internal" href="#submitting-issues">Submitting Issues</a></li>
+<li><a class="reference internal" href="#">How To Play</a><ul>
+<li><a class="reference internal" href="#winning-and-losing">Winning and Losing</a></li>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+<li><a class="reference internal" href="#exploration">Exploration</a></li>
+<li><a class="reference internal" href="#generators">Generators</a></li>
+<li><a class="reference internal" href="#point-multiplier">Point Multiplier</a></li>
+<li><a class="reference internal" href="#survival-and-bots">Survival and Bots</a></li>
+<li><a class="reference internal" href="#strategy-tips">Strategy Tips</a></li>
 </ul>
 </li>
 </ul>
