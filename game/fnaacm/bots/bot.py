@@ -30,7 +30,7 @@ class Bot(GameObject):
 
     def can_attack(self, avatar: Avatar) -> bool:
         # distance check is just a shortcut for checking up/down/left/right
-        return self.can_see_player and self.position.distance(avatar.position) <= 1
+        return self.can_see_player and self.position.distance(avatar.position) <= 1 and not self.is_stunned
 
     def boosting(self, boost):
         self.boosted = boost
