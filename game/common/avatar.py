@@ -158,6 +158,7 @@ class Avatar(GameObject):
         self.power: int = Avatar.MAX_POWER
         self.__held_index: int = 0
         self.health: int = 3
+        self.direction: str = "" # to be updated by `MovementController`, used in visualizer
 
     def give_score(self, amount: int) -> None:
         self.score += amount
@@ -380,6 +381,7 @@ class Avatar(GameObject):
         data['scrap'] = self.get_quantity_of_item_type(ObjectType.SCRAP)
         data['health'] = self.health
         data['power'] = self.power
+        data['direction'] = self.direction
         return data
 
     def from_json(self, data: dict) -> Self:
