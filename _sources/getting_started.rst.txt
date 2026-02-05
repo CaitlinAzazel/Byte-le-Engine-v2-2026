@@ -11,7 +11,8 @@ Getting Started
 Prerequisites
 ===================================
 
-- Python 3.13; download it `here <https://www.python.org/downloads/release/python-31311/>`_.
+- Python 3.13; download it `here <https://www.python.org/downloads/release/python-31312/>`_.
+    - Python 3.14 **HAS** been tested and it does **BREAK** things. Please **DO NOT** use it.
 
 - A code editor with Python support; some recommendations:
     - VS Code/`VSCodium <https://vscodium.com/#install>`_ with the Python extension published by ms-python
