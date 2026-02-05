@@ -6,17 +6,18 @@ Byte-le Royale 2026 is a Player vs Environment (PvE) survival game. Your objecti
 resources, and survive while hostile bots attempt to stop you. Points are earned through collecting items and
 unlocking new areas.
 
-Game Objective
-==============
+Winning and Losing
+==================
 
 Your goal is to score as many points as possible before being defeated by the bots. Points are earned by:
 
 * Collecting **Coins**
 * Collecting **Batteries**
-* Activating **Generators** using Scrap
-* Unlocking new areas that increase your **Point Multiplier**
+* Collecting **Scrap**
+* Activating **Generators** using Scrap gives you a flat, one-time bonus per generator
+* Turning on **Generators**  increases your base multiplier, if the generators turn off that goes away
 
-You lose the game if your character is caught by a bot.
+You lose the game if your character is caught enough times by a bot and if power hits 0.
 
 Resources
 =========
@@ -27,7 +28,7 @@ There are three main resources in the game:
 Resource         Description
 ================ ============================================================
 Coins            Grant points when collected
-Batteries        Grant points when collected
+Batteries        Grant points and power when collected
 Scrap            Used to activate generators and unlock new areas
 ================ ============================================================
 
@@ -60,6 +61,7 @@ The more generators you power:
 * The faster your score increases
 * The more dangerous the map becomes
 * The more bots may appear
+* The multiplier is halved when in vents and 0 when in refuges
 
 Survival and Bots
 =================
@@ -75,16 +77,6 @@ To survive:
 * Keep moving
 * Use the environment to avoid bots
 * Unlock new areas to create escape routes
-
-Winning and Losing
-==================
-
-==================== ======================================================
-Condition            Result
-==================== ======================================================
-Player is caught     Game Over
-Player survives      Continue scoring points
-==================== ======================================================
 
 Strategy Tips
 =============
