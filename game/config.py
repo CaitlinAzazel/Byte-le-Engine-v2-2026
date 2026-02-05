@@ -1,7 +1,15 @@
 import os
 from pathlib import Path
+from warnings import warn
 
 from game.common.enums import *
+
+USE_PRECOMPILED_MAP = False
+try:
+    from game.map_data import USE_PRECOMPILED_MAP
+except ModuleNotFoundError:
+    # isn't this neat
+    warn("map_data is missing; please generate it with compile_map_data.py")
 
 """
 This file is important for configuring settings for the project. All parameters in this file have comments to explain 
@@ -62,9 +70,6 @@ class Debug:                    # Keeps track of the current debug level of the 
 
 # Other Settings Here --------------------------------------------------------------------------------------------------
 
-
-USE_PRECOMPILED_MAP = os.getenv('CLIENT_PACKAGE_BUILD') or False
-MAP_DATA_FILEPATH = Path('game', 'map_data.py')
 
 PATH_TO_ROOT_DIR = Path()
 PATH_TO_LDTK_PROJECT = str()

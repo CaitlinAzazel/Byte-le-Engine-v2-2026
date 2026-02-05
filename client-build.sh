@@ -22,15 +22,17 @@ mkdir -p output
 echo "Compiling map data..."
 python compile_map_data.py
 
+echo "Copying extra files..."
+cp -r client_package/!(.venv*) output/
+
 echo "Building launcher..."
-cp -r game wrapper/game/
+mkdir -p wrapper/game
+cp -r game/!(map_data) wrapper/game/
 cp -r visualizer wrapper/visualizer/
 mkdir -p wrapper/server
 cp -r server/!(*_temp|logs) wrapper/server/
 python -m zipapp wrapper -o output/launcher.pyz -c
 
-echo "Copying extra files..."
-cp -r client_package/* output/
 
 if ! [[ -v CI ]]; then
 	echo "Cleaning up..."
