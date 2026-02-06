@@ -15,7 +15,7 @@ Prerequisites
     - Python 3.14 **HAS** been tested and it does **BREAK** things. Please **DO NOT** use it.
 
 - A code editor with Python support; some recommendations:
-    - VS Code/`VSCodium <https://vscodium.com/#install>`_ with the Python extension published by ms-python
+    - VS Code/`VSCodium <https://vscodium.com/#install>`_ with the Python extension published by **ms-python**
     - `PyCharm <https://www.jetbrains.com/pycharm/download/>`_
 
 
@@ -29,7 +29,7 @@ Using `Git <https://git-scm.com/install>`_'s built-in CLI
 $$$$$$$$$
 
 
-#. In the directory you want to download to, run the following command:
+1. In the directory you want to download to, run the following command:
 
 .. code-block:: console
 
@@ -38,7 +38,7 @@ $$$$$$$$$
 Using `GitHub CLI <https://cli.github.com/>`_
 $$$$$$$$$$$
 
-#. In the directory you want to download to, run the following command:
+1. In the directory you want to download to, run the following command:
 
 .. code-block:: console
 
@@ -56,36 +56,33 @@ $$$$$$$$$
 
 2. Press the ``<> Code`` button to drop down a menu:
 
-.. container:: centered
-
-    .. image:: /_static/images/clone_repo.png
-        :width: 60%
+.. figure:: /_static/images/clone_repo.png
+    :width: 60%
+    :align: center
 
 3. Press "Open with GitHub Desktop"
-    * Allow the website to open GitHub Desktop if you have it downloaded already
-    * Once in GitHub Desktop, the URL to the repository will be provided
-    * Choose where you'd like it saved on your device
-    * Click ``Clone`` and you're good to go!
+    i. Allow the website to open GitHub Desktop if you have it downloaded already
+    ii. Once in GitHub Desktop, the URL to the repository will be provided
+    iii. Choose where you'd like it saved on your device
+    iv. Click ``Clone`` and you're good to go!
 
-.. container:: centered
-
-    .. image:: /_static/images/github_desktop.png
-        :width: 70%
+.. figure:: /_static/images/github_desktop.png
+    :width: 70%
+    :align: center
 
 Download ZIP
 $$$$$$$$$$$$
 
-#. Go to https://github.com/acm-ndsu/Byte-le-2026-Client-Package
+1. Go to https://github.com/acm-ndsu/Byte-le-2026-Client-Package
 
-#. Press the ``<> Code`` button to drop down a menu:
+2. Press the ``<> Code`` button to drop down a menu:
 
-.. container:: centered
+.. figure:: /_static/images/clone_repo.png
+    :width: 60%
+    :align: center
 
-    .. image:: /_static/images/clone_repo.png
-        :width: 60%
-
-#. Click ``Download ZIP`` and find it in your Downloads.
-#. Extract the files somewhere on your device.
+3. Click ``Download ZIP`` and find it in your Downloads.
+4. Extract the files somewhere on your device.
 
 Installing Dependencies
 ===============
@@ -101,48 +98,87 @@ In your project directory, run the following commands in a command line:
 
 To activate your virtual environment, run **one** of the following commands depending on your shell:
 
-.. code-block:: powershell
-   :caption: cmd/PowerShell
+.. tabs::
 
-   .\.venv\Scripts\activate
+    .. group-tab:: cmd
 
-.. code-block:: bash
-   :caption: bash/zsh
+        .. code-block:: cmd
 
-   source .venv/bin/activate
+           .\.venv\Scripts\activate.bat
+
+    .. group-tab:: PowerShell
+
+        .. code-block:: powershell
+
+           .\.venv\Scripts\Activate.ps1
+
+    .. group-tab:: Bash/zsh
+
+        .. code-block:: bash
+
+           source .venv/bin/activate
+
+    .. group-tab:: fish
+
+        .. code-block:: fish
+
+            source .venv/bin/activate.fish
+
+
 
 If you don't see your shell or these don't work, find the appropriate command for your shell `here <https://docs.python.org/3/library/venv.html#how-venvs-work>`_.
 
 .. note::
 
-    If your virtual environment was activated, your shell might notice, adding "``(.venv)``" to the beginning of your prompt like so:
+    If your virtual environment was activated, your shell might notice, adding "``.venv``" somewhere in your prompt like so:
 
-    .. code-block:: console
-       :caption: cmd
+    .. tabs::
 
-       (.venv) C:\path\to\Byte-le-2026-Client-Package\>
+        .. group-tab:: cmd
 
-    .. code-block:: console
-       :caption: PowerShell
+            .. code-block:: console
 
-       (.venv) PS C:\path\to\Byte-le-2026-Client-Package\>
+               (.venv) C:\path\to\Byte-le-2026-Client-Package\>
 
-    .. code-block:: console
-       :caption: bash
+        .. group-tab:: PowerShell
 
-       (.venv) /path/to/Byte-le-2026-Client-Package $
+            .. code-block:: console
+
+               (.venv) PS C:\path\to\Byte-le-2026-Client-Package\>
+
+        .. group-tab:: Bash/zsh
+
+            .. code-block:: console
+
+               (.venv) /path/to/Byte-le-2026-Client-Package $
+
+        .. group-tab:: fish
+
+            .. code-block:: fish
+
+                .venv /path/to/Byte-le-2026-Client-Package >
 
     Alternatively, you can check your path to Python:
 
-    .. code-block:: console
-       :caption: cmd/PowerShell
+    .. tabs::
 
-       where.exe python
+        .. group-tab:: cmd
 
-    .. code-block:: bash
-       :caption: POSIX
+            .. code-block:: console
 
-       which python
+               where.exe python
+
+        .. group-tab:: PowerShell
+
+            .. code-block:: console
+
+               where.exe python
+
+        .. group-tab:: Bash/zsh
+
+            .. code-block:: console
+
+               which python
 
     If your virtual environment is activated, the output of these commands should include a path that looks something like ``/path/to/Byte-le-2026-Client-Package/path/to/venv/bin/python``.
 

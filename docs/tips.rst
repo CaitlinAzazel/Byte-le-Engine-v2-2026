@@ -44,7 +44,7 @@ The animatronics seem to be a bit quirky:
    |bison|, Thundar, "Has poor eyesight, moves erratically"
    |e_n|, I.A.N., "Always knows where you are, is fast"
    |deer|, Doe/Jumper, "Moves diagonally"
-   |trash_heap|, Computer?, "Turns on after some time, other bots get quirkier when it's on"
+   |trash_heap|, Computer?, "Turns on after some time, other bots get quirkier while it's on"
 
 
 Programming Tips
@@ -60,29 +60,42 @@ When in doubt:
    - |discord|
 
 .. note::
-   For brevity, variables representing ``Vector`` s are written as ``<variable_name>``.
+   For brevity, variables representing ``Vector`` s are written as ``<variable_name>`` in the following code examples.
 
-Want to go somewhere? Use ``convert_vector_to_move(...)`` (from ``game.constants``)
+Navigation
+----------
 
-.. code-block:: python
-
-   # I want to go to <goal> but I'm at <position>!
-   move_action: ActionType | None = convert_vector_to_move(goal - position)
-
-Want to interact with something? Use ``convert_vector_to_interact(...)`` (from ``game.constants``)
-
-.. code-block:: python
-
-   # I want to interact with something <there> but I'm <here>!
-   interact_action: ActionType | None = convert_vector_to_interact(there - here)
-
-Want to know if you can stand in a certain spot? Use ``GameBoard.can_object_occupy(...)``
+Want to know if you can stand in a certain spot?
+Use ``GameBoard.can_object_occupy(...)``
 
 .. code-block:: python
    :caption: Given that ``game_board`` is a ``GameBoard`` and ``my_avatar`` is an ``Avatar``
 
    # Can I stand <over_there>?
    can_stand_over_there: bool = game_board.can_object_occupy(over_there, my_avatar)
+
+Want to move somewhere?
+Use ``convert_vector_to_move(...)`` (from ``game.constants``)
+
+.. code-block:: python
+
+   # I want to go to <goal> but I'm at <position>!
+   move_action: ActionType | None = convert_vector_to_move(goal - position)
+
+Want to interact with something?
+Use ``convert_vector_to_interact(...)`` (from ``game.constants``)
+
+.. code-block:: python
+
+   # I want to interact with something <there> but I'm <here>!
+   interact_action: ActionType | None = convert_vector_to_interact(there - here)
+
+.. caution::
+   Be mindful that the above two functions can return ``None``.
+   See :ref:`walking-touching` for a more detailed explanation.
+
+Points
+--------------
 
 Want to know how much points something gives? Look for properties mentioning a "bonus" or "points":
 
@@ -96,3 +109,37 @@ Want to know how much points something gives? Look for properties mentioning a "
    ``ScrapSpawner.point_value``, Similar to ``CoinSpawner.point_value``
    ``BatterySpawner.point_value``, Similar to ``CoinSpawner.point_value``
 
+Vectors
+--------------
+
+Want to know how far away something is?
+Use ``Vector.distance(...)``
+
+.. code-block:: python
+
+   # How far is <here> from <there>?
+   distance: int = here.distance(there)
+
+Only need to know if something is closer/farther?
+Use ``Vector.is_closer_to(...)``/``Vector.is_farther_from(...)``
+
+.. important::
+   These methods return ``False`` if the positions are **equally** close/far.
+
+.. code-block:: python
+
+   # Is <here> closer to <somewhere> than <there>?
+   is_closer: bool = here.is_closer_to(somewhere, there)
+   # Is <here> farther from <somewhere> than <there>?
+   is_closer: bool = here.is_farther_from(somewhere, there)
+
+Want to know what positions are between two points?
+Use ``Vector.get_positions_overlapped_by_line(...)``
+
+.. note::
+   This function uses `Bresenham's line algorithm <https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#>`_.
+
+.. code-block:: python
+
+   # What are the places between <here> and <there>?
+   places = Vector.get_positions_overlapped_by_line(here, there)

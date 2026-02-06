@@ -33,12 +33,22 @@ a:hover {
 /* 	color: var(--custom-link-color-visited); */
 /* } */
 
-.sprite {
-	image-rendering: crisp-edges;
-}
-
 td:has(img) {
 	text-align: center;
+}
+
+figcaption > p {
+	font-size: x-large;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sprite {
+	image-rendering: crisp-edges;
 }
 
 .notice {
@@ -53,4 +63,8 @@ td:has(img) {
 .bigger {
 	font-size: 180%;
 	font-weight: bold;
+}
+
+.name-here {
+	font-size: x-large;
 }

@@ -4,6 +4,7 @@ Credits
 
 .. role:: big
 .. role:: bigger
+.. role:: name-here
 
 THANK YOU, THANK YOU, THANK YOU!
 ================================
@@ -14,14 +15,14 @@ We hope it was memorable and very enjoyable for you all!
 And an even :bigger:`BIIIIIIGGER` thank you to everyone that helped make this year's game possible.
 Any contribution to the project did not go unnoticed! Until next year, take care!
 
-----
+.. container:: image-2
 
-.. container:: centered
-
-   .. image:: /_static/images/and_you_the.png
+   .. figure:: /_static/images/and_you_the.png
       :class: sprite
       :width: 60%
+      :align: center
 
-   Ian King the Royal (:gold:`Uroda`)
+   .. container:: centered
 
-----
+      :name-here:`Ian King the Royal` 
+

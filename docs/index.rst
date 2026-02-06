@@ -8,7 +8,7 @@
 
    The onsite IT (DEV TEAM) can help you with setting up your projects. We support Windows and Linux. 
 
-.. image:: /_static/images/StartMenu.png
+.. figure:: /_static/images/StartMenu.png
 
 ----
 
