@@ -11,6 +11,7 @@ class SupportBot(Bot):
         self.object_type = ObjectType.SUPPORT_BOT
         self.turnedOn = False
         self.timer = Timer(duration=150)
+        self.timer.reset(force=True)
 
     @property
     def turned_on(self):

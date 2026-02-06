@@ -159,6 +159,9 @@ class MasterController(Controller):
 
         self.refuge_controller.handle_actions(ActionType.NONE, player, game_board)
 
+        support_bot: SupportBot | None = self.bots.get(ObjectType.SUPPORT_BOT)
+        assert support_bot is not None
+        assert isinstance(support_bot, SupportBot)
         for bot in self.bots.values():
             bot.stunned()
 
@@ -174,7 +177,7 @@ class MasterController(Controller):
                     self.bot_movement_controller.handle_actions(move, bot, game_board, self.turn)
 
             attack = self.bot_attack_controller.calculate_attack_action(bot, player.avatar)
-            self.bot_attack_controller.handle_actions(attack, player, game_board, bot)
+            self.bot_attack_controller.handle_actions(attack, player, game_board, bot, support_bot)
 
             if not player.avatar.is_alive:
                 self.game_over = True
