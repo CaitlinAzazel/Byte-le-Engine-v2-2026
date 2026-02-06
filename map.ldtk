@@ -1505,7 +1505,7 @@
 						},
 						{
 							"__identifier": "EntitySpawn",
-							"__grid": [7,3],
+							"__grid": [29,1],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 42, "x": 128, "y": 32, "w": 32, "h": 32 },
@@ -1514,13 +1514,13 @@
 							"width": 32,
 							"height": 32,
 							"defUid": 13,
-							"px": [224,96],
+							"px": [928,32],
 							"fieldInstances": [{ "__identifier": "spawned_entity", "__type": "LocalEnum.SpawnedEntity", "__value": "Crawler", "__tile": { "tilesetUid": 42, "x": 128, "y": 32, "w": 32, "h": 32 }, "defUid": 15, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Crawler"]
 							}] }],
-							"__worldX": 224,
-							"__worldY": 96
+							"__worldX": 928,
+							"__worldY": 32
 						},
 						{
 							"__identifier": "Battery",
