@@ -67,6 +67,7 @@ Survival and Bots
 =================
 
 Hostile bots roam the map and attempt to catch the player.
+For more information, see :ref:`bot-quirks`.
 
 * Bots patrol different areas of the map
 * Some bots may chase the player if detected

@@ -16,6 +16,7 @@ Controls
 In the bottom middle of the screen there are buttons that will control playback of the game.
 
 .. csv-table::
+   :class: ghost
    :header-rows: 1
     
     Button, Function

@@ -52,16 +52,16 @@ $$$$$$$$$$$
 Using `GitHub Desktop <https://desktop.github.com/download/>`_
 $$$$$$$$$
 
-#. Go to https://github.com/acm-ndsu/Byte-le-2026-Client-Package
+1. Go to https://github.com/acm-ndsu/Byte-le-2026-Client-Package
 
-#. Press the ``<> Code`` button to drop down a menu:
+2. Press the ``<> Code`` button to drop down a menu:
 
 .. container:: centered
 
     .. image:: /_static/images/clone_repo.png
         :width: 60%
 
-2. Press "Open with GitHub Desktop"
+3. Press "Open with GitHub Desktop"
     * Allow the website to open GitHub Desktop if you have it downloaded already
     * Once in GitHub Desktop, the URL to the repository will be provided
     * Choose where you'd like it saved on your device
@@ -144,7 +144,7 @@ If you don't see your shell or these don't work, find the appropriate command fo
 
        which python
 
-    If your virtual environment is activated, the output of these commands should include a path that looks something like ``/path/to/Byte-le-2026-Client-Package/.venv/bin/python``.
+    If your virtual environment is activated, the output of these commands should include a path that looks something like ``/path/to/Byte-le-2026-Client-Package/path/to/venv/bin/python``.
 
 
 Once your virtual environment is activated, run the following command to install Byte-le's packages:
@@ -159,11 +159,11 @@ More useful commands are listed in :doc:`useful_commands`.
 What Now?
 =============
 
-To learn how to get your lil' guy movin' around, read :doc:`controls`!
+To learn more about the game mechanic's, read :doc:`HowToPlay`!
 
 To get your team registered and learn how to submit your code, read :doc:`server`!
 
-To learn more about the game mechanic's, read :doc:`HowToPlay`!
+To learn how to make your lil' guy do stuff, read :doc:`controls`!
 
 For tips on programming your client, read :doc:`tips`!
 

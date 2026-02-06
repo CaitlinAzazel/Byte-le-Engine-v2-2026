@@ -11,6 +11,42 @@ Strategy Tips
 * Learn bot movement patterns to avoid being trapped
 * Higher multipliers mean higher risk but higher reward
 
+.. _bot-quirks:
+
+Bot Quirks
+==========
+
+The animatronics seem to be a bit quirky:
+
+.. |cables| image:: /_static/images/cables.png
+   :scale: 100%
+
+.. |bison| image:: /_static/images/bison.png
+   :scale: 100%
+   :class: sprite
+
+.. |e_n| image:: /_static/images/e_n.png
+   :scale: 100%
+   :class: sprite
+
+.. |deer| image:: /_static/images/deer.png
+   :scale: 100%
+   :class: sprite
+
+.. |trash_heap| image:: /_static/images/trash_heap_on.png
+   :scale: 100%
+   :class: sprite
+
+.. csv-table::
+   :class: ghost
+
+   |cables|, Crawler, "Always knows where you are, is slow, can enter vents"
+   |bison|, Thundar, "Has poor eyesight, moves erratically"
+   |e_n|, I.A.N., "Always knows where you are, is fast"
+   |deer|, Doe/Jumper, "Moves diagonally"
+   |trash_heap|, Computer?, "Turns on after some time, other bots get quirkier when it's on"
+
+
 Programming Tips
 ================
 
@@ -31,14 +67,14 @@ Want to go somewhere? Use ``convert_vector_to_move(...)`` (from ``game.constants
 .. code-block:: python
 
    # I want to go to <goal> but I'm at <position>!
-   move_action: ActionType = convert_vector_to_move(goal - position)
+   move_action: ActionType | None = convert_vector_to_move(goal - position)
 
 Want to interact with something? Use ``convert_vector_to_interact(...)`` (from ``game.constants``)
 
 .. code-block:: python
 
    # I want to interact with something <there> but I'm <here>!
-   interact_action: ActionType = convert_vector_to_interact(there - here)
+   interact_action: ActionType | None = convert_vector_to_interact(there - here)
 
 Want to know if you can stand in a certain spot? Use ``GameBoard.can_object_occupy(...)``
 
@@ -46,11 +82,12 @@ Want to know if you can stand in a certain spot? Use ``GameBoard.can_object_occu
    :caption: Given that ``game_board`` is a ``GameBoard`` and ``my_avatar`` is an ``Avatar``
 
    # Can I stand <over_there>?
-   can_stand_over_there = game_board.can_object_occupy(over_there, my_avatar)
+   can_stand_over_there: bool = game_board.can_object_occupy(over_there, my_avatar)
 
 Want to know how much points something gives? Look for properties mentioning a "bonus" or "points":
 
 .. csv-table::
+   :class: ghost
    :header: Property, Meaning
 
    ``Generator.activation_bonus``, The amount of points granted upon your **FIRST** time activating that specific generator (varies between instances)

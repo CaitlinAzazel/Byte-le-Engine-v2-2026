@@ -6,7 +6,7 @@ Controlling your Avatar
 Actions List
 ============
 
-Your client's ``take_turn()`` method *must* return a list of ``ActionType`` s.
+Your ``Client.take_turn()`` method *must* return a list of ``ActionType`` s.
 Note that only the **FIRST TWO** actions will be actually be used by the engine.
 
 See :doc:`enums` for a list of all possible ``ActionType`` s.

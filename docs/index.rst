@@ -1,26 +1,33 @@
 ===============================================
-welcome toe tthe docs !
+2026 QBB Security Manual
 ===============================================
 
-these area the edocs (ᴗ ͜ʖ ᴗ)
+.. container:: notice
+
+   You may use the internet, but please include "``-AI``" in your searches.
+
+   The onsite IT (DEV TEAM) can help you with setting up your projects. We support Windows and Linux. 
 
 .. image:: /_static/images/StartMenu.png
 
+----
+
+Table of Contents
+=================
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    getting_started
    HowToPlay
-   useful_commands
-   controls
-   helpers
-   tips
    server
+   controls
+   tips
+   useful_commands
    visualizer
    enums
    debugging
+   credits
 
-Search Page
-===========
-
+Search
+=============
 :ref:`search`
