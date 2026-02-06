@@ -20,6 +20,7 @@ class TestAttackController(unittest.TestCase):
         self.attacking_bot = Bot()
         self.player_avatar = Avatar(position=Vector(0, 0))
         self.target_player = Player(avatar=self.player_avatar)
+        Bot.reset_global_state()
 
     def build_board(self, objects: dict[Vector, list[GameObject]]):
         gb = GameBoard(0, Vector(4, 4), objects)
