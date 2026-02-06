@@ -173,7 +173,6 @@ class MasterController(Controller):
 
             if isinstance(bot, SupportBot):
                 bot.tick()
-                self.timer.tick()
                 self.support_bot = bot
 
             self.boosting_controller.boosting(bot, self.support_bot)
