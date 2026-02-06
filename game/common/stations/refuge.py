@@ -56,6 +56,7 @@ class Refuge(Occupiable):
         json['vector'] = self.vector.to_json()
         json['occupied'] = self.global_occupied
         json['turns_inside'] = self.global_turns_inside
+        json['is_closed'] = self.is_closed
         return json
 
     @override
@@ -70,7 +71,7 @@ class Refuge(Occupiable):
     def can_occupy(self, game_object: GameObject) -> bool:
         if game_object.object_type != ObjectType.AVATAR:
             return False
-        if not Refuge.global_occupied and Refuge.global_turns_outside < Refuge.MIN_TURNS_OUTSIDE:
+        if self.is_closed:
             return False
         return True
 
@@ -84,3 +85,7 @@ class Refuge(Occupiable):
             Refuge.all_positions.remove(self.vector) # there should never be 2 refuges on the same tile so this is fine
             Refuge.all_positions.add(new_position)
         self.vector = new_position
+
+    @property
+    def is_closed(self) -> bool:
+        return not Refuge.global_occupied and Refuge.global_turns_outside < Refuge.MIN_TURNS_OUTSIDE
