@@ -24,7 +24,7 @@ class PointController(Controller):
     gives the player points when applicable
     """
 
-    BASE_POINTS_PER_TURN = 10
+    BASE_POINTS_PER_TURN = 100
     VENT_POINT_MULTIPLIER_REDUCTION = 0.5
 
     def __init__(self, base_points_per_turn: int = BASE_POINTS_PER_TURN):

@@ -10,7 +10,8 @@ class JumperBot(Bot):
     def __init__(self):
         super().__init__()
         self.object_type = ObjectType.JUMPER_BOT
-        self.vision_radius = 6
-        self.boosted_vision_radius = 10
+        self.vision_radius = 4
+        self.boosted_vision_radius = 6
         self.stun = False
         self.turn_delay = 3
+        self.cooldown = 1
