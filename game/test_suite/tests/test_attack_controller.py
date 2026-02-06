@@ -6,6 +6,7 @@ from game.common.avatar import Avatar
 from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.fnaacm.bots.bot import Bot
+from game.fnaacm.bots.crawler_bot import CrawlerBot
 from game.fnaacm.map.vent import Vent
 from game.common.stations.refuge import Refuge
 from game.common.stations.station import Station
@@ -18,6 +19,7 @@ class TestAttackController(unittest.TestCase):
         self.vision_controller = BotVisionController()
         self.attack_controller = Attack_Controller()
         self.attacking_bot = Bot()
+        self.crawler = CrawlerBot()
         self.player_avatar = Avatar(position=Vector(0, 0))
         self.target_player = Player(avatar=self.player_avatar)
         Bot.reset_global_state()
@@ -26,6 +28,24 @@ class TestAttackController(unittest.TestCase):
         gb = GameBoard(0, Vector(4, 4), objects)
         gb.generate_map()
         return gb
+
+    def test_crawler_attacks_while_in_vent(self):
+        self.crawler.position = Vector(0, 1)
+
+        board = self.build_board({
+            Vector(0, 0): [Vent(), self.player_avatar],
+            Vector(0, 1): [Vent(), self.crawler]
+        })
+
+        self.vision_controller.handle_actions(self.player_avatar, self.crawler, board)
+        self.attack_controller.handle_actions(
+            ActionType.ATTACK_UP,
+            self.target_player,
+            board,
+            self.crawler
+        )
+
+        self.assertTrue(self.crawler.has_attacked)
 
     def test_attack_hits_player_up(self):
         self.attacking_bot.position = Vector(0, 1)
