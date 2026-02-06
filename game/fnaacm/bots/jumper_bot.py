@@ -13,4 +13,4 @@ class JumperBot(Bot):
         self.vision_radius = 6
         self.boosted_vision_radius = 10
         self.stun = False
-        self.cooldown = 3
+        self.turn_delay = 3

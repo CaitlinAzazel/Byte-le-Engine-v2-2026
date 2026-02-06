@@ -68,8 +68,6 @@ class Attack_Controller(Controller):
 
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot) -> None:
         bot.has_attacked = False
-        if not bot.can_attack(client.avatar):
-            return
 
         if not bot.can_attack(client.avatar):
             return

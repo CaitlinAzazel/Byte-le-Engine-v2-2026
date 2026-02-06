@@ -14,6 +14,16 @@ class Bot(GameObject):
 
     global_stun_turns_remaining = 0
 
+    @staticmethod
+    def tick_global_stun():
+        # Decrements global stun counter, once per turn
+        if Bot.global_stun_turns_remaining > 0:
+            Bot.global_stun_turns_remaining -= 1
+
+    @staticmethod
+    def reset_global_state():
+        Bot.global_stun_turns_remaining = 0
+
     def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
         super().__init__()
         self.object_type = ObjectType.BOT
@@ -34,7 +44,7 @@ class Bot(GameObject):
 
     def can_attack(self, avatar: Avatar) -> bool:
         # distance check is just a shortcut for checking up/down/left/right
-        return self.can_see_player and self.position.distance(avatar.position) <= 1 and not self.is_stunned
+        return self.can_see_player and not self.is_stunned
 
     def boosting(self, boost):
         self.boosted = boost
@@ -55,12 +65,6 @@ class Bot(GameObject):
 
     #def stunned(self):
     #   self.stun_timer.tick()
-
-    @classmethod
-    def tick_global_stun(cls):
-        # Decrements global stun counter, once per turn
-        if cls.global_stun_turns_remaining > 0:
-            cls.global_stun_turns_remaining -= 1
 
     def can_move(self, turn: int) -> bool:
         # turns are 1-indexed
