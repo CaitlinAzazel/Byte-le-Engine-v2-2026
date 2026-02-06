@@ -162,6 +162,9 @@ class MasterController(Controller):
         for bot in self.bots.values():
             bot.stunned()
 
+            if isinstance(bot, SupportBot):
+                bot.tick()
+
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
 
             if bot.can_move(turn):
