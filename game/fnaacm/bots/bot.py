@@ -12,6 +12,18 @@ class Bot(GameObject):
     DEFAULT_VISION_RADIUS = 1
     SAVED_PRIMITIVE_FIELDS = {'boosted', 'has_attacked', 'can_see_player', 'direction'}
 
+    global_stun_turns_remaining = 0
+
+    @staticmethod
+    def tick_global_stun():
+        # Decrements global stun counter, once per turn
+        if Bot.global_stun_turns_remaining > 0:
+            Bot.global_stun_turns_remaining -= 1
+
+    @staticmethod
+    def reset_global_state():
+        Bot.global_stun_turns_remaining = 0
+
     def __init__(self, stun_duration : int = DEFAULT_STUN_DURATION, start_position : Vector = Vector(), vision_radius: int = DEFAULT_VISION_RADIUS):
         super().__init__()
         self.object_type = ObjectType.BOT
@@ -19,36 +31,40 @@ class Bot(GameObject):
         self.position : Vector = start_position
         self.vision_radius: int = vision_radius
         self.boosted_vision_radius: int = vision_radius * 2
-        self.stun_timer: Timer = Timer(stun_duration)
+        # Removed in exchange for global stun
+        # self.stun_timer: Timer = Timer(stun_duration)
         self.has_attacked: bool = False
         self.can_see_player: bool = False # to be updated by `BotVisionController`
         self.turn_delay: int = 1
         self.direction: str = "" # to be updated by `BotMovementController`, used in visualizer
+
 
     def get_current_vision_radius(self) -> int:
         return self.boosted_vision_radius if self.boosted else self.vision_radius
 
     def can_attack(self, avatar: Avatar) -> bool:
         # distance check is just a shortcut for checking up/down/left/right
-        return self.can_see_player and self.position.distance(avatar.position) <= 1
+        return self.can_see_player and not self.is_stunned
 
     def boosting(self, boost):
         self.boosted = boost
 
     @property
     def is_stunned(self) -> bool:
-        return not self.stun_timer.done
+        return Bot.global_stun_turns_remaining > 0
+
 
     # available for backwards compatibility
-    @is_stunned.setter
-    def is_stunned(self, value: bool) -> None:
-        if value:
-            self.stun_timer.reset()
-        else:
-            self.stun_timer.force_done()
+    #@is_stunned.setter
+    #def is_stunned(self, value: bool) -> None:
+    #    if value:
+    #        self.stun_timer.reset()
+    #    else:
+    #        self.stun_timer.force_done()
 
-    def stunned(self):
-        self.stun_timer.tick()
+
+    #def stunned(self):
+    #   self.stun_timer.tick()
 
     def can_move(self, turn: int) -> bool:
         # turns are 1-indexed
@@ -68,8 +84,7 @@ class Bot(GameObject):
         target.receive_attack()
 
         # Bot stunned after hitting the player
-        self.is_stunned = True
-        self.stun_counter = 0
+        Bot.global_stun_turns_remaining = Bot.DEFAULT_STUN_DURATION
 
         self.has_attacked = True
 
@@ -97,7 +112,7 @@ class Bot(GameObject):
             data[field] = getattr(self, field)
 
         data['position'] = self.position.to_json()
-        data['stun_timer'] = self.stun_timer.to_json()
+        data['global_stun_turns_remaining'] = Bot.global_stun_turns_remaining
 
         return data
 
@@ -110,6 +125,7 @@ class Bot(GameObject):
             setattr(self, field, data[field])
 
         self.position = Vector().from_json(data['position'])
-        self.stun_timer = Timer.new_from_json(data['stun_timer'])
+        if 'global_stun_turns_remaining' in data:
+            Bot.global_stun_turns_remaining = data['global_stun_turns_remaining']
 
         return self

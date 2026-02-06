@@ -24,6 +24,7 @@ class TestBot(unittest.TestCase):
         self.refuge_controller = RefugeController()
         Refuge.reset_global_state()
         self.bot_vision_controller = BotVisionController()
+        Bot.reset_global_state()
 
     """
     `calc_next_move` should be tested by respective bots since

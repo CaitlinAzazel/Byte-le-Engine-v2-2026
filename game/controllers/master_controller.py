@@ -162,8 +162,9 @@ class MasterController(Controller):
         support_bot: SupportBot | None = self.bots.get(ObjectType.SUPPORT_BOT)
         assert support_bot is not None
         assert isinstance(support_bot, SupportBot)
+        Bot.tick_global_stun()
         for bot in self.bots.values():
-            bot.stunned()
+            #bot.stunned()
 
             if isinstance(bot, SupportBot):
                 bot.tick()

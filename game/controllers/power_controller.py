@@ -10,7 +10,7 @@ class PowerController(Controller):
     manages the passive drain of power from the player
     """
 
-    GENERATOR_PENALTY = 1
+    GENERATOR_PENALTY = 0
 
     def __init__(self, passive_decay_frequency: int = 1, passive_decay_amount: int = 1):
         super().__init__()
