@@ -20,8 +20,8 @@ TYPES_WITHOUT_DATA = {Wall, Vent}
 
 assert not USE_PRECOMPILED_MAP, \
     f'PATH_TO_LDTK_PROJECT is incorrect when USE_PRECOMPILED_MAP is true, ' \
-    f'and USE_PRE_COMPILED_MAP should be false unless building for client package'
-
+    f'and USE_PRE_COMPILED_MAP should be false unless building for client package\n\n' \
+    f'YOU MAY HAVE BUILT A LOCAL CLIENT PACKAGE; SIMPLY DELETE game/map_data IN THIS CASE'
 class TestLDtkHelpers(unittest.TestCase):
     def setUp(self) -> None:
         map_size = Vector(8, 8)
