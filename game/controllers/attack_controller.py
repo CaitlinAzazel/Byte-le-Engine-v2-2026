@@ -94,8 +94,9 @@ class Attack_Controller(Controller):
             tile_stack = world.get(target_pos)
 
             # Vents block attacks entirely
-            if any(isinstance(obj, Vent) for obj in tile_stack):
-                continue
+            # ^ handled by bot.can_attack()
+            # if any(isinstance(obj, Vent) for obj in tile_stack):
+            #     continue
 
             # Attack first Avatar on stack
             for obj in tile_stack:
