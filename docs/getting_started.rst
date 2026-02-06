@@ -161,7 +161,11 @@ What Now?
 
 To learn how to get your lil' guy movin' around, read :doc:`controls`!
 
-To get your team registered and learn how to submit your code, read :doc:`the_server`!
+To get your team registered and learn how to submit your code, read :doc:`server`!
+
+To learn more about the game mechanic's, read :doc:`HowToPlay`!
+
+For tips on programming your client, read :doc:`tips`!
 
 Submitting Issues
 ================

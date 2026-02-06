@@ -14,6 +14,7 @@ these area the edocs (ᴗ ͜ʖ ᴗ)
    useful_commands
    controls
    helpers
+   tips
    server
    visualizer
    enums
