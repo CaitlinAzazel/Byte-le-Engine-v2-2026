@@ -5,6 +5,7 @@ from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.fnaacm.bots.bot import Bot
 from game.common.avatar import Avatar
+from game.fnaacm.bots.support_bot import SupportBot
 from game.utils.vector import Vector
 from game.fnaacm.map.vent import Vent
 from game.fnaacm.bots.jumper_bot import JumperBot
@@ -66,7 +67,7 @@ class Attack_Controller(Controller):
         direction = (avatar.position - bot.position).clamp_xy(-1, 1)
         return DIRECTION_TO_ATTACK[direction]
 
-    def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot) -> None:
+    def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot, supportBot: SupportBot|None = None) -> None:
         bot.has_attacked = False
 
         if not bot.can_attack(client.avatar):
@@ -105,6 +106,9 @@ class Attack_Controller(Controller):
                     # Turn off all generators
                     for gen in world.generators.values():
                         gen.deactivate()
+
+                    if supportBot != None:
+                        supportBot.turnoff()
 
                     bot.has_attacked = True
                     return
