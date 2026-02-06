@@ -101,6 +101,7 @@ class Attack_Controller(Controller):
                 if isinstance(obj, Avatar):
                     bot.attack(obj)
 
+                    #bot.is_stunned = False
                     # Turn off all generators
                     for gen in world.generators.values():
                         gen.deactivate()

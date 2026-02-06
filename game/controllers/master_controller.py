@@ -159,8 +159,9 @@ class MasterController(Controller):
 
         self.refuge_controller.handle_actions(ActionType.NONE, player, game_board)
 
+        Bot.tick_global_stun()
         for bot in self.bots.values():
-            bot.stunned()
+            #bot.stunned()
 
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
 

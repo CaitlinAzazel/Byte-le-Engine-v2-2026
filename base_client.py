@@ -1,6 +1,6 @@
 from game.client.user_client import UserClient
 from game.common.avatar import Avatar
-from game.common.enums import ObjectType, ActionType
+from game.common.enums import *
 from game.common.map.game_board import GameBoard
 from game.constants import *
 
