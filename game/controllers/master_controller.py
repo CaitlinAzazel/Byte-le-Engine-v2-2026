@@ -3,6 +3,8 @@ from dataclasses import dataclass
 import dataclasses
 import random
 
+from sqlalchemy.testing import is_instance_of
+
 from game.common.action import Action
 from game.common.avatar import Avatar
 from game.common.enums import *
@@ -161,6 +163,9 @@ class MasterController(Controller):
 
         for bot in self.bots.values():
             bot.stunned()
+
+            if isinstance(bot, SupportBot):
+                bot.tick()
 
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
 

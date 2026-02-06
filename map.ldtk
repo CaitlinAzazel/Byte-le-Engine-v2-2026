@@ -1149,7 +1149,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "EntitySpawn",
-							"__grid": [1,1],
+							"__grid": [3,8],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 42, "x": 512, "y": 32, "w": 32, "h": 32 },
@@ -1158,13 +1158,13 @@
 							"width": 32,
 							"height": 32,
 							"defUid": 13,
-							"px": [32,32],
+							"px": [96,256],
 							"fieldInstances": [{ "__identifier": "spawned_entity", "__type": "LocalEnum.SpawnedEntity", "__value": "Player", "__tile": { "tilesetUid": 42, "x": 512, "y": 32, "w": 32, "h": 32 }, "defUid": 15, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Player"]
 							}] }],
-							"__worldX": 32,
-							"__worldY": 32
+							"__worldX": 96,
+							"__worldY": 256
 						},
 						{
 							"__identifier": "Generator",
@@ -1692,7 +1692,7 @@
 						},
 						{
 							"__identifier": "EntitySpawn",
-							"__grid": [16,9],
+							"__grid": [2,7],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 42, "x": 256, "y": 32, "w": 32, "h": 32 },
@@ -1701,13 +1701,13 @@
 							"width": 32,
 							"height": 32,
 							"defUid": 13,
-							"px": [512,288],
+							"px": [64,224],
 							"fieldInstances": [{ "__identifier": "spawned_entity", "__type": "LocalEnum.SpawnedEntity", "__value": "Dummy", "__tile": { "tilesetUid": 42, "x": 256, "y": 32, "w": 32, "h": 32 }, "defUid": 15, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Dummy"]
 							}] }],
-							"__worldX": 512,
-							"__worldY": 288
+							"__worldX": 64,
+							"__worldY": 224
 						},
 						{
 							"__identifier": "Battery",

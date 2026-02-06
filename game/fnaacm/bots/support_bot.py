@@ -2,12 +2,15 @@ from typing import Self, override
 from game.common.enums import ObjectType
 from game.fnaacm.bots.bot import Bot
 from game.fnaacm.bots.general_bot_commands import *
+from game.fnaacm.timer import Timer
+
 
 class SupportBot(Bot):
     def __init__(self):
         super().__init__()
         self.object_type = ObjectType.SUPPORT_BOT
         self.turnedOn = False
+        self.timer = Timer(duration=150)
 
     @property
     def turned_on(self):
@@ -27,3 +30,12 @@ class SupportBot(Bot):
         obj = super().from_json(data)
         obj.turnedOn = data['turnedOn']
         return obj
+
+    def tick(self):
+        self.timer.tick()
+        if self.timer.done:
+            self.turnedOn = True
+
+    def turnoff(self):
+        self.turnedOn = False
+        self.timer.reset(50, force=True)
