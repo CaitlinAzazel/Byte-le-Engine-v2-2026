@@ -23,12 +23,14 @@ class SupportBot(Bot):
     def to_json(self) -> dict:
         data = super().to_json()
         data['turnedOn'] = self.turnedOn
+        data['timer'] = self.timer.to_json()
         return data
 
     @override
     def from_json(self, data: dict) -> Self:
         obj = super().from_json(data)
         obj.turnedOn = data['turnedOn']
+        obj.timer = Timer.new_from_json(data['timer'])
         return obj
 
     def tick(self):
