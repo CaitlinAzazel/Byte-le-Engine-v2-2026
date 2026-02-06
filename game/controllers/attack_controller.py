@@ -68,6 +68,8 @@ class Attack_Controller(Controller):
 
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard, bot: Bot) -> None:
         bot.has_attacked = False
+        if not bot.can_attack(client.avatar):
+            return
 
         # Invalid attack type
         if action not in ATTACK_TO_DIRECTION:
@@ -98,6 +100,7 @@ class Attack_Controller(Controller):
                 if isinstance(obj, Avatar):
                     bot.attack(obj)
 
+                    #bot.is_stunned = False
                     # Turn off all generators
                     for gen in world.generators.values():
                         gen.deactivate()

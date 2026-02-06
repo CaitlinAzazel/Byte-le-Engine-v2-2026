@@ -14,4 +14,4 @@ class DumbBot(Bot):
         self.vision_radius = 4
         self.boosted_vision_radius = 10
         self.boosted : bool = False
-        self.stun = False
+        #self.stun = False
