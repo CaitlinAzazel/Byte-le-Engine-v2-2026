@@ -25,8 +25,8 @@ class SafeSpotBS(ByteSpriteFactory):
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
         if data.get('is_closed', False):
-            return spritesheets[1]
-        return spritesheets[0]
+            return spritesheets[0]
+        return spritesheets[1]
 
     @staticmethod
     def create_bytesprite(screen: pyg.Surface) -> ByteSprite:
