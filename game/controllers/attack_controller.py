@@ -71,6 +71,9 @@ class Attack_Controller(Controller):
         if not bot.can_attack(client.avatar):
             return
 
+        if not bot.can_attack(client.avatar):
+            return
+
         # Invalid attack type
         if action not in ATTACK_TO_DIRECTION:
             return

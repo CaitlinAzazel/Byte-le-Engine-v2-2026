@@ -7,7 +7,7 @@ from game.common.enums import *
 USE_PRECOMPILED_MAP = False
 try:
     from game.map_data import USE_PRECOMPILED_MAP
-except ModuleNotFoundError:
+except ImportError:
     # isn't this neat
     warn("map_data is missing; please generate it with compile_map_data.py")
 

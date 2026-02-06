@@ -9,7 +9,7 @@ export CLIENT_PACKAGE_BUILD=true
 if ! [[ -v CI ]]; then
 	if [[ -f output ]]; then
 		echo "Cleaning old build..."
-		rm output/*
+		rm -r output/*
 	fi
 
 	echo "Activating venv..."
@@ -25,13 +25,19 @@ echo "Copying extra files..."
 cp -r client_package/* output/
 cp client_package/.gitignore output/ # wildcards dont match dotfiles by default
 
+IMAGES=output/visualizer/images
+mkdir -p $IMAGES/staticsprites $IMAGES/spritesheets output/visualizer/fonts
+echo "Copying assets..."
+cp -r visualizer/images/staticsprites/!(*.txt) $IMAGES/staticsprites
+cp -r visualizer/images/spritesheets/!(*.txt) $IMAGES/spritesheets
+cp -r visualizer/fonts/!(*.txt) output/visualizer/fonts
+
 echo "Building launcher..."
 cp -r game wrapper/game/
 cp -r visualizer wrapper/visualizer/
 mkdir -p wrapper/server
 cp -r server/!(*_temp|logs) wrapper/server/
 python -m zipapp wrapper -o output/launcher.pyz -c
-
 
 if ! [[ -v CI ]]; then
 	echo "Cleaning up..."

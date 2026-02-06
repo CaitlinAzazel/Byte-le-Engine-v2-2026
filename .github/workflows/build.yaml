@@ -8,7 +8,7 @@ on:
       - 'visualizer/**'
       - 'wrapper/**'
       - 'build.*'
-  pull_request: {}
+      - 'map.ldtk'
 
 jobs:
   build:

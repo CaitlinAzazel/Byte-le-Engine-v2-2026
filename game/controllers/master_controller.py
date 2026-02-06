@@ -1,4 +1,6 @@
 from copy import deepcopy
+from dataclasses import dataclass
+import dataclasses
 import random
 
 from game.common.action import Action
@@ -11,7 +13,7 @@ from game.controllers import refuge_controller
 from game.controllers.attack_controller import Attack_Controller
 from game.controllers.bot_movement_controller import BotMovementController
 from game.controllers.bot_vision_controller import BotVisionController
-from game.controllers.point_controller import PointController
+from game.controllers.point_controller import PointController, PointData
 from game.controllers.power_controller import PowerController
 from game.controllers.refuge_controller import RefugeController
 from game.fnaacm.bots.bot import Bot
@@ -75,6 +77,7 @@ class MasterController(Controller):
         self.refuge_controller: RefugeController = RefugeController()
         self.point_controller: PointController = PointController()
         self.power_controller: PowerController = PowerController()
+        self.point_data = PointData()
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -178,7 +181,7 @@ class MasterController(Controller):
         self.power_controller.handle_actions(ActionType.NONE, player, game_board)
         if player.avatar.power <= 0:
             self.game_over = True
-        self.point_controller.handle_actions(player.avatar, game_board)
+        self.point_data = self.point_controller.handle_actions(player.avatar, game_board)
 
         # checks event logic at the end of round
         # self.handle_events(clients)
@@ -197,6 +200,8 @@ class MasterController(Controller):
         data['clients'] = [client.to_json() for client in clients]
         # Add things that should be thrown into the turn logs here
         data['game_board'] = self.current_world_data["game_board"].to_json()
+        data['point_data'] = dataclasses.asdict(self.point_data)
+        data['points_awarded'] = self.point_data.point_award
 
         return data
 

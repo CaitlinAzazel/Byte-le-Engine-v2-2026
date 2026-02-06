@@ -158,6 +158,7 @@ class Avatar(GameObject):
         self.power: int = Avatar.MAX_POWER
         self.__held_index: int = 0
         self.health: int = 3
+        self.direction: str = "" # to be updated by `MovementController`, used in visualizer
 
     def give_score(self, amount: int) -> None:
         self.score += amount
@@ -368,6 +369,8 @@ class Avatar(GameObject):
         return sum(map(lambda x: x.quantity if x is not None and x.object_type == item_type else 0, self.inventory))
 
     def to_json(self) -> dict:
+        if not self.is_alive:
+            self.state = 'hurt'
         data: dict = super().to_json()
         data['held_index'] = self.__held_index
         data['held_item'] = self.held_item.to_json() if self.held_item is not None else None
@@ -378,6 +381,7 @@ class Avatar(GameObject):
         data['scrap'] = self.get_quantity_of_item_type(ObjectType.SCRAP)
         data['health'] = self.health
         data['power'] = self.power
+        data['direction'] = self.direction
         return data
 
     def from_json(self, data: dict) -> Self:

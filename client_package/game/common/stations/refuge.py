@@ -20,9 +20,6 @@ class Refuge(Occupiable):
             - boot countdown resets after a certain number of turns. all refuges share the same boot countdown
 
         The Refuge is intended to add a layer of strategy to the game, providing safety at the cost of valuable points
-
-        The occupied/turns_inside variables are meant to be global because their status can
-                                        drastically change the state and operations of the entire game
     """
 
     def __init__(self, x: int = 0, y: int = 0) -> None:
@@ -45,3 +42,7 @@ class Refuge(Occupiable):
             Refuge.all_positions.remove(self.vector) # there should never be 2 refuges on the same tile so this is fine
             Refuge.all_positions.add(new_position)
         self.vector = new_position
+
+    @property
+    def is_closed(self) -> bool:
+        ...

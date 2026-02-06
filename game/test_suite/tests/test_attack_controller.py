@@ -1,4 +1,5 @@
 import unittest
+from game.controllers.bot_vision_controller import BotVisionController
 from game.controllers.attack_controller import Attack_Controller
 from game.common.enums import ActionType
 from game.common.avatar import Avatar
@@ -6,6 +7,7 @@ from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.fnaacm.bots.bot import Bot
 from game.fnaacm.map.vent import Vent
+from game.common.stations.refuge import Refuge
 from game.common.stations.station import Station
 from game.fnaacm.stations.generator import Generator
 from game.utils.vector import Vector
@@ -13,6 +15,7 @@ from game.common.game_object import GameObject
 
 class TestAttackController(unittest.TestCase):
     def setUp(self):
+        self.vision_controller = BotVisionController()
         self.attack_controller = Attack_Controller()
         self.attacking_bot = Bot()
         self.player_avatar = Avatar(position=Vector(0, 0))
@@ -37,6 +40,7 @@ class TestAttackController(unittest.TestCase):
             Vector(1, 1): [gen2],
         })
 
+        self.vision_controller.handle_actions(self.player_avatar, self.attacking_bot, board)
         self.attack_controller.handle_actions(
             ActionType.ATTACK_UP,
             self.target_player,
@@ -55,6 +59,7 @@ class TestAttackController(unittest.TestCase):
             Vector(0, 1): [self.attacking_bot]
         })
 
+        self.vision_controller.handle_actions(self.player_avatar, self.attacking_bot, board)
         self.attack_controller.handle_actions(
             ActionType.ATTACK_UP,
             Player(avatar=Avatar(Vector(1, 1))),
@@ -73,6 +78,7 @@ class TestAttackController(unittest.TestCase):
             Vector(0, 1): [self.attacking_bot]
         })
 
+        self.vision_controller.handle_actions(self.player_avatar, self.attacking_bot, board)
         self.attack_controller.handle_actions(
             ActionType.ATTACK_UP,
             Player(avatar=Avatar(Vector(1, 1))),
@@ -90,6 +96,25 @@ class TestAttackController(unittest.TestCase):
             Vector(0, 1): [self.attacking_bot]
         })
 
+        self.vision_controller.handle_actions(self.player_avatar, self.attacking_bot, board)
+        self.attack_controller.handle_actions(
+            ActionType.ATTACK_UP,
+            self.target_player,
+            board,
+            self.attacking_bot
+        )
+
+        self.assertFalse(self.attacking_bot.has_attacked)
+
+    def test_attack_blocked_by_refuge(self):
+        self.attacking_bot.position = Vector(0, 1)
+
+        board = self.build_board({
+            Vector(0, 0): [Refuge(), self.player_avatar],
+            self.attacking_bot.position: [self.attacking_bot]
+        })
+
+        self.vision_controller.handle_actions(self.player_avatar, self.attacking_bot, board)
         self.attack_controller.handle_actions(
             ActionType.ATTACK_UP,
             self.target_player,
@@ -120,6 +145,7 @@ class TestAttackController(unittest.TestCase):
             Vector(1, 0): [self.attacking_bot],
         })
         old_health = self.player_avatar.health
+        self.vision_controller.handle_actions(self.player_avatar, self.attacking_bot, board)
         self.attack_controller.handle_actions(
             ActionType.ATTACK_LEFT,
             self.target_player,
