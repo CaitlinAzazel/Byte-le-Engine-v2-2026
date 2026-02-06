@@ -6,6 +6,7 @@ from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.fnaacm.bots.bot import Bot
 from game.fnaacm.map.vent import Vent
+from game.common.stations.refuge import Refuge
 from game.common.stations.station import Station
 from game.fnaacm.stations.generator import Generator
 from game.utils.vector import Vector
@@ -88,6 +89,23 @@ class TestAttackController(unittest.TestCase):
         board = self.build_board({
             Vector(0, 0): [Vent(), self.player_avatar],
             Vector(0, 1): [self.attacking_bot]
+        })
+
+        self.attack_controller.handle_actions(
+            ActionType.ATTACK_UP,
+            self.target_player,
+            board,
+            self.attacking_bot
+        )
+
+        self.assertFalse(self.attacking_bot.has_attacked)
+
+    def test_attack_blocked_by_refuge(self):
+        self.attacking_bot.position = Vector(0, 1)
+
+        board = self.build_board({
+            Vector(0, 0): [Refuge(), self.player_avatar],
+            self.attacking_bot.position: [self.attacking_bot]
         })
 
         self.attack_controller.handle_actions(
