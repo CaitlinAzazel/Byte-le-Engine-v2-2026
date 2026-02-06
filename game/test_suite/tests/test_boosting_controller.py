@@ -14,13 +14,7 @@ class TestCaseA(unittest.TestCase):
         self.ianBot = IANBot()
         self.crawlerBot = CrawlerBot()
         self.dumbBot = DumbBot()
-        self.boosting_controller = BoostingController(
-            self.supportBot,
-            self.jumperBot,
-            self.dumbBot,
-            self.crawlerBot,
-            self.ianBot
-        )
+        self.boosting_controller = BoostingController()
 
     def test_boosting_turned_off(self):
         # Use the internal variable, not the property
@@ -32,7 +26,10 @@ class TestCaseA(unittest.TestCase):
         self.assertFalse(self.jumperBot.boosted)
         self.assertFalse(self.ianBot.boosted)
 
-        self.boosting_controller.boosting()
+        self.boosting_controller.boosting(self.crawlerBot, self.supportBot)
+        self.boosting_controller.boosting(self.dumbBot, self.supportBot)
+        self.boosting_controller.boosting(self.jumperBot, self.supportBot)
+        self.boosting_controller.boosting(self.ianBot, self.supportBot)
 
         # After calling boosting with supportBot off, all should still be off
         self.assertFalse(self.crawlerBot.boosted)
@@ -49,7 +46,10 @@ class TestCaseA(unittest.TestCase):
 
         # Turn support bot on
         self.supportBot.turnedOn = True
-        self.boosting_controller.boosting()
+        self.boosting_controller.boosting(self.crawlerBot, self.supportBot)
+        self.boosting_controller.boosting(self.dumbBot, self.supportBot)
+        self.boosting_controller.boosting(self.jumperBot, self.supportBot)
+        self.boosting_controller.boosting(self.ianBot, self.supportBot)
 
         # Now all bots should be boosted
         self.assertTrue(self.crawlerBot.boosted)
@@ -66,7 +66,10 @@ class TestCaseA(unittest.TestCase):
 
         # Turn on
         self.supportBot.turnedOn = True
-        self.boosting_controller.boosting()
+        self.boosting_controller.boosting(self.crawlerBot, self.supportBot)
+        self.boosting_controller.boosting(self.dumbBot, self.supportBot)
+        self.boosting_controller.boosting(self.jumperBot, self.supportBot)
+        self.boosting_controller.boosting(self.ianBot, self.supportBot)
         self.assertTrue(self.crawlerBot.boosted)
         self.assertTrue(self.dumbBot.boosted)
         self.assertTrue(self.jumperBot.boosted)
@@ -74,7 +77,10 @@ class TestCaseA(unittest.TestCase):
 
         # Turn off
         self.supportBot.turnedOn = False
-        self.boosting_controller.boosting()
+        self.boosting_controller.boosting(self.crawlerBot, self.supportBot)
+        self.boosting_controller.boosting(self.dumbBot, self.supportBot)
+        self.boosting_controller.boosting(self.jumperBot, self.supportBot)
+        self.boosting_controller.boosting(self.ianBot, self.supportBot)
         self.assertFalse(self.crawlerBot.boosted)
         self.assertFalse(self.dumbBot.boosted)
         self.assertFalse(self.jumperBot.boosted)
@@ -82,7 +88,10 @@ class TestCaseA(unittest.TestCase):
 
         # Turn on again
         self.supportBot.turnedOn = True
-        self.boosting_controller.boosting()
+        self.boosting_controller.boosting(self.crawlerBot, self.supportBot)
+        self.boosting_controller.boosting(self.dumbBot, self.supportBot)
+        self.boosting_controller.boosting(self.jumperBot, self.supportBot)
+        self.boosting_controller.boosting(self.ianBot, self.supportBot)
         self.assertTrue(self.crawlerBot.boosted)
         self.assertTrue(self.dumbBot.boosted)
         self.assertTrue(self.jumperBot.boosted)

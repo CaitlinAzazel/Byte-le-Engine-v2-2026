@@ -11,6 +11,7 @@ import game.config as config   # this is for turns
 from game.common.stations.refuge import Refuge
 from game.controllers import refuge_controller
 from game.controllers.attack_controller import Attack_Controller
+from game.controllers.boosting_controller import BoostingController
 from game.controllers.bot_movement_controller import BotMovementController
 from game.controllers.bot_vision_controller import BotVisionController
 from game.controllers.point_controller import PointController, PointData
@@ -22,6 +23,7 @@ from game.fnaacm.bots.dumb_bot import DumbBot
 from game.fnaacm.bots.ian_bot import IANBot
 from game.fnaacm.bots.jumper_bot import JumperBot
 from game.fnaacm.bots.support_bot import SupportBot
+from game.fnaacm.timer import Timer
 from game.utils.thread import CommunicationThread
 from game.controllers.movement_controller import MovementController
 from game.controllers.controller import Controller
@@ -78,6 +80,9 @@ class MasterController(Controller):
         self.point_controller: PointController = PointController()
         self.power_controller: PowerController = PowerController()
         self.point_data = PointData()
+        self.boosting_controller: BoostingController = BoostingController()
+        self.support_bot = SupportBot()
+        self.timer = Timer(duration=150)
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -162,8 +167,13 @@ class MasterController(Controller):
         for bot in self.bots.values():
             bot.stunned()
 
+
             if isinstance(bot, SupportBot):
                 bot.tick()
+                self.timer.tick()
+                self.support_bot = bot
+
+            self.boosting_controller.boosting(bot, self.support_bot)
 
             self.bot_vision_controller.handle_actions(player.avatar, bot, game_board)
 

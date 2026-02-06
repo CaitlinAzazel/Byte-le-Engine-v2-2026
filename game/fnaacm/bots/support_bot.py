@@ -10,7 +10,7 @@ class SupportBot(Bot):
         super().__init__()
         self.object_type = ObjectType.SUPPORT_BOT
         self.turnedOn = False
-        self.timer = Timer(duration=150)
+        self.cooldown = 250
 
     @property
     def turned_on(self):
@@ -32,10 +32,10 @@ class SupportBot(Bot):
         return obj
 
     def tick(self):
-        self.timer.tick()
-        if self.timer.done:
+        self.cooldown -= 1
+        if self.cooldown <= 0:
             self.turnedOn = True
 
     def turnoff(self):
         self.turnedOn = False
-        self.timer.reset(50, force=True)
+        self.cooldown = 50
