@@ -1,15 +1,16 @@
 import heapq
 from typing import Dict, List, Tuple, Optional
-from game.common.enums import ObjectType
+from game.common.enums import ActionType, ObjectType
 from game.common.game_object import GameObject
 from game.common.map.occupiable import Occupiable
+from game.constants import DIRECTION_TO_MOVE
 from game.utils.vector import Vector
 
 Position = Tuple[int, int]
 
 DIRECTIONS = [(1,0), (-1,0), (0,1), (0,-1)]
 
-def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optional[List[Vector]]:
+def a_star_path(start: Vector, goal: Vector, world, allow_vents = True, game_object: GameObject | None = None) -> Optional[List[Vector]]:
     start_p = (start.x, start.y)
     goal_p = (goal.x, goal.y)
 
@@ -31,6 +32,9 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
         for dx, dy in DIRECTIONS:
             nxt = (current[0] + dx, current[1] + dy)
             vec = Vector(nxt[0], nxt[1])
+
+            if game_object is not None and not world.can_object_occupy(vec, game_object):
+                continue
 
             if not world.is_valid_coords(vec):
                 continue
@@ -57,3 +61,20 @@ def a_star_path(start: Vector, goal: Vector, world, allow_vents=True) -> Optiona
                 came_from[nxt] = current
 
     return None
+
+def a_star_move(start: Vector, goal: Vector, world, allow_vents: bool = True, game_object: GameObject | None = None) -> ActionType | None:
+    path = a_star_path(
+        start=start,
+        goal=goal,
+        world=world,
+        allow_vents=allow_vents, 
+        game_object=game_object
+    )
+
+    if not path or len(path) < 2:
+        return None
+
+    next_step: Vector = path[1]
+    direction = next_step - start
+    action = DIRECTION_TO_MOVE.get(direction)
+    return action

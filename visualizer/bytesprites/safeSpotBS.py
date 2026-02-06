@@ -24,15 +24,16 @@ class SafeSpotBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
-        # Static sprite: always use first row
-        return spritesheets[0]
+        if data.get('is_closed', False):
+            return spritesheets[0]
+        return spritesheets[1]
 
     @staticmethod
     def create_bytesprite(screen: pyg.Surface) -> ByteSprite:
         return ByteSprite(
             screen,
             SafeSpotBS.SAFESPOT_PATH,
-            1,                          # one row (static)
+            2,
             ObjectType.REFUGE.value, # must match Adapter + logs
             SafeSpotBS.update,
             colorkey=None               # use PNG alpha transparency

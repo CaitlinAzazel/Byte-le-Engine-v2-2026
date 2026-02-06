@@ -3,6 +3,7 @@ from game.common.map.occupiable import Occupiable
 from game.common.player import Player
 from game.common.map.game_board import GameBoard
 from game.common.enums import *
+from game.constants import MOVE_TO_DIRECTION, MOVE_TO_DIRECTION_STR
 from game.utils.vector import Vector
 from game.controllers.controller import Controller
 
@@ -24,21 +25,14 @@ class MovementController(Controller):
 
 
     def handle_actions(self, action: ActionType, client: Player, world: GameBoard):
+        assert client.avatar is not None
         avatar = client.avatar
 
-        direction: Vector
-        match action:
-            case ActionType.MOVE_UP:
-                direction = Vector(x=0, y=-1)
-            case ActionType.MOVE_DOWN:
-                direction = Vector(x=0, y=1)
-            case ActionType.MOVE_LEFT:
-                direction = Vector(x=-1, y=0)
-            case ActionType.MOVE_RIGHT:
-                direction = Vector(x=1, y=0)
-            case _:  # default case
-                return
+        direction = MOVE_TO_DIRECTION.get(action)
+        if direction is None:
+            return
 
+        avatar.direction = MOVE_TO_DIRECTION_STR.get(action, "")
         destination: Vector = avatar.position + direction
 
         if not world.can_object_occupy(destination, avatar):

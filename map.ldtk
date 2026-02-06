@@ -10,8 +10,8 @@
 	},
 	"iid": "7a6ff7c0-5e50-11f0-9d3b-290c9e8d0b0c",
 	"jsonVersion": "1.5.3",
-	"appBuildId": 473703,
-	"nextUid": 72,
+	"appBuildId": 489701,
+	"nextUid": 74,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -571,8 +571,8 @@
 					"tilesetUid": null
 				},
 				{
-					"identifier": "point_bonus",
-					"doc": null,
+					"identifier": "activation_bonus",
+					"doc": "the flat point bonus given when activated for the first time",
 					"__type": "Int",
 					"uid": 60,
 					"type": "F_Int",
@@ -593,11 +593,48 @@
 					"useForSmartColor": false,
 					"exportToToc": false,
 					"searchable": false,
-					"min": 1,
+					"min": 0,
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
-					"defaultOverride": null,
+					"defaultOverride": { "id": "V_Int", "params": [1] },
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "multiplier_bonus",
+					"doc": "amount to increase the point multiplier while active",
+					"__type": "Float",
+					"uid": 73,
+					"type": "F_Float",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": 0,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": { "id": "V_Float", "params": [0.1] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": true,
@@ -1160,7 +1197,8 @@
 									"id": "V_String",
 									"params": ["fceed140-fa90-11f0-b78e-295cca8706db"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 1, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }
+								{ "__identifier": "activation_bonus", "__type": "Int", "__value": 50, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [50] }] },
+								{ "__identifier": "multiplier_bonus", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 73, "realEditorValues": [null] }
 							],
 							"__worldX": 32,
 							"__worldY": 256
@@ -1215,7 +1253,8 @@
 									"id": "V_String",
 									"params": ["293dc960-d380-11f0-ab8e-d1e1b17d57b4"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 4, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [4] }] }
+								{ "__identifier": "activation_bonus", "__type": "Int", "__value": 200, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [200] }] },
+								{ "__identifier": "multiplier_bonus", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 73, "realEditorValues": [] }
 							],
 							"__worldX": 96,
 							"__worldY": 576
@@ -1498,7 +1537,8 @@
 									"id": "V_String",
 									"params": ["80e3a940-fa90-11f0-b78e-7b0bdf91d3d6"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 2, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
+								{ "__identifier": "activation_bonus", "__type": "Int", "__value": 100, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [100] }] },
+								{ "__identifier": "multiplier_bonus", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 73, "realEditorValues": [] }
 							],
 							"__worldX": 928,
 							"__worldY": 576
@@ -1611,7 +1651,8 @@
 									"id": "V_String",
 									"params": ["46e3a930-d380-11f0-ab8e-3b3ae60fa6c9"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 3, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }
+								{ "__identifier": "activation_bonus", "__type": "Int", "__value": 150, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [150] }] },
+								{ "__identifier": "multiplier_bonus", "__type": "Float", "__value": 0.1, "__tile": null, "defUid": 73, "realEditorValues": [] }
 							],
 							"__worldX": 1152,
 							"__worldY": 64
@@ -2804,7 +2845,8 @@
 									"id": "V_String",
 									"params": ["d1aed9c0-ac70-11f0-ba6a-ad2de5a201b6"]
 								} ] },
-								{ "__identifier": "point_bonus", "__type": "Int", "__value": 2025, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [2025] }] }
+								{ "__identifier": "activation_bonus", "__type": "Int", "__value": 2025, "__tile": null, "defUid": 60, "realEditorValues": [{ "id": "V_Int", "params": [2025] }] },
+								{ "__identifier": "multiplier_bonus", "__type": "Float", "__value": 6.7, "__tile": null, "defUid": 73, "realEditorValues": [{ "id": "V_Float", "params": [6.7] }] }
 							],
 							"__worldX": -224,
 							"__worldY": -256

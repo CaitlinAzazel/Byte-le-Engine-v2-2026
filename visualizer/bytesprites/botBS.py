@@ -28,6 +28,11 @@ class MovingBotBS(ByteSpriteFactory):
         pos: Vector,
         spritesheets: list[list[pyg.Surface]]
     ) -> list[pyg.Surface]:
+        match data.get('state'):
+            case 'attacking':
+                return spritesheets[4]
+            case 'stunned':
+                return spritesheets[5]
 
         direction = data.get('direction', 'down')
 
@@ -58,7 +63,7 @@ class MovingBotBS(ByteSpriteFactory):
                 os.getcwd(),
                 f'visualizer/images/spritesheets/{spritesheet_name}'
             ),
-            4,
+            6,
             object_type,
             MovingBotBS.update,
             colorkey=pyg.Color(255, 0, 255)
