@@ -1,15 +1,18 @@
 import os
+import warnings
 from pathlib import Path
-from warnings import warn
 
 from game.common.enums import *
+
+
+warnings.simplefilter('ignore')
 
 USE_PRECOMPILED_MAP = False
 try:
     from game.map_data import USE_PRECOMPILED_MAP
 except ImportError:
     # isn't this neat
-    warn("map_data is missing; please generate it with compile_map_data.py")
+    warnings.warn("map_data is missing; end-users may safely ignore this message")
 
 """
 This file is important for configuring settings for the project. All parameters in this file have comments to explain 

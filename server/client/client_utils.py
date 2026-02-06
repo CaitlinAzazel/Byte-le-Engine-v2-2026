@@ -43,7 +43,7 @@ def as_result(func: Callable):
 class ClientUtils:
     def __init__(self, csv_bool: bool) -> None:
         urllib3.disable_warnings()
-        self.IP = 'http://127.0.0.1:8000/'
+        self.IP = 'http://134.129.106.84:8000/'
         self.path_to_public = False
         self.use_csv: bool = csv_bool
         self.tournaments: list = []
