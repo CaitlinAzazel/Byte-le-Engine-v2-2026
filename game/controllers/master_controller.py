@@ -82,7 +82,6 @@ class MasterController(Controller):
         self.point_data = PointData()
         self.boosting_controller: BoostingController = BoostingController()
         self.support_bot = SupportBot()
-        self.timer = Timer(duration=150)
 
     # Receives all clients for the purpose of giving them the objects they will control
     def give_clients_objects(self, clients: list[Player], world: dict):
@@ -174,7 +173,6 @@ class MasterController(Controller):
 
             if isinstance(bot, SupportBot):
                 bot.tick()
-                self.timer.tick()
                 self.support_bot = bot
 
             self.boosting_controller.boosting(bot, self.support_bot)
