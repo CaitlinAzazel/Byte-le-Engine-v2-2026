@@ -69,6 +69,11 @@ You can check the scrap cost of a generator via ``Generator.cost``
 
 You can check if a generator is on via ``Generator.active``
 
+Doors
+---------
+
+You can check if a door is open via ``Door.open``
+
 Navigation
 ----------
 
