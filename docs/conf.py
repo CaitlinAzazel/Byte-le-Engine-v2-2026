@@ -38,7 +38,7 @@ DISCORD_URL = 'https://discord.gg/zJ9xU7gZ8q'
 UPDATE_GUIDE_URL = 'useful_commands.html#updating-your-launcher'
 SHOW_ANNOUNCEMENT = True
 ANNOUNCEMENT = \
-    '(12:28 p.m.) UPDATED <a href="tips.html">TIPS & TRICKS</a>' \
+    '(12:38 p.m.) UPDATED <a href="tips.html">TIPS & TRICKS</a> AND ADDED <a href="controls.html#pathfinding">SAMPLE A* CODE</a>' \
 
 html_title = '2026 QBB Security Manual'
 html_theme = 'shibuya'

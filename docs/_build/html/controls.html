@@ -24,7 +24,7 @@
   </head>
 <body><div class="announcement">
     <div class="announcement-inner">
-      <p>(12:28 p.m.) UPDATED <a href="tips.html">TIPS & TRICKS</a></p>
+      <p>(12:38 p.m.) UPDATED <a href="tips.html">TIPS & TRICKS</a> AND ADDED <a href="controls.html#pathfinding">SAMPLE A* CODE</a></p>
       <button class="announcement-close" aria-label="Close announcement">
         <i class="i-lucide close"></i>
       </button>
@@ -183,7 +183,90 @@ Since you must use <code class="docutils literal notranslate"><span class="pre">
 </section>
 <section id="pathfinding">
 <h2>Pathfinding<a class="headerlink" href="#pathfinding" title="Link to this heading">¶</a></h2>
-<p>something something</p>
+<p>For your convenience:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">heapq</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">game.common.enums</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActionType</span><span class="p">,</span> <span class="n">ObjectType</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">game.common.game_object</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameObject</span>
+</span><span data-line="5"><span class="kn">from</span><span class="w"> </span><span class="nn">game.common.map.occupiable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Occupiable</span>
+</span><span data-line="6"><span class="kn">from</span><span class="w"> </span><span class="nn">game.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DIRECTION_TO_MOVE</span>
+</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">game.utils.vector</span><span class="w"> </span><span class="kn">import</span> <span class="n">Vector</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="n">Position</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="n">DIRECTIONS</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+</span><span data-line="12">
+</span><span data-line="13">
+</span><span data-line="14"><span class="k">def</span><span class="w"> </span><span class="nf">a_star_move</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">goal</span><span class="p">:</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">allow_vents</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">game_object</span><span class="p">:</span> <span class="n">GameObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActionType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="15">    <span class="n">path</span> <span class="o">=</span> <span class="n">a_star_path</span><span class="p">(</span>
+</span><span data-line="16">        <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+</span><span data-line="17">        <span class="n">goal</span><span class="o">=</span><span class="n">goal</span><span class="p">,</span>
+</span><span data-line="18">        <span class="n">world</span><span class="o">=</span><span class="n">world</span><span class="p">,</span>
+</span><span data-line="19">        <span class="n">allow_vents</span><span class="o">=</span><span class="n">allow_vents</span><span class="p">,</span>
+</span><span data-line="20">        <span class="n">game_object</span><span class="o">=</span><span class="n">game_object</span>
+</span><span data-line="21">    <span class="p">)</span>
+</span><span data-line="22">
+</span><span data-line="23">    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+</span><span data-line="24">        <span class="k">return</span> <span class="kc">None</span>
+</span><span data-line="25">
+</span><span data-line="26">    <span class="n">next_step</span><span class="p">:</span> <span class="n">Vector</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span><span data-line="27">    <span class="n">direction</span> <span class="o">=</span> <span class="n">next_step</span> <span class="o">-</span> <span class="n">start</span>
+</span><span data-line="28">    <span class="n">action</span> <span class="o">=</span> <span class="n">DIRECTION_TO_MOVE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span data-line="29">    <span class="k">return</span> <span class="n">action</span>
+</span><span data-line="30">
+</span><span data-line="31"><span class="k">def</span><span class="w"> </span><span class="nf">a_star_path</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">goal</span><span class="p">:</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">allow_vents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">game_object</span><span class="p">:</span> <span class="n">GameObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Vector</span><span class="p">]]:</span>
+</span><span data-line="32">    <span class="n">start_p</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">start</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</span><span data-line="33">    <span class="n">goal_p</span> <span class="o">=</span> <span class="p">(</span><span class="n">goal</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">goal</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</span><span data-line="34">
+</span><span data-line="35">    <span class="n">frontier</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start_p</span><span class="p">)]</span>
+</span><span data-line="36">    <span class="n">came_from</span> <span class="o">=</span> <span class="p">{</span><span class="n">start_p</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+</span><span data-line="37">    <span class="n">cost</span> <span class="o">=</span> <span class="p">{</span><span class="n">start_p</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</span><span data-line="38">
+</span><span data-line="39">    <span class="k">while</span> <span class="n">frontier</span><span class="p">:</span>
+</span><span data-line="40">        <span class="n">_</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">frontier</span><span class="p">)</span>
+</span><span data-line="41">
+</span><span data-line="42">        <span class="k">if</span> <span class="n">current</span> <span class="o">==</span> <span class="n">goal_p</span><span class="p">:</span>
+</span><span data-line="43">            <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="44">            <span class="k">while</span> <span class="n">current</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="45">                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">current</span>
+</span><span data-line="46">                <span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Vector</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+</span><span data-line="47">                <span class="n">current</span> <span class="o">=</span> <span class="n">came_from</span><span class="p">[</span><span class="n">current</span><span class="p">]</span>
+</span><span data-line="48">            <span class="k">return</span> <span class="n">path</span>
+</span><span data-line="49">
+</span><span data-line="50">        <span class="k">for</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="ow">in</span> <span class="n">DIRECTIONS</span><span class="p">:</span>
+</span><span data-line="51">            <span class="n">nxt</span> <span class="o">=</span> <span class="p">(</span><span class="n">current</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">current</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dy</span><span class="p">)</span>
+</span><span data-line="52">            <span class="n">vec</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">nxt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nxt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span><span data-line="53">
+</span><span data-line="54">            <span class="k">if</span> <span class="n">game_object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">can_object_occupy</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">game_object</span><span class="p">):</span>
+</span><span data-line="55">                <span class="k">continue</span>
+</span><span data-line="56">
+</span><span data-line="57">            <span class="k">if</span> <span class="ow">not</span> <span class="n">world</span><span class="o">.</span><span class="n">is_valid_coords</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+</span><span data-line="58">                <span class="k">continue</span>
+</span><span data-line="59">
+</span><span data-line="60">            <span class="n">top</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_top</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+</span><span data-line="61">            <span class="k">if</span> <span class="n">top</span> <span class="ow">and</span> <span class="n">top</span><span class="o">.</span><span class="n">object_type</span> <span class="o">!=</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">AVATAR</span><span class="p">:</span>
+</span><span data-line="62">                <span class="c1"># walls block</span>
+</span><span data-line="63">                <span class="k">if</span> <span class="n">top</span><span class="o">.</span><span class="n">object_type</span> <span class="o">==</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">WALL</span><span class="p">:</span>
+</span><span data-line="64">                    <span class="k">continue</span>
+</span><span data-line="65">
+</span><span data-line="66">                <span class="c1"># vents block unless allowed</span>
+</span><span data-line="67">                <span class="k">if</span> <span class="n">top</span><span class="o">.</span><span class="n">object_type</span> <span class="o">==</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">VENT</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_vents</span><span class="p">:</span>
+</span><span data-line="68">                    <span class="k">continue</span>
+</span><span data-line="69">
+</span><span data-line="70">                <span class="c1"># can&#39;t pass through non-occupiable</span>
+</span><span data-line="71">                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">Occupiable</span><span class="p">):</span>
+</span><span data-line="72">                    <span class="k">continue</span>
+</span><span data-line="73">
+</span><span data-line="74">            <span class="n">new_cost</span> <span class="o">=</span> <span class="n">cost</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span data-line="75">            <span class="k">if</span> <span class="n">nxt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cost</span> <span class="ow">or</span> <span class="n">new_cost</span> <span class="o">&lt;</span> <span class="n">cost</span><span class="p">[</span><span class="n">nxt</span><span class="p">]:</span>
+</span><span data-line="76">                <span class="n">cost</span><span class="p">[</span><span class="n">nxt</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_cost</span>
+</span><span data-line="77">                <span class="n">priority</span> <span class="o">=</span> <span class="n">new_cost</span> <span class="o">+</span> <span class="n">vec</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span>
+</span><span data-line="78">                <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">frontier</span><span class="p">,</span> <span class="p">(</span><span class="n">priority</span><span class="p">,</span> <span class="n">nxt</span><span class="p">))</span>
+</span><span data-line="79">                <span class="n">came_from</span><span class="p">[</span><span class="n">nxt</span><span class="p">]</span> <span class="o">=</span> <span class="n">current</span>
+</span><span data-line="80">
+</span><span data-line="81">    <span class="k">return</span> <span class="kc">None</span>
+</span></pre></div>
+</div>
 </section>
 </section>
 

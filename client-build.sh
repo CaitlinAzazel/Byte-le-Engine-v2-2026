@@ -25,6 +25,7 @@ echo "Copying extra files..."
 cp -r client_package/* output/
 cp client_package/.gitignore output/ # wildcards dont match dotfiles by default
 cp -r docs/ output/
+echo "these docs may be outdated" > output/docs/warning.txt
 
 IMAGES=output/visualizer/images
 mkdir -p $IMAGES/staticsprites $IMAGES/spritesheets output/visualizer/fonts
