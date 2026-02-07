@@ -49,21 +49,19 @@ Activating Generators
 If you have enough scrap, you may activate a generator by interacting with it.
 Since you must use ``ActionType`` s, you must also know which direction to interact:
 
-.. caution::
-   You may only interact with the tile you stand on and those directly above, below, left, or right of you.
-
 .. code-block:: python
 
      # x.direction_to(y) returns (y - x).as_direction()
-     direction_to_generator = avatar.position.direction_to(generator_position)
-     # DIRECTION_TO_INTERACT and other useful lookup tables
-     # can be imported from game.constants
-     interact_action = DIRECTION_TO_INTERACT.get(direction_to_generator)
+     direction_to_generator: Vector = avatar.position.direction_to(generator_position)
+     interact_action: ActionType | None = convert_vector_to_interact(direction_to_generator)
      if interact_action is None:
          # the generator is not directly up/down/left/right
      else:
          actions.append(interact_action)
 
+.. caution::
+   Note that the vector conversion may return ``None``.
+   See the caution message in :ref:`walking-touching` for more details.
 
 Pathfinding
 ============
