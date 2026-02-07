@@ -95,7 +95,7 @@ Things in the game. Note the difference between ``SCRAP_ITEM`` and ``SCRAP_SPAWN
    |coin|,COIN_SPAWNER, A tile where you can collect coins that give you points
    |generator|,GENERATOR, A generator; fueled by ``SCRAP``
    |vent|,VENT, A vent; big enough for you to *crawl* through
-   |refuge|,REFUGE, A tile that bots cannot enter
+   |refuge|,REFUGE, "A tile that bots cannot enter; ejects humans that stay inside it too long"
    |door|,DOOR, A door; opened by generators
    |avatar|, AVATAR, You!
    |cables|,CRAWLER_BOT, ████████ █████
@@ -104,3 +104,4 @@ Things in the game. Note the difference between ``SCRAP_ITEM`` and ``SCRAP_SPAWN
    |deer|,JUMPER_BOT, ████ ████ 
    |trash_heap|,SUPPORT_BOT, ████████; █████ ███ 
 
+*Psst... want to know more about the animatronics? There's declassified info in* :ref:`bot-quirks`
