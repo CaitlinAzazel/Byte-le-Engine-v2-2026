@@ -47,6 +47,6 @@ html_theme_options = {
     'accent_color': 'indigo', # shibuya
     'github_url': CLIENT_PACKAGE_REPO_URL, # shibuya
     'discord_url': DISCORD_URL, # shibuya
-    'announcement': ANNOUNCEMENT if SHOW_ANNOUNCEMENT else ''
+    'announcement': ANNOUNCEMENT if SHOW_ANNOUNCEMENT else '' # shibuya
 }
 html_logo = '_static/images/bytele-logo.png'

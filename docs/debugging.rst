@@ -24,4 +24,4 @@ Whenever you run a game, a ``logs`` folder will be created. This folder contains
 If you're wondering what the value of a stored :ref:`object-type` or :ref:`action-type` means,
 see :ref:`enum-script`.
 
-point data
+You can view sources of your point multiplier in the ``point_data`` key in the turn log.
