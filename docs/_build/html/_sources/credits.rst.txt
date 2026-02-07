@@ -111,6 +111,16 @@ No contribution to the project went unnoticed! Until next year, take care!
 
 .. container:: image-2
 
+   .. figure:: /_static/images/gunnar.png
+      :width: 80%
+      :align: center
+
+   .. container:: nameplate
+
+      Gunnar Moody (:dev-alum:`Shadow Developer`)
+
+.. container:: image-2
+
    .. figure:: /_static/images/and_you_the.png
       :class: sprite
       :width: 50%
