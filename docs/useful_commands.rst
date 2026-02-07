@@ -69,6 +69,7 @@ To do so, use the provided "launcher":
 where ``<command>`` describes the action you want to perform:
 
 .. csv-table::
+   :class: ghost
    :header: "Action", "<command>"
 
     "Generate", "g, gen, generate"

@@ -23,3 +23,5 @@ Whenever you run a game, a ``logs`` folder will be created. This folder contains
 ``.json`` file for every turn and stores the information about the game world during that turn.
 If you're wondering what the value of a stored :ref:`object-type` or :ref:`action-type` means,
 see :ref:`enum-script`.
+
+point data
