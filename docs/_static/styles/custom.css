@@ -14,6 +14,10 @@
 	color: var(--custom-link-color);
 	font-weight: bolder;
 }
+
+.yue a:has(img) {
+	border: 0;
+}
 /* end theme overrides */
 
 :root {
@@ -41,10 +45,12 @@ figcaption > p {
 	font-size: x-large;
 }
 
-.centered {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.nameplate {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-size: x-large;
 }
 
 .sprite {
@@ -67,4 +73,20 @@ figcaption > p {
 
 .name-here {
 	font-size: x-large;
+}
+.dev {
+	color: #1C7D44;
+	font-weight: bold;
+}
+.dev-alum {
+	color: #8B50A4;
+	font-weight: bold;
+}
+.playtester {
+	color: #310B59;
+	font-weight: bold;
+}
+.artist {
+	color: #164873;
+	font-weight: bold;
 }
