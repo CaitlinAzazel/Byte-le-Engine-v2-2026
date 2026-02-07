@@ -227,13 +227,13 @@ class ClientRunner:
         seed = self.index_to_seed_id.get(seed_index)
         assert seed is not None, f'cannot find seed for submission with id={submission.submission_id}, index={index}'
 
-        run_runner(end_path, RunnerOptions.GENERATE, seed=seed)
-
-        logging.info(f'running run {index} for game (id={submission.submission_id}), using seed index {seed_index}')
-
         score_for_each_submission: dict[int, int] = {}
         results = dict()
         try:
+            run_runner(end_path, RunnerOptions.GENERATE, seed=seed)
+
+            logging.info(f'running run {index} for game (id={submission.submission_id}), using seed index {seed_index}')
+
             res = run_runner(end_path, RunnerOptions.RUN)
 
             results_filepath = os.path.join(end_path, 'logs', 'results.json')
@@ -243,13 +243,22 @@ class ClientRunner:
         except Exception as e:
             logging.error(e)
         finally:
-            player_sub_ids: list[int] = [int(x["file_name"].split("_")[-1]) for x in results['players']]
+            assert results.get('players') is not None, f'results file contains no players\n{json.dumps(results, indent=4)}'
+            player_sub_ids: list[int] = [] # [int(x["file_name"].split("_")[-1]) for x in results['players']]
+            for player in results['players']:
+                file_name = player['file_name']
+                assert file_name is not None, f'player had a null filename:\n{json.dumps(player, indent=4)}'
+                parts: list[str]  = file_name.split('_')
+                last_part = parts[-1]
+                assert last_part.isdigit(), f'player sub id was not an int; got "{last_part}" from filename "{file_name}"'
+                player_sub_id = int(last_part)
+                player_sub_ids.append(player_sub_id)
             assert self.tournament != -1
             run_id: int = self.insert_run(
                 self.tournament.tournament_id,
                 seed,
                 results)
-            assert results.get('reason') is None, f'{results['reason']}\n{json.dumps(results, indent=4)}'
+            # assert results.get('reason') is None, f'{results['reason']}\n{json.dumps(results, indent=4)}'
             for i, result in enumerate(results["players"]):
                 self.insert_submission_run_info(player_sub_ids[i], run_id, result["error"], i,
                                                 result["avatar"]["score"])
