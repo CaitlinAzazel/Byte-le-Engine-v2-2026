@@ -33,6 +33,11 @@ a {
 a:hover {
 	color: var(--custom-link-color);
 }
+.announcement * {
+	color: white;
+	text-align: center;
+	font-weight: bolder;
+}
 /* a:visited { */
 /* 	color: var(--custom-link-color-visited); */
 /* } */

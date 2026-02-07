@@ -33,12 +33,22 @@ html_css_files = [
     'styles/custom.css'
 ]
 
+CLIENT_PACKAGE_REPO_URL = 'https://github.com/acm-ndsu/Byte-le-2026-Client-Package'
+DISCORD_URL = 'https://discord.gg/zJ9xU7gZ8q'
+UPDATE_GUIDE_URL = 'useful_commands.html#updating-your-launcher'
+SHOW_ANNOUNCEMENT = False
+ANNOUNCEMENT = \
+    '(00:00 a.m.) UPDATE LIVE @ ' \
+    f'<a href={CLIENT_PACKAGE_REPO_URL}>CLIENT PACKAGE REPO</a> | ' \
+    f'<a href={UPDATE_GUIDE_URL}>HOW DO I UPDATE?</a>'
+
 html_title = '2026 QBB Security Manual'
 html_theme = 'shibuya'
 html_theme_options = {
     'sidebar_hide_name': True, # furo
     'accent_color': 'indigo', # shibuya
-    'github_url': 'https://github.com/acm-ndsu/Byte-le-2026-Client-Package', # shibuya
-    'discord_url': 'https://discord.gg/zJ9xU7gZ8q', # shibuya
+    'github_url': CLIENT_PACKAGE_REPO_URL, # shibuya
+    'discord_url': DISCORD_URL, # shibuya
+    'announcement': ANNOUNCEMENT if SHOW_ANNOUNCEMENT else ''
 }
 html_logo = '_static/images/bytele-logo.png'
