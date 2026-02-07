@@ -181,8 +181,8 @@ if __name__ == '__main__':
             cl.register(par_args.name, par_args.uni, par_args.team_type)
         elif par_args.subparse in ['submit', 's',]:
             cl.submit()
-        else:
-            cl.handle_client(par_args)
+        # else:
+        #     cl.handle_client(par_args)
 
     # Print help if no arguments are passed
     if len(sys.argv) == 1:
