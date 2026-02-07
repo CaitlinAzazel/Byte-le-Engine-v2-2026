@@ -114,7 +114,6 @@ class ScoreboardTemplate(InfoTemplate):
         self.scrap.text = f"Scrap: {self.current_scrap}"
         self.health_text.text = f"HP: {self.current_health}"
         self.power_text.text = f"Power: {self.current_power:3}%"
-        team_name = 'mymegalongteamname'
         TEAM_NAME_TRUNCATE_CHAR_LIMIT = 18
         if len(team_name) > TEAM_NAME_TRUNCATE_CHAR_LIMIT:
             team_name = team_name[:TEAM_NAME_TRUNCATE_CHAR_LIMIT-3] + '...'

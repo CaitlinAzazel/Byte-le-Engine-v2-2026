@@ -145,3 +145,11 @@ Some commands have their own help messages, which can be displayed via
 .. code-block::
 
    python launcher.pyz <command> -h
+
+Updating Your Launcher
+=====================
+
+Do **ONE** of the following:
+
+- Pull from the client package repo's main	
+- Save your client file(s) (any code that you wrote) and re-clone/redownload the client package repo (if the first solution didn't work; it's happened in the past)
