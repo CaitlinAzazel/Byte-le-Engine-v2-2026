@@ -67,6 +67,8 @@ Generators
 
 You can check the scrap cost of a generator via ``Generator.cost`` 
 
+You can check if a generator is on via ``Generator.active``
+
 Navigation
 ----------
 
