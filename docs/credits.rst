@@ -27,7 +27,7 @@ No contribution to the project went unnoticed! Until next year, take care!
 
    .. container:: nameplate
 
-      Noah "LeBron" Magcalas (:dev:`Developer`)
+      Noah "LeBron" Magcalas (:dev:`Senior Developer`)
 
 .. container:: image-2
 
@@ -37,7 +37,7 @@ No contribution to the project went unnoticed! Until next year, take care!
 
    .. container:: nameplate
 
-      Caitlin Frank (:dev:`Developer`)
+      Caitlin Frank (:dev:`Senior Developer`)
 
 .. container:: image-2
 
@@ -47,7 +47,7 @@ No contribution to the project went unnoticed! Until next year, take care!
 
    .. container:: nameplate
 
-      Ethan Birnbaum (:dev:`Developer`)
+      Ethan Birnbaum (:dev:`Junior Developer`)
 
 .. container:: image-2
 
@@ -57,7 +57,7 @@ No contribution to the project went unnoticed! Until next year, take care!
 
    .. container:: nameplate
 
-      Cedar Longballa (:dev:`Developer`)
+      Cedar Longballa (:dev:`Junior Developer`)
 
 .. container:: image-2
 
@@ -67,7 +67,7 @@ No contribution to the project went unnoticed! Until next year, take care!
 
    .. container:: nameplate
 
-      Sophie Hanna (:dev:`Developer`)
+      Sophie Hanna (:dev:`PR Member`)
 
 .. container:: image-2
 
@@ -107,7 +107,7 @@ No contribution to the project went unnoticed! Until next year, take care!
 
    .. container:: nameplate
 
-      Ian King (:dev-alum:`Supervisor`)
+      Ian King (:dev-alum:`Shadow Developer`)
 
 .. container:: image-2
 
