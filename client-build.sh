@@ -24,6 +24,7 @@ python compile_map_data.py
 echo "Copying extra files..."
 cp -r client_package/* output/
 cp client_package/.gitignore output/ # wildcards dont match dotfiles by default
+cp -r docs/ output/
 
 IMAGES=output/visualizer/images
 mkdir -p $IMAGES/staticsprites $IMAGES/spritesheets output/visualizer/fonts
