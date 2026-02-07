@@ -175,25 +175,28 @@ If you don't see your shell or these don't work, find the appropriate command fo
 
     Alternatively, you can check your path to Python:
 
-    .. tabs::
+    .. .. tabs::
 
-        .. group-tab:: cmd
+    ..    .. group-tab:: cmd
 
-            .. code-block:: console
+    .. code-block:: console
+        :caption: cmd
 
-               where.exe python
+        where.exe python
 
-        .. group-tab:: PowerShell
+    ..    .. group-tab:: PowerShell
 
-            .. code-block:: console
+    .. code-block:: console
+        :caption: PowerShell
 
-               where.exe python
+        where.exe python
 
-        .. group-tab:: Bash/zsh
+    ..    .. group-tab:: Bash/zsh
 
-            .. code-block:: console
+    .. code-block:: console
+        :caption: Bash/zsh
 
-               which python
+        which python
 
     If your virtual environment is activated, the output of these commands should include a path that looks something like ``/path/to/Byte-le-2026-Client-Package/path/to/venv/bin/python``.
 
