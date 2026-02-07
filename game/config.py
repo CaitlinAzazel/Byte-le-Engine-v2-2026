@@ -41,6 +41,11 @@ SET_NUMBER_OF_CLIENTS_CONTINUE = 1                  # required number of clients
 
 ALLOWED_MODULES = ["game.client.user_client",       # modules that clients are specifically allowed to access
                    "game.common.enums",
+                   "typing",
+                   "heapq",
+                   "game.common.game_object",
+                   "json",
+                   "subprocess",
                    "math",
                    "numpy",
                    "scipy",
