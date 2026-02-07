@@ -98,31 +98,42 @@ In your project directory, run the following commands in a command line:
 
 To activate your virtual environment, run **one** of the following commands depending on your shell:
 
-.. tabs::
+.. .. tabs::
+..
+..     .. group-tab:: cmd
+..
+..         .. code-block:: cmd
+..
+..            .\.venv\Scripts\activate.bat
 
-    .. group-tab:: cmd
+.. code-block:: cmd
+   :caption: cmd
 
-        .. code-block:: cmd
+   .\.venv\Scripts\activate.bat
 
-           .\.venv\Scripts\activate.bat
+..     .. group-tab:: PowerShell
+..
 
-    .. group-tab:: PowerShell
+.. code-block:: powershell
+   :caption: PowerShell
 
-        .. code-block:: powershell
+    .\.venv\Scripts\Activate.ps1
 
-           .\.venv\Scripts\Activate.ps1
+..
+..     .. group-tab:: Bash/zsh
+..
 
-    .. group-tab:: Bash/zsh
+.. code-block:: bash
+    :caption: Bash/zsh
 
-        .. code-block:: bash
+    source .venv/bin/activate
+..
+..     .. group-tab:: fish
+..
+.. code-block:: fish
+    :caption: fish
 
-           source .venv/bin/activate
-
-    .. group-tab:: fish
-
-        .. code-block:: fish
-
-            source .venv/bin/activate.fish
+    source .venv/bin/activate.fish
 
 
 
@@ -132,31 +143,35 @@ If you don't see your shell or these don't work, find the appropriate command fo
 
     If your virtual environment was activated, your shell might notice, adding "``.venv``" somewhere in your prompt like so:
 
-    .. tabs::
+    .. .. tabs::
 
-        .. group-tab:: cmd
+    ..    .. group-tab:: cmd
 
-            .. code-block:: console
+    .. code-block:: console
+        :caption: cmd
 
-               (.venv) C:\path\to\Byte-le-2026-Client-Package\>
+        (.venv) C:\path\to\Byte-le-2026-Client-Package\>
 
-        .. group-tab:: PowerShell
+    ..    .. group-tab:: PowerShell
 
-            .. code-block:: console
+    .. code-block:: console
+        :caption: PowerShell
 
-               (.venv) PS C:\path\to\Byte-le-2026-Client-Package\>
+        (.venv) PS C:\path\to\Byte-le-2026-Client-Package\>
 
-        .. group-tab:: Bash/zsh
+    ..    .. group-tab:: Bash/zsh
 
-            .. code-block:: console
+    .. code-block:: console
+        :caption: Bash
 
-               (.venv) /path/to/Byte-le-2026-Client-Package $
+        (.venv) /path/to/Byte-le-2026-Client-Package $
 
-        .. group-tab:: fish
+    ..    .. group-tab:: fish
 
-            .. code-block:: fish
+    .. code-block:: fish
+        :caption: fish
 
-                .venv /path/to/Byte-le-2026-Client-Package >
+        .venv /path/to/Byte-le-2026-Client-Package >
 
     Alternatively, you can check your path to Python:
 

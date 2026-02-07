@@ -15,7 +15,7 @@ author = 'NDSU ACM Byte-le 2026 Dev Team'
 
 extensions = [
     'sphinx_copybutton',
-    'sphinx_tabs.tabs',
+    # 'sphinx_tabs.tabs',
 ]
 
 templates_path = ['_templates']
