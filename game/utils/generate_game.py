@@ -19,6 +19,7 @@ def generate(seed: int = random.randint(0, 1000000000)):
     """
 
     print(f'Generating game map... seed: {seed}')
+    print(f'Using precompiled map? {USE_PRECOMPILED_MAP}')
 
     locations: dict[Vector, list[GameObject]]
     map_size: Vector

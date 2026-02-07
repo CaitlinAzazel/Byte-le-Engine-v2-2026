@@ -46,6 +46,13 @@ Submitting Code
 
 After successfully registering your team, you are able to submit your client code. At least one client must be
 submitted before the end of the competition to be eligible to win. We recommend that you at least submit the provided ``base_client.py``.
+Additionally, any additional clients that you write should (1) have the ``.py`` extension, (2) contain the word "client" in the filename, and (3) be saved in the root of your package directory so that they can be detected by the launcher.
+
+.. note::
+   If your client file does not satisfy the above criteria, you can manually enter a **relative** (based on the package directory) path to your file when prompted by the launcher.
+
+.. important::
+   Your client file cannot import any modules that you create locally; ALL of the logic for your client must be contained in your client file. Sorry!
 
 Once uploaded to the server, your bot will run against other submitted bots to determine placing. You can submit as
 many times as you'd like during the duration of the competition, but please do not excessively submit.

@@ -67,6 +67,7 @@ Survival and Bots
 =================
 
 Hostile bots roam the map and attempt to catch the player.
+For more information, see :ref:`bot-quirks`.
 
 * Bots patrol different areas of the map
 * Some bots may chase the player if detected
@@ -77,13 +78,3 @@ To survive:
 * Keep moving
 * Use the environment to avoid bots
 * Unlock new areas to create escape routes
-
-Strategy Tips
-=============
-
-* Prioritize collecting Scrap early to unlock generators
-* Unlocking areas increases your multiplier and your escape options
-* Do not hoard Scrap too long, as locked areas limit your movement
-* Learn bot movement patterns to avoid being trapped
-* Higher multipliers mean higher risk but higher reward
-

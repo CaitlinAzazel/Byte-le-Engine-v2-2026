@@ -61,6 +61,17 @@ class ScoreboardTemplate(InfoTemplate):
             position=Vector(topleft.x + 1000, topleft.y)
         )
 
+        self.team_name_text: Text = Text(
+            screen,
+            text="Your Team Name",
+            font_size=36,
+            font_name=font,
+            color=color,
+        )
+        # self.fastest_speed_button.rect.center = screen_center.add_x_y(200, 350).as_tuple()
+        self.team_name_text.rect.center = Vector.from_xy_tuple(screen.get_rect().center).add_x_y(380, 340).as_tuple()
+        
+
         # Store current values for updates
         self.current_scrap = 0
         self.current_score = 0
@@ -76,8 +87,10 @@ class ScoreboardTemplate(InfoTemplate):
           - 'score': current score (or sum of team scores)
         """
 
+        team_name: str = ''
         # Update score
         if 'clients' in turn_log:
+            team_name = turn_log['clients'][0]['team_name']
             # Sum all client scores and total scrap
             def sum_avatar_attr(attr: str):
                 return sum(
@@ -101,6 +114,11 @@ class ScoreboardTemplate(InfoTemplate):
         self.scrap.text = f"Scrap: {self.current_scrap}"
         self.health_text.text = f"HP: {self.current_health}"
         self.power_text.text = f"Power: {self.current_power:3}%"
+        team_name = 'mymegalongteamname'
+        TEAM_NAME_TRUNCATE_CHAR_LIMIT = 18
+        if len(team_name) > TEAM_NAME_TRUNCATE_CHAR_LIMIT:
+            team_name = team_name[:TEAM_NAME_TRUNCATE_CHAR_LIMIT-3] + '...'
+        self.team_name_text.text = f"{team_name}"
 
     def render(self) -> None:
         """
@@ -111,3 +129,4 @@ class ScoreboardTemplate(InfoTemplate):
         self.scrap.render()
         self.health_text.render()
         self.power_text.render()
+        self.team_name_text.render()

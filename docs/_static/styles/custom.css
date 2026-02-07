@@ -1,7 +1,92 @@
+/* theme overrides */
+.globaltoc > ul a {
+	color: var(--custom-link-color);
+}
+.globaltoc > ul a.current {
+	color: var(--custom-link-color);
+	font-weight: bolder;
+}
+
+.localtoc > ul li > a {
+	color: var(--custom-link-color);
+}
+.localtoc > ul li.active > a {
+	color: var(--custom-link-color);
+	font-weight: bolder;
+}
+
+.yue a:has(img) {
+	border: 0;
+}
+/* end theme overrides */
+
+:root {
+	--custom-link-color: rgb(10, 110, 255);
+	--custom-link-color-visited: #872ee0;
 * {
 	/* color: green; */
 }
 
-.pixel-art {
+a {
+	color: var(--custom-link-color);
+}
+a:hover {
+	color: var(--custom-link-color);
+}
+/* a:visited { */
+/* 	color: var(--custom-link-color-visited); */
+/* } */
+
+td:has(img) {
+	text-align: center;
+}
+
+figcaption > p {
+	font-size: x-large;
+}
+
+.nameplate {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-size: x-large;
+}
+
+.sprite {
 	image-rendering: crisp-edges;
+}
+
+.notice {
+	text-align: center;
+	font-size: 140%;
+	font-weight: bold;
+}
+
+.big {
+	font-size: 140%;
+}
+.bigger {
+	font-size: 180%;
+	font-weight: bold;
+}
+
+.name-here {
+	font-size: x-large;
+}
+.dev {
+	color: #1C7D44;
+	font-weight: bold;
+}
+.dev-alum {
+	color: #8B50A4;
+	font-weight: bold;
+}
+.playtester {
+	color: #310B59;
+	font-weight: bold;
+}
+.artist {
+	color: #164873;
+	font-weight: bold;
 }
