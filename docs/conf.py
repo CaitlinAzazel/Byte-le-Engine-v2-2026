@@ -36,11 +36,9 @@ html_css_files = [
 CLIENT_PACKAGE_REPO_URL = 'https://github.com/acm-ndsu/Byte-le-2026-Client-Package'
 DISCORD_URL = 'https://discord.gg/zJ9xU7gZ8q'
 UPDATE_GUIDE_URL = 'useful_commands.html#updating-your-launcher'
-SHOW_ANNOUNCEMENT = False
+SHOW_ANNOUNCEMENT = True
 ANNOUNCEMENT = \
-    '(00:00 a.m.) UPDATE LIVE @ ' \
-    f'<a href={CLIENT_PACKAGE_REPO_URL}>CLIENT PACKAGE REPO</a> | ' \
-    f'<a href={UPDATE_GUIDE_URL}>HOW DO I UPDATE?</a>'
+    '(12:28 p.m.) UPDATED <a href="tips.html">TIPS & TRICKS</a>' \
 
 html_title = '2026 QBB Security Manual'
 html_theme = 'shibuya'

@@ -62,6 +62,11 @@ When in doubt:
 .. note::
    For brevity, variables representing ``Vector`` s are written as ``<variable_name>`` in the following code examples.
 
+Generators
+----------
+
+You can check the scrap cost of a generator via ``Generator.cost`` 
+
 Navigation
 ----------
 
@@ -93,6 +98,24 @@ Use ``convert_vector_to_interact(...)`` (from ``game.constants``)
 .. caution::
    Be mindful that the above two functions can return ``None``.
    See :ref:`walking-touching` for a more detailed explanation.
+
+Want to know everything that occupies a certain spot?
+
+.. code-block:: python
+
+   # What's over <there>?
+   game_objects: GameObjectContainer | None = world.get(there)
+
+.. important::
+   ``GameObjectContainer`` is a custom data structure.
+   You may have to do some more digging to find what you're looking for.
+
+Want to know everything **of a certain type** that occupies a certain spot?
+
+.. code-block:: python
+
+   # Are there any BatterySpawners over <there>?
+   game_objects: list[GameObject] = world.get_objects_from(there, ObjectType.BATTERY_SPAWNER)
 
 Points
 --------------

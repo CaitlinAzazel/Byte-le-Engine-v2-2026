@@ -22,7 +22,14 @@
     <meta property="og:type" content="website"/><meta property="og:title" content="Tips &amp; Tricks"/>
     <meta name="twitter:card" content="summary"/>
   </head>
-<body><div class="sy-head">
+<body><div class="announcement">
+    <div class="announcement-inner">
+      <p>(12:28 p.m.) UPDATED <a href="tips.html">TIPS & TRICKS</a></p>
+      <button class="announcement-close" aria-label="Close announcement">
+        <i class="i-lucide close"></i>
+      </button>
+    </div>
+  </div><div class="sy-head">
   <div class="sy-head-blur"></div>
   <div class="sy-head-inner sy-container mx-auto">
     <a class="sy-head-brand" href="index.html">
@@ -88,6 +95,7 @@ data-aria-dark="Switch to auto color mode">
 <li><a class="reference internal" href="#strategy-tips">Strategy Tips</a></li>
 <li><a class="reference internal" href="#bot-quirks">Bot Quirks</a></li>
 <li><a class="reference internal" href="#programming-tips">Programming Tips</a><ul>
+<li><a class="reference internal" href="#generators">Generators</a></li>
 <li><a class="reference internal" href="#navigation">Navigation</a></li>
 <li><a class="reference internal" href="#points">Points</a></li>
 <li><a class="reference internal" href="#vectors">Vectors</a></li>
@@ -179,6 +187,10 @@ data-aria-dark="Switch to auto color mode">
 <p class="admonition-title">Note</p>
 <p>For brevity, variables representing <code class="docutils literal notranslate"><span class="pre">Vector</span></code> s are written as <code class="docutils literal notranslate"><span class="pre">&lt;variable_name&gt;</span></code> in the following code examples.</p>
 </div>
+<section id="generators">
+<h3>Generators<a class="headerlink" href="#generators" title="Link to this heading">¶</a></h3>
+<p>You can check the scrap cost of a generator via <code class="docutils literal notranslate"><span class="pre">Generator.cost</span></code></p>
+</section>
 <section id="navigation">
 <h3>Navigation<a class="headerlink" href="#navigation" title="Link to this heading">¶</a></h3>
 <p>Want to know if you can stand in a certain spot?
@@ -206,6 +218,21 @@ Use <code class="docutils literal notranslate"><span class="pre">convert_vector_
 <p class="admonition-title">Caution</p>
 <p>Be mindful that the above two functions can return <code class="docutils literal notranslate"><span class="pre">None</span></code>.
 See <a class="reference internal" href="controls.html#walking-touching"><span class="std std-ref">Walking Around And Touching Stuff</span></a> for a more detailed explanation.</p>
+</div>
+<p>Want to know everything that occupies a certain spot?</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># What&#39;s over &lt;there&gt;?</span>
+</span><span data-line="2"><span class="n">game_objects</span><span class="p">:</span> <span class="n">GameObjectContainer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">there</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code class="docutils literal notranslate"><span class="pre">GameObjectContainer</span></code> is a custom data structure.
+You may have to do some more digging to find what you’re looking for.</p>
+</div>
+<p>Want to know everything <strong>of a certain type</strong> that occupies a certain spot?</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Are there any BatterySpawners over &lt;there&gt;?</span>
+</span><span data-line="2"><span class="n">game_objects</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">GameObject</span><span class="p">]</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">get_objects_from</span><span class="p">(</span><span class="n">there</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">BATTERY_SPAWNER</span><span class="p">)</span>
+</span></pre></div>
 </div>
 </section>
 <section id="points">

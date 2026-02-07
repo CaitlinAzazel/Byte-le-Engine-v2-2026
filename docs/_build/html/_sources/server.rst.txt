@@ -24,7 +24,7 @@ To register your team, run
 
 .. code-block::
 
-    python launcher.pyz client -register
+    python launcher.pyz client register
 
 Follow the prompts to enter your team name, select your university, and select if you are an alumni.
 
@@ -40,8 +40,8 @@ Submitting Code
 
 .. code-block::
 
-    python launcher.pyz client -submit
-    python launcher.pyz c -submit
+    python launcher.pyz client submit
+    python launcher.pyz c submit
 
 
 After successfully registering your team, you are able to submit your client code. At least one client must be
