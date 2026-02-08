@@ -18,6 +18,9 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 
+EMPTY_TURN_LOGS_MSG = f'self.turn_logs is empty. If you have not yet generated and ran a game, run "python launcher.pyz gr"'
+
+
 class ByteVisualiser:
     """
     The Byte Visualiser is a generic visualiser that uses `pygame <https://www.pygame.org/docs/>`_
@@ -507,7 +510,11 @@ class ByteVisualiser:
         # if first turn log doens't exist, this can cause problems; can find better way to fix this
         self.turn_logs: dict = logs_to_dict(self.logs)
         self.bytesprite_factories = self.adapter.populate_bytesprite_factories()
-        map_size: dict = self.turn_logs['turn_0001']['game_board']['map_size']
+        map_size = dict()
+        try:
+            map_size: dict = self.turn_logs['turn_0001']['game_board']['map_size']
+        except KeyError as e:
+            raise KeyError(EMPTY_TURN_LOGS_MSG) from e
 
         # bytesprite_factories[7] is indexing to access the Tile object type
         self.bytesprite_map = [[[self.bytesprite_factories[ObjectType.TILE.value](self.screen), ]
@@ -808,7 +815,10 @@ class ByteVisualiser:
         :return: None
         """
         in_phase: bool = True
-        self.adapter.results_load(self.turn_logs['results'])
+        try:
+            self.adapter.results_load(self.turn_logs['results'])
+        except KeyError as e:
+            raise KeyError(EMPTY_TURN_LOGS_MSG) from e
         ticks: int = 0
         while in_phase:
             for event in pygame.event.get():
