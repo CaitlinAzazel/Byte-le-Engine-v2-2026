@@ -19,7 +19,7 @@ from game.client.user_client import UserClient
 
 
 class Engine:
-    def __init__(self, quiet_mode=False):
+    def __init__(self, quiet_mode=False, timeout=MAX_SECONDS_PER_TURN):
         self.clients: list[Player] = list()
         self.master_controller = MasterController()
         self.tick_number = 0
@@ -29,6 +29,7 @@ class Engine:
         self.current_world_key = None
 
         self.quiet_mode = quiet_mode
+        self.timeout = timeout
 
     # Starting point of the engine. Runs other methods then sits on top of a basic game loop until over
     def loop(self):
@@ -218,7 +219,7 @@ class Engine:
             # Convert to seconds
             time_elapsed /= 1000000
             # Subtract value from MAX_SECONDS_PER_TURN to get time remaining
-            time_remaining = MAX_SECONDS_PER_TURN - time_elapsed
+            time_remaining = self.timeout - time_elapsed
             # Ensure value never goes negative
             time_remaining = max(0.0, time_remaining)
 

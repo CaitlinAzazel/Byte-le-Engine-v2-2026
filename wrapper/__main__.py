@@ -34,6 +34,8 @@ if __name__ == '__main__':
     run_subpar.add_argument('-quiet', '-q', action='store_true', default=False,
                             dest='q_bool', help='Runs your AI... quietly :) (the runs per second won\'t be displayed)')
 
+    run_subpar.add_argument('--timeout', '-t', default=-1.0, type=float, help='nonnegative float; maximum seconds clients may take per turn')
+
     # Visualizer Subparser and optionals
     vis_subpar = spar.add_parser('visualize', aliases=['v'],
                                  help='Runs the visualizer! "v -h" shows more options')
@@ -58,8 +60,12 @@ if __name__ == '__main__':
     all_subpar = spar.add_parser('gen,run,vis', aliases=['grv'],
                                  help='Generate, Run, Visualize! "grv -h" shows more options')
 
+    all_subpar.add_argument('--timeout', '-t', default=-1.0, type=float, help='nonnegative float; maximum seconds clients may take per turn')
+
     gr_subpar = spar.add_parser('gen,run', aliases=['gr'], help='Generates and runs the game without '
                                                                 'visualization. Can be helpful for testing!')
+
+    gr_subpar.add_argument('--timeout', '-t', default=-1.0, type=float, help='nonnegative float; maximum seconds clients may take per turn')
 
     # Version Subparser
     update_subpar = spar.add_parser('version', aliases=['ver'], help='Prints the current version of the '
@@ -149,7 +155,11 @@ if __name__ == '__main__':
         if par_args.q_bool:
             quiet = True
 
-        engine = Engine(quiet)
+        timeout = game.config.MAX_SECONDS_PER_TURN
+        if par_args.timeout > 0.0:
+            timeout = par_args.timeout
+
+        engine = Engine(quiet, timeout)
         engine.loop()
 
     # Run the visualizer
@@ -161,12 +171,18 @@ if __name__ == '__main__':
 
     elif action in ['gen,run', 'gr']:
         generate()
-        engine = Engine(False)
+        timeout = game.config.MAX_SECONDS_PER_TURN
+        if par_args.timeout > 0.0:
+            timeout = par_args.timeout
+        engine = Engine(False, timeout)
         engine.loop()
 
     elif action in ['gen,run,vis', 'grv']:
         generate()
-        engine = Engine(False)
+        timeout = game.config.MAX_SECONDS_PER_TURN
+        if par_args.timeout > 0.0:
+            timeout = par_args.timeout
+        engine = Engine(False, timeout)
         engine.loop()
         visualiser = ByteVisualiser()
         visualiser.loop()
