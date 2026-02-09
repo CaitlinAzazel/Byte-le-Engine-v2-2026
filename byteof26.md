@@ -30,7 +30,7 @@ i start testing locally
 beb (noah) — 2/6/26, 22:38
 guys the game Definitely works
 
-<img alt="me hosting the game on desktop with 2 laptops as clients" src="https://cdn.discordapp.com/attachments/1357471164083208402/1469552923108446208/IMG_6165.jpg?ex=698964cf&is=6988134f&hm=994a7bcf3d6b8791045f27dea584a7c0c76a9464bf3d83b768d80f3d8c21f226&">
+![me hosting the game on desktop with 2 laptops as clients](byteof26_media/IMG_6165.jpg)
 
 ---
 
@@ -40,7 +40,7 @@ do y’all have the client name being displayed on the visualizer?
 
 beb (noah) — 2/6/26, 23:28
 
-<img alt="a guy slowly grinning" src="https://media1.tenor.com/m/CmveZfzeAT0AAAAd/aizen.gif">
+![gif a guy slowly grinning](byteof26_media/aizen.gif)
 
 [ skull emoji react from ian and gunnar ]
 
@@ -212,13 +212,13 @@ Stuff coming your way
 sighhhhhh
 
 ### beb (noah) — Yesterday at 11:22
-<img alt="me burning in development hell" src="https://cdn.discordapp.com/attachments/1357475841549799545/1463297012463173823/scary-fella.gif?ex=6989b4ca&is=6988634a&hm=98aca2f5a6907bfaf3fee1264588822c2453ac9a1db2191b8b43d84623424710&">
+![me burning in development hell](byteof26_media/scary-fella.gif)
 
 ### King_Philip — Yesterday at 11:22
 
 my guy LOL
 
-<img alt='screenshot of the docs where the pathfinding secion just says "something something"' src="https://cdn.discordapp.com/attachments/1357471164083208402/1469745172144328866/image.png?ex=69896f1b&is=69881d9b&hm=51f8b5f91d24056c7370228e623268509ad954d2e810ed98077a02614a3c76ee&">
+![screenshot of the docs where the pathfinding secion just says "something something"](byteof26_media/somethingsomething.png)
 
 ### beb (noah) — Yesterday at 11:24
 
@@ -328,7 +328,7 @@ player asks if they can remove Zero Point One Second client timeout limit becaus
 
 the toughbook in question:
 
-<img alt="awesome gray brick" src="https://cdn.discordapp.com/attachments/1357477072297005108/1469839305131425972/IMG_20260207_173141615_AE.jpg?ex=69891e06&is=6987cc86&hm=04e89af35cd1534f7d28af7a03f56569531232916827a303b9ca1e7096045389&">
+![awesome gray brick](byteof26_media/toughbook.jpg)
 
 ---
 
